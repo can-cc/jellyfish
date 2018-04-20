@@ -1,3 +1,5 @@
 /storage.db
 /storage.sqlite3
 /vendor
+main
+/.idea

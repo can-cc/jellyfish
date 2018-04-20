@@ -2,10 +2,17 @@ package main
 
 import (
 	"database/sql"
-	"go-echo-vue/handlers"
+
+	"jellyfish/handlers"
+
+	"fmt"
+
+	_ "github.com/labstack/gommon/log"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/standard"
+	"github.com/labstack/echo/middleware"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -27,20 +34,20 @@ func initDB(filepath string) *sql.DB {
 
 func migrate(db *sql.DB) {
 	sql := `
-    CREATE TABLE IF NOT EXISTS todo(
+    CREATE TABLE IF NOT EXISTS todos(
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         content TEXT NOT NULL,
         detail TEXT,
-        dealine DATE,
-        status: TEXT,
+        deadline DATE,
+        status TEXT,
         created_at DATE,
         updated_at DATE
     );
 
-    CREATE TABLE IF NOT EXISTS keep(
+    CREATE TABLE IF NOT EXISTS keeps(
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         content TEXT NOT NULL,
-        status: TEXT,
+        status TEXT,
         created_at DATE,
         updated_at DATE
     );
@@ -59,10 +66,12 @@ func main() {
 
 	e := echo.New()
 
-	e.GET("/api/tasks", handlers.GetTasks(db))
-	e.PUT("/api/tasks", handlers.PutTask(db))
-	e.DELETE("/tasks/:id", handlers.DeleteTask(db))
+	e.Use(middleware.Logger())
 
+	e.GET("/todo", handlers.GetTodos(db))
+	e.POST("/todo", handlers.PostTodo(db))
+	e.DELETE("/todo/:id", handlers.DeleteTodo(db))
+
+	fmt.Printf("jellyfish serve on http://localhost:8000")
 	e.Run(standard.New(":8000")) // Start as a web server
-	e.Run(standard.New(":8000"))
 }

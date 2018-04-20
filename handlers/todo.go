@@ -5,33 +5,34 @@ import (
 	"net/http"
 	"strconv"
 
+	"jellyfish/models"
+
 	"github.com/labstack/echo"
 )
 
 type H map[string]interface{}
 
 // GetTasks endpoint
-func GetTasks(db *sql.DB) echo.HandlerFunc {
+func GetTodos(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return c.JSON(http.StatusOK, models.GetTasks(db))
+		return c.JSON(http.StatusOK, models.GetTodos(db))
 	}
 }
 
 // PutTask endpoint
-func PutTask(db *sql.DB) echo.HandlerFunc {
+func PostTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// Instantiate a new task
-		var task models.Task
-		// Map imcoming JSON body to the new Task
-		c.Bind(&task)
-		// Add a task using our new model
-		id, err := models.PutTask(db, task.Name)
-		// Return a JSON response if successful
+
+		todo := new(models.Todo)
+
+		c.Bind(&todo)
+
+		id, err := models.PostTodo(db, todo)
+
 		if err == nil {
 			return c.JSON(http.StatusCreated, H{
 				"created": id,
 			})
-			// Handle any errors
 		} else {
 			return err
 		}
@@ -39,11 +40,11 @@ func PutTask(db *sql.DB) echo.HandlerFunc {
 }
 
 // DeleteTask endpoint
-func DeleteTask(db *sql.DB) echo.HandlerFunc {
+func DeleteTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id, _ := strconv.Atoi(c.Param("id"))
 		// Use our new model to delete a task
-		_, err := models.DeleteTask(db, id)
+		_, err := models.DeleteTodo(db, id)
 		// Return a JSON response on success
 		if err == nil {
 			return c.JSON(http.StatusOK, H{

@@ -2,13 +2,20 @@
 
 
 [[projects]]
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
+
+[[projects]]
   name = "github.com/labstack/echo"
   packages = [
     ".",
     "context",
     "engine",
     "engine/standard",
-    "log"
+    "log",
+    "middleware"
   ]
   revision = "e08070379af60f5b9c0fb5bb2d1527ba9624fe43"
   version = "v2.2.0"
@@ -16,8 +23,10 @@
 [[projects]]
   name = "github.com/labstack/gommon"
   packages = [
+    "bytes",
     "color",
-    "log"
+    "log",
+    "random"
   ]
   revision = "6fe1405d73ec4bd4cd8a4ac8e2a2b2bf95d03954"
   version = "0.2.4"
@@ -33,6 +42,12 @@
   packages = ["."]
   revision = "0360b2af4f38e8d38c7fce2a9f4e702702d73a39"
   version = "v0.0.3"
+
+[[projects]]
+  name = "github.com/mattn/go-sqlite3"
+  packages = ["."]
+  revision = "6c771bb9887719704b210e87e934f08be014bdb1"
+  version = "v1.6.0"
 
 [[projects]]
   branch = "master"
@@ -61,6 +76,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e5336f8f3ff662c7fd9d15a9556b2cc59bc057aba0aef257e208796d0dc79bc3"
+  inputs-digest = "a7c9e4575ff9c3114e6a94d9005b3980a7f8c49c661e45f50594b0cfd7dad31e"
   solver-name = "gps-cdcl"
   solver-version = 1
