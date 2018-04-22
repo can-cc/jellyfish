@@ -12,8 +12,9 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
-
 	_ "github.com/mattn/go-sqlite3"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func initDB(filepath string) *sql.DB {
@@ -36,6 +37,8 @@ func migrate(db *sql.DB) {
 	sql := `
     CREATE TABLE IF NOT EXISTS todos(
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        accessId INTEGER NOT NULL,
+        createrId INTEGER NOT NULL,
         content TEXT NOT NULL,
         detail TEXT,
         deadline DATE,
@@ -51,6 +54,15 @@ func migrate(db *sql.DB) {
         created_at DATE,
         updated_at DATE
     );
+
+    CREATE TABLE IF NOT EXISTS users(
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL,
+        hash TEXT NOT NULL,
+        created_at DATE,
+        updated_at DATE
+    );
+
     `
 	_, err := db.Exec(sql)
 	// Exit if something goes wrong with our SQL statement above
