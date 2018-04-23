@@ -48,7 +48,7 @@ func GetTodos(db *sql.DB) TodoCollection {
 
 // PutTask into DB
 func PostTodo(db *sql.DB, todo *Todo) (int64, error) {
-	sql := "INSERT INTO todos(content, detail, deadline, status, created_at) VALUES(?, ?, ?, ?, ?)"
+	sql := "INSERT INTO todos(content, detail, deadline, status, created_at) VALUES(?)"
 
 	// Create a prepared SQL statement
 	stmt, err := db.Prepare(sql)

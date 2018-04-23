@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 
+	"jellyfish/database"
 	"jellyfish/handlers"
 
 	"fmt"
@@ -13,25 +14,7 @@ import (
 	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
 	_ "github.com/mattn/go-sqlite3"
-
-	"golang.org/x/crypto/bcrypt"
 )
-
-func initDB(filepath string) *sql.DB {
-	db, err := sql.Open("sqlite3", filepath)
-
-	// Here we check for any db errors then exit
-	if err != nil {
-		panic(err)
-	}
-
-	// If we don't get any errors but somehow still don't get a db connection
-	// we exit as well
-	if db == nil {
-		panic("db nil")
-	}
-	return db
-}
 
 func migrate(db *sql.DB) {
 	sql := `
@@ -57,7 +40,7 @@ func migrate(db *sql.DB) {
 
     CREATE TABLE IF NOT EXISTS users(
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
+        username TEXT NOT NULL UNIQUE,
         hash TEXT NOT NULL,
         created_at DATE,
         updated_at DATE
@@ -73,7 +56,7 @@ func migrate(db *sql.DB) {
 
 func main() {
 	// Create a new instance of Echo
-	db := initDB("storage.sqlite3")
+	db := database.InitDB("storage.sqlite3")
 	migrate(db)
 
 	e := echo.New()
@@ -82,6 +65,7 @@ func main() {
 
 	e.GET("/todo", handlers.GetTodos(db))
 	e.POST("/todo", handlers.PostTodo(db))
+	e.POST("/signin", handlers.SignIn(db))
 	e.DELETE("/todo/:id", handlers.DeleteTodo(db))
 
 	fmt.Printf("jellyfish serve on http://localhost:8000")
