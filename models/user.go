@@ -6,15 +6,14 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	"fmt"
-
 	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	ID        int    `json:"id"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	CreatedAt string
 }
 
 func CreateUser(db *sql.DB, user *User) (int64, error) {
@@ -53,8 +52,8 @@ func CheckUserExist(db *sql.DB, username string) bool {
 	return rows.Next()
 }
 
-func CompareHashAndPassword(db *sql.DB, user *User) bool {
-	sql := "SELECT hash FROM users WHERE username = ?"
+func GetUserWhenCompareHashAndPassword(db *sql.DB, username string, password string) (User, error) {
+	sql := "SELECT id, hash, created_at FROM users WHERE username = ?"
 	stmt, err := db.Prepare(sql)
 
 	if err != nil {
@@ -62,20 +61,18 @@ func CompareHashAndPassword(db *sql.DB, user *User) bool {
 	}
 
 	// Replace the '?' in our prepared statement with 'id'
-	rows, err2 := stmt.Query(user.Username)
+	rows, err2 := stmt.Query(username)
 
 	if err2 != nil {
 		panic(err2)
 	}
 
+	user := User{}
+	user.Username = username
 	var hash string
 	rows.Next()
-	rows.Scan(hash)
+	rows.Scan(&user.ID, &hash, &user.CreatedAt)
 
-	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(user.Password))
-	if err != nil {
-		return false
-	} else {
-		return true
-	}
+	err3 := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return user, err3
 }
