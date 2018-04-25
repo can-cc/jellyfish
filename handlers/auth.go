@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"time"
 
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"jellyfish/models"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo"
 )
@@ -43,6 +43,7 @@ func SignIn(db *sql.DB) echo.HandlerFunc {
 		claims["createdAt"] = user.CreatedAt
 		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 		// TODO replace secret
+
 		t, err := token.SignedString([]byte("secret"))
 
 		if err != nil {
@@ -50,6 +51,7 @@ func SignIn(db *sql.DB) echo.HandlerFunc {
 		}
 		return c.JSON(http.StatusOK, map[string]string{
 			"token": t,
+			"id":    strconv.Itoa(user.ID),
 		})
 	}
 }
