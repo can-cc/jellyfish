@@ -20,8 +20,7 @@ func migrate(db *sql.DB) {
 	sql := `
     CREATE TABLE IF NOT EXISTS todos(
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        accessId INTEGER NOT NULL,
-        createrId INTEGER NOT NULL,
+        creater_id INTEGER NOT NULL,
         content TEXT NOT NULL,
         detail TEXT,
         deadline DATE,
@@ -56,18 +55,22 @@ func migrate(db *sql.DB) {
 
 func main() {
 	// Create a new instance of Echo
-	db := database.InitDB("storage.sqlite3")
+	db := database.InitDB("storage.sqlite3?parseTime=true")
 	migrate(db)
 
 	e := echo.New()
 
 	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	e.POST("/signin", handlers.SignIn(db))
+
+	e.Use(middleware.JWT([]byte("secret")))
 
 	e.GET("/todo", handlers.GetTodos(db))
 	e.POST("/todo", handlers.PostTodo(db))
-	e.POST("/signin", handlers.SignIn(db))
 	e.DELETE("/todo/:id", handlers.DeleteTodo(db))
 
-	fmt.Printf("jellyfish serve on http://localhost:8000")
+	fmt.Println("jellyfish serve on http://localhost:8000")
 	e.Run(standard.New(":8000")) // Start as a web server
 }

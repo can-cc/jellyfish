@@ -9,12 +9,13 @@ import (
 
 // Task is a struct containing Task data
 type Todo struct {
-	ID        int     `json:"id"`
-	Content   string  `json:"content"`
-	Detail    string  `json:"detail"`
-	Deadline  string  `json:"deadline"`
-	Status    string  `json:"status"`
-	CreatedAt float64 `json:"created_at"`
+	ID        int        `json:"id"`
+	Content   string     `json:"content"`
+	Detail    string     `json:"detail"`
+	Deadline  *time.Time `json:"deadline"`
+	Status    string     `json:"status"`
+	CreaterId string     `json:"createrId"`
+	CreatedAt *time.Time `json:"createdAt"`
 }
 
 // TaskCollection is collection of Tasks
@@ -22,10 +23,9 @@ type TodoCollection struct {
 	Todos []Todo `json:"items"`
 }
 
-// GetTasks from the DB
-func GetTodos(db *sql.DB) TodoCollection {
-	sql := "SELECT * FROM todos"
-	rows, err := db.Query(sql)
+func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
+	sql := "SELECT id, content, detail, deadline, status, created_at FROM todos where creater_id = ?"
+	rows, err := db.Query(sql, userId)
 	// Exit if the SQL doesn't work for some reason
 	if err != nil {
 		panic(err)
@@ -33,22 +33,23 @@ func GetTodos(db *sql.DB) TodoCollection {
 	// make sure to cleanup when the program exits
 	defer rows.Close()
 
-	result := TodoCollection{}
+	todoCollection := TodoCollection{Todos: make([]Todo, 0)}
+
 	for rows.Next() {
 		todo := Todo{}
-		err2 := rows.Scan(&todo.ID, &todo.Content)
-		// Exit if we get an error
+		err2 := rows.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Deadline, &todo.Status, &todo.CreatedAt)
+
 		if err2 != nil {
 			panic(err2)
 		}
-		result.Todos = append(result.Todos, todo)
+		todoCollection.Todos = append(todoCollection.Todos, todo)
 	}
-	return result
+	return todoCollection
 }
 
 // PutTask into DB
 func PostTodo(db *sql.DB, todo *Todo) (int64, error) {
-	sql := "INSERT INTO todos(content, detail, deadline, status, created_at) VALUES(?, ?, ?, ?, ?)"
+	sql := "INSERT INTO todos(content, detail, creater_id, deadline, status, created_at) VALUES(?, ?, ?, ?, ?, ?)"
 
 	// Create a prepared SQL statement
 	stmt, err := db.Prepare(sql)
@@ -60,7 +61,8 @@ func PostTodo(db *sql.DB, todo *Todo) (int64, error) {
 	defer stmt.Close()
 
 	// Replace the '?' in our prepared statement with 'name'
-	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.Deadline, todo.Status, time.Now().Unix())
+	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.CreaterId, todo.Deadline, todo.Status, time.Now().Unix())
+
 	// Exit if we get an error
 	if err2 != nil {
 		panic(err2)
