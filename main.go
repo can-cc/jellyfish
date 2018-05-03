@@ -65,11 +65,12 @@ func main() {
 
 	e.POST("/signin", handlers.SignIn(db))
 
-	e.Use(middleware.JWT([]byte("secret")))
+	r := e.Group("/")
+	r.Use(middleware.JWT([]byte("secret")))
 
-	e.GET("/todo", handlers.GetTodos(db))
-	e.POST("/todo", handlers.PostTodo(db))
-	e.DELETE("/todo/:id", handlers.DeleteTodo(db))
+	r.GET("/todo", handlers.GetTodos(db))
+	r.POST("/todo", handlers.PostTodo(db))
+	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
 
 	fmt.Println("jellyfish serve on http://localhost:8000")
 	e.Run(standard.New(":8000")) // Start as a web server
