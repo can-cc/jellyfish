@@ -54,7 +54,6 @@ func migrate(db *sql.DB) {
 }
 
 func main() {
-	// Create a new instance of Echo
 	db := database.InitDB("storage.sqlite3?parseTime=true")
 	migrate(db)
 
@@ -65,7 +64,7 @@ func main() {
 
 	e.POST("/signin", handlers.SignIn(db))
 
-	r := e.Group("/")
+	r := e.Group("")
 	r.Use(middleware.JWT([]byte("secret")))
 
 	r.GET("/todo", handlers.GetTodos(db))
@@ -73,5 +72,5 @@ func main() {
 	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
 
 	fmt.Println("jellyfish serve on http://localhost:8000")
-	e.Run(standard.New(":8000")) // Start as a web server
+	e.Run(standard.New("0.0.0.0:8000")) // Start as a web server
 }
