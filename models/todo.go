@@ -47,6 +47,35 @@ func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
 	return todoCollection
 }
 
+func GetTodo(db *sql.DB, todoId string) Todo {
+	sql := "SELECT id, content, detail, deadline, status, creater_id, created_at FROM todos where id = ?"
+	row := db.QueryRow(sql, todoId)
+
+	var todo Todo
+	err := row.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Deadline, &todo.Status, &todo.CreaterId, &todo.CreatedAt)
+	if err != nil {
+		panic(err)
+	}
+	return todo
+}
+
+func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
+	sql := "UPDATE todos set content = ?, detail = ?, deadline = ?, status = ?, updated_at = ? where id = ?"
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		panic(err)
+	}
+
+	defer stmt.Close()
+
+	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.Deadline, todo.Status, time.Now().Unix(), todo.ID)
+
+	if err2 != nil {
+		panic(err2)
+	}
+	return result.LastInsertId()
+}
+
 // PutTask into DB
 func PostTodo(db *sql.DB, todo *Todo) (int64, error) {
 	sql := "INSERT INTO todos(content, detail, creater_id, deadline, status, created_at) VALUES(?, ?, ?, ?, ?, ?)"

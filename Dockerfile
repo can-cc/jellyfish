@@ -1,10 +1,15 @@
 # build stage
-FROM golang:alpine AS build-env
-ADD . /src
-RUN cd /src && go build main.go
+FROM golang:1.8 AS build-env
+RUN mkdir /go/src/jellyfish
+WORKDIR /go/src/jellyfish
+COPY . .
+RUN go get -d -v github.com/labstack/echo
+RUN go get -d -v github.com/labstack/gommon/log
+RUN go get -d -v github.com/mattn/go-sqlite3
+CMD ["jellyfish"]
+RUN go build main.go
 
 # final stage
 FROM alpine
-WORKDIR /app
-COPY --from=build-env /src/goapp /app/
-ENTRYPOINT ./main
+RUN mkdir /jellyfish
+COPY --from=build-env /go/src/jellyfish/ /jellyfish

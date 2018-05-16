@@ -25,14 +25,7 @@ func migrate(db *sql.DB) {
         detail TEXT,
         deadline DATE,
         status TEXT,
-        created_at DATE,
-        updated_at DATE
-    );
-
-    CREATE TABLE IF NOT EXISTS keeps(
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        content TEXT NOT NULL,
-        status TEXT,
+        done INTEGER,
         created_at DATE,
         updated_at DATE
     );
@@ -70,6 +63,7 @@ func main() {
 	r.GET("/todo", handlers.GetTodos(db))
 	r.POST("/todo", handlers.PostTodo(db))
 	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
+	r.PUT("/todo/:id", handlers.PutTodo(db))
 
 	fmt.Println("jellyfish serve on http://localhost:8000")
 	e.Run(standard.New("0.0.0.0:8000")) // Start as a web server

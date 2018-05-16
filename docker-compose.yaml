@@ -1,0 +1,11 @@
+version: "3.2"
+services:
+  api:
+    restart: "no"
+    build: ./
+    ports:
+      - "8200:8000"
+    command: >
+      sh -c "/jellyfish/main"
+
+  

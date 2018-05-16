@@ -33,6 +33,24 @@ func GetTodos(db *sql.DB) echo.HandlerFunc {
 	}
 }
 
+func PutTodo(db *sql.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// user := c.Get("user").(*jwt.Token)
+		// claims := user.Claims.(jwt.MapClaims)
+		// userId := claims["id"].(string)
+
+		todo := new(models.Todo)
+		c.Bind(&todo)
+		_, err := models.UpdateTodo(db, todo)
+		if err == nil {
+			return c.JSON(http.StatusCreated, nil)
+		} else {
+			return err
+		}
+
+	}
+}
+
 // PutTask endpoint
 func PostTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
