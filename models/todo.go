@@ -13,6 +13,7 @@ type Todo struct {
 	Content   string     `json:"content"`
 	Detail    string     `json:"detail"`
 	Deadline  *time.Time `json:"deadline"`
+	Done      bool       `json:"done"`
 	Status    string     `json:"status"`
 	CreaterId string     `json:"createrId"`
 	CreatedAt *time.Time `json:"createdAt"`
@@ -24,7 +25,7 @@ type TodoCollection struct {
 }
 
 func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
-	sql := "SELECT id, content, detail, deadline, status, created_at FROM todos where creater_id = ?"
+	sql := "SELECT id, content, detail, deadline, status, done, created_at FROM todos where creater_id = ?"
 	rows, err := db.Query(sql, userId)
 	// Exit if the SQL doesn't work for some reason
 	if err != nil {
@@ -37,7 +38,7 @@ func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
 
 	for rows.Next() {
 		todo := Todo{}
-		err2 := rows.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Deadline, &todo.Status, &todo.CreatedAt)
+		err2 := rows.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Deadline, &todo.Status, &todo.Done, &todo.CreatedAt)
 
 		if err2 != nil {
 			panic(err2)
@@ -60,7 +61,7 @@ func GetTodo(db *sql.DB, todoId string) Todo {
 }
 
 func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
-	sql := "UPDATE todos set content = ?, detail = ?, deadline = ?, status = ?, updated_at = ? where id = ?"
+	sql := "UPDATE todos set content = ?, detail = ?, done = ?, deadline = ?, status = ?, updated_at = ? where id = ?"
 	stmt, err := db.Prepare(sql)
 	if err != nil {
 		panic(err)
@@ -68,7 +69,7 @@ func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
 
 	defer stmt.Close()
 
-	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.Deadline, todo.Status, time.Now().Unix(), todo.ID)
+	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.Done, todo.Deadline, todo.Status, time.Now().Unix(), todo.ID)
 
 	if err2 != nil {
 		panic(err2)

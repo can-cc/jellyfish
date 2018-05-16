@@ -25,7 +25,7 @@ func migrate(db *sql.DB) {
         detail TEXT,
         deadline DATE,
         status TEXT,
-        done INTEGER,
+        done INTEGER DEFAULT 0,
         created_at DATE,
         updated_at DATE
     );
