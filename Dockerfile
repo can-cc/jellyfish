@@ -2,7 +2,7 @@
 FROM golang:1.9.6-alpine3.7 AS build-env
 
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
+    apk add --no-cache bash git openssh gcc make alpine-sdk libssh2 ca-certificates openssl
 
 RUN mkdir /go/src/jellyfish
 WORKDIR /go/src/jellyfish

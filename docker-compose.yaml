@@ -7,5 +7,3 @@ services:
       - "8200:8000"
     command: >
       sh -c "/jellyfish/main"
-
-  
