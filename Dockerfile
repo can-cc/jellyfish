@@ -1,5 +1,9 @@
 # build stage
-FROM golang:1.8 AS build-env
+FROM golang:1.9.6-alpine3.7 AS build-env
+
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
 RUN mkdir /go/src/jellyfish
 WORKDIR /go/src/jellyfish
 COPY . .

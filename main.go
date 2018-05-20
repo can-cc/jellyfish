@@ -48,6 +48,7 @@ func migrate(db *sql.DB) {
 
 func main() {
 	db := database.InitDB("storage.sqlite3?parseTime=true")
+
 	migrate(db)
 
 	e := echo.New()
