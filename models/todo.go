@@ -9,14 +9,14 @@ import (
 
 // Task is a struct containing Task data
 type Todo struct {
-	ID        int        `json:"id"`
-	Content   string     `json:"content"`
-	Detail    string     `json:"detail"`
-	Deadline  *time.Time `json:"deadline"`
-	Done      bool       `json:"done"`
-	Status    string     `json:"status"`
-	CreaterId string     `json:"createrId"`
-	CreatedAt *time.Time `json:"createdAt"`
+	ID        int    `json:"id"`
+	Content   string `json:"content"`
+	Detail    string `json:"detail"`
+	Deadline  int64  `json:"deadline"`
+	Done      bool   `json:"done"`
+	Status    string `json:"status"`
+	CreaterId string `json:"createrId"`
+	CreatedAt int64  `json:"createdAt"`
 }
 
 // TaskCollection is collection of Tasks
@@ -38,7 +38,11 @@ func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
 
 	for rows.Next() {
 		todo := Todo{}
-		err2 := rows.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Deadline, &todo.Status, &todo.Done, &todo.CreatedAt)
+		var deadline time.Time
+		var createdAt time.Time
+		err2 := rows.Scan(&todo.ID, &todo.Content, &todo.Detail, &deadline, &todo.Status, &todo.Done, &createdAt)
+		todo.Deadline = deadline.Unix()
+		todo.CreatedAt = createdAt.Unix()
 
 		if err2 != nil {
 			panic(err2)
@@ -102,8 +106,8 @@ func PostTodo(db *sql.DB, todo *Todo) (int64, error) {
 }
 
 // DeleteTask from DB
-func DeleteTodo(db *sql.DB, id int) (int64, error) {
-	sql := "DELETE FROM todos WHERE id = ?"
+func DeleteTodo(db *sql.DB, id int, userId string) (int64, error) {
+	sql := "DELETE FROM todos WHERE id = ? and creater_id = ?"
 
 	// Create a prepared SQL statement
 	stmt, err := db.Prepare(sql)
@@ -113,7 +117,7 @@ func DeleteTodo(db *sql.DB, id int) (int64, error) {
 	}
 
 	// Replace the '?' in our prepared statement with 'id'
-	result, err2 := stmt.Exec(id)
+	result, err2 := stmt.Exec(id, userId)
 	// Exit if we get an error
 	if err2 != nil {
 		panic(err2)

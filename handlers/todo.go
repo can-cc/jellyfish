@@ -41,6 +41,7 @@ func PutTodo(db *sql.DB) echo.HandlerFunc {
 
 		todo := new(models.Todo)
 		c.Bind(&todo)
+
 		_, err := models.UpdateTodo(db, todo)
 		if err == nil {
 			return c.JSON(http.StatusCreated, nil)
@@ -90,14 +91,16 @@ func PostTodo(db *sql.DB) echo.HandlerFunc {
 // DeleteTask endpoint
 func DeleteTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(jwt.MapClaims)
+		userId := claims["id"].(string)
+
 		id, _ := strconv.Atoi(c.Param("id"))
 		// Use our new model to delete a task
-		_, err := models.DeleteTodo(db, id)
+		_, err := models.DeleteTodo(db, id, userId)
 		// Return a JSON response on success
 		if err == nil {
-			return c.JSON(http.StatusOK, H{
-				"deleted": id,
-			})
+			return c.JSON(http.StatusOK, H{})
 			// Handle errors
 		} else {
 			return err
