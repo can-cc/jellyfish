@@ -8,7 +8,6 @@ RUN mkdir /go/src/jellyfish
 WORKDIR /go/src/jellyfish
 COPY . .
 RUN go get -d -v github.com/labstack/echo
-RUN go get -d -v github.com/labstack/echo/engine/standard
 RUN go get -d -v github.com/labstack/gommon/log
 RUN go get -d -v github.com/mattn/go-sqlite3
 RUN go get -d -v github.com/dgrijalva/jwt-go
