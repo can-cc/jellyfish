@@ -13,6 +13,8 @@ func main() {
 
 	db := database.InitDB("storage.sqlite3")
 
+	defer db.Close()
+
 	user := models.User{}
 
 	user.Username = username
