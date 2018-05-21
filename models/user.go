@@ -2,7 +2,7 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
+	// "fmt"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -18,7 +18,6 @@ type User struct {
 }
 
 func CreateUser(db *sql.DB, user *User) (int64, error) {
-	fmt.Println(user)
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		panic(err)
@@ -28,7 +27,6 @@ func CreateUser(db *sql.DB, user *User) (int64, error) {
 	stmt, err := db.Prepare(sql)
 
 	defer stmt.Close()
-	fmt.Println(user.Username, &hash)
 
 	result, err2 := stmt.Exec(user.Username, string(hash), time.Now().Unix())
 
