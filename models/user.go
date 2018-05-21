@@ -18,6 +18,7 @@ type User struct {
 }
 
 func CreateUser(db *sql.DB, user *User) (int64, error) {
+	fmt.Println(user)
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		panic(err)
