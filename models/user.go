@@ -30,7 +30,7 @@ func CreateUser(db *sql.DB, user *User) (int64, error) {
 	defer stmt.Close()
 	fmt.Println(user.Username, &hash)
 
-	result, err2 := stmt.Exec(user.Username, &hash, time.Now().Unix())
+	result, err2 := stmt.Exec(user.Username, string(hash), time.Now().Unix())
 
 	if err2 != nil {
 		panic(err2)
