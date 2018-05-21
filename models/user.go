@@ -24,6 +24,7 @@ func CreateUser(db *sql.DB, user *User) (int64, error) {
 
 	sql := "INSERT INTO users(username, hash, created_at) VALUES (?, ?, ?)"
 	stmt, err := db.Prepare(sql)
+
 	defer stmt.Close()
 
 	result, err2 := stmt.Exec(user.Username, hash, time.Now().Unix())

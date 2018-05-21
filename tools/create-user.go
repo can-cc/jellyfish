@@ -15,12 +15,12 @@ func main() {
 
 	defer db.Close()
 
-	user := models.User{}
+	user := new(models.User)
 
 	user.Username = username
 	user.Password = password
 
-	models.CreateUser(db, &user)
+	models.CreateUser(db, user)
 
 	fmt.Print("Create user successful:")
 	fmt.Print("username: ", username, "\npassword: ", password, "\n")
