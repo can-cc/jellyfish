@@ -13,7 +13,7 @@ type User struct {
 	ID        string `json:"id"`
 	Username  string `json:"username"`
 	Password  string `json:"password"`
-	CreatedAt string
+	CreatedAt int64
 }
 
 func CreateUser(db *sql.DB, user *User) (int64, error) {
