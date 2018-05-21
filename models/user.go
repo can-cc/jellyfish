@@ -28,7 +28,7 @@ func CreateUser(db *sql.DB, user *User) (int64, error) {
 	stmt, err := db.Prepare(sql)
 
 	defer stmt.Close()
-	fmt.Println(user.Username, hash)
+	fmt.Println(user.Username, &hash)
 
 	result, err2 := stmt.Exec(user.Username, hash, time.Now().Unix())
 
