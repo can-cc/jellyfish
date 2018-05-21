@@ -24,5 +24,4 @@ func main() {
 
 	fmt.Print("Create user successful:")
 	fmt.Print("username: ", username, "\npassword: ", password, "\n")
-
 }

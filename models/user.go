@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -26,6 +27,7 @@ func CreateUser(db *sql.DB, user *User) (int64, error) {
 	stmt, err := db.Prepare(sql)
 
 	defer stmt.Close()
+	fmt.Println(user.Username, hash)
 
 	result, err2 := stmt.Exec(user.Username, hash, time.Now().Unix())
 
