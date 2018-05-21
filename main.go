@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"net/http"
 
 	"jellyfish/database"
 	"jellyfish/handlers"
