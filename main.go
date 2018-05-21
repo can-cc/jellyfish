@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"net/http"
 
 	"jellyfish/database"
 	"jellyfish/handlers"
@@ -11,7 +12,6 @@ import (
 	_ "github.com/labstack/gommon/log"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -67,5 +67,6 @@ func main() {
 	r.PUT("/todo/:id", handlers.PutTodo(db))
 
 	fmt.Println("jellyfish serve on http://localhost:8000")
-	e.Run(standard.New("0.0.0.0:8000")) // Start as a web server
+	// e.Run(standard.New("0.0.0.0:8000")) // Start as a web server
+	e.Logger.Fatal(e.Start("0.0.0.0:8000"))
 }
