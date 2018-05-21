@@ -5,5 +5,7 @@ services:
     build: ./
     ports:
       - "8200:8000"
+    volumes:
+      - /root/database:/jellyfish/database
     command: >
       sh -c "/jellyfish/main"
