@@ -12,6 +12,7 @@ RUN go get -d -v github.com/labstack/gommon/log
 RUN go get -d -v github.com/mattn/go-sqlite3
 CMD ["jellyfish"]
 RUN go build main.go
+RUN go build tools/create-user.go
 
 # final stage
 FROM alpine
