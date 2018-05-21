@@ -12,16 +12,16 @@ func main() {
 	var password string = os.Args[2]
 
 	db := database.InitDB("storage.sqlite3")
-
 	defer db.Close()
 
-	user := new(models.User)
+	user := models.User{}
 
 	user.Username = username
 	user.Password = password
 
-	models.CreateUser(db, user)
+	models.CreateUser(db, &user)
 
 	fmt.Print("Create user successful:")
 	fmt.Print("username: ", username, "\npassword: ", password, "\n")
+
 }

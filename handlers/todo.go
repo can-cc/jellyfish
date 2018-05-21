@@ -44,7 +44,7 @@ func PutTodo(db *sql.DB) echo.HandlerFunc {
 
 		_, err := models.UpdateTodo(db, todo)
 		if err == nil {
-			return c.JSON(http.StatusCreated, nil)
+			return c.NoContent(http.StatusCreated)
 		} else {
 			return err
 		}
