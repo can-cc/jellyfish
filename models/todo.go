@@ -41,8 +41,8 @@ func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
 		var deadline time.Time
 		var createdAt time.Time
 		err2 := rows.Scan(&todo.ID, &todo.Content, &todo.Detail, &deadline, &todo.Status, &todo.Done, &createdAt)
-		todo.Deadline = deadline.Unix()
-		todo.CreatedAt = createdAt.Unix()
+		todo.Deadline = deadline.UnixNano()
+		todo.CreatedAt = createdAt.UnixNano()
 
 		if err2 != nil {
 			panic(err2)
@@ -73,7 +73,7 @@ func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
 
 	defer stmt.Close()
 
-	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.Done, todo.Deadline, todo.Status, time.Now().Unix(), todo.ID)
+	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.Done, todo.Deadline, todo.Status, time.Now().UnixNano(), todo.ID)
 
 	if err2 != nil {
 		panic(err2)
@@ -95,7 +95,7 @@ func CreateTodo(db *sql.DB, todo *Todo) (int64, error) {
 	defer stmt.Close()
 
 	// Replace the '?' in our prepared statement with 'name'
-	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.CreaterId, todo.Deadline, todo.Status, time.Now().Unix())
+	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.CreaterId, todo.Deadline, todo.Status, time.Now().UnixNano())
 
 	// Exit if we get an error
 	if err2 != nil {
