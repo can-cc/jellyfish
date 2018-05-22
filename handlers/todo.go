@@ -62,25 +62,15 @@ func PostTodo(db *sql.DB) echo.HandlerFunc {
 
 		todo := new(models.Todo)
 
-		// deadlinePath := new(struct {
-		// 	Deadline int64 `json:"deadline"`
-		// })
-
-		// fmt.Println(deadlinePath.Deadline)
-		// var deadline time.Time
-		// if deadlinePath.Deadline != 0 {
-		// 	deadline = time.Unix(deadlinePath.Deadline, 0)
-		// }
-
 		c.Bind(&todo)
 
 		todo.CreaterId = userId
 
-		id, err := models.PostTodo(db, todo)
+		id, err := models.CreateTodo(db, todo)
 
 		if err == nil {
 			return c.JSON(http.StatusCreated, H{
-				"created": id,
+				"id": id,
 			})
 		} else {
 			return err

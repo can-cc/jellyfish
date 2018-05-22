@@ -82,7 +82,7 @@ func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
 }
 
 // PutTask into DB
-func PostTodo(db *sql.DB, todo *Todo) (int64, error) {
+func CreateTodo(db *sql.DB, todo *Todo) (int64, error) {
 	sql := "INSERT INTO todos(content, detail, creater_id, deadline, status, created_at) VALUES(?, ?, ?, ?, ?, ?)"
 
 	// Create a prepared SQL statement
@@ -115,6 +115,7 @@ func DeleteTodo(db *sql.DB, id int, userId string) (int64, error) {
 	if err != nil {
 		panic(err)
 	}
+	defer stmt.Close()
 
 	// Replace the '?' in our prepared statement with 'id'
 	result, err2 := stmt.Exec(id, userId)
