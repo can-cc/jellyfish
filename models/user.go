@@ -45,6 +45,8 @@ func CheckUserExist(db *sql.DB, username string) bool {
 		panic(err)
 	}
 
+	defer stmt.Close()
+
 	rows, err2 := stmt.Query(username)
 
 	if err2 != nil {
@@ -62,12 +64,16 @@ func GetUserWhenCompareHashAndPassword(db *sql.DB, username string, password str
 		panic(err)
 	}
 
+	defer stmt.Close()
+
 	// Replace the '?' in our prepared statement with 'id'
 	rows, err2 := stmt.Query(username)
 
 	if err2 != nil {
 		panic(err2)
 	}
+
+	defer rows.Close()
 
 	user := User{}
 	user.Username = username
