@@ -33,7 +33,6 @@ func SignIn(db *sql.DB) echo.HandlerFunc {
 
 		user, err := models.GetUserWhenCompareHashAndPassword(db, request.Username, request.Password)
 
-		fmt.Println(user)
 		if err != nil {
 			return c.JSON(http.StatusUnauthorized, "")
 		}

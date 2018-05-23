@@ -44,7 +44,6 @@ func CheckUserExist(db *sql.DB, username string) bool {
 	if err != nil {
 		panic(err)
 	}
-
 	defer stmt.Close()
 
 	rows, err2 := stmt.Query(username)
@@ -52,6 +51,7 @@ func CheckUserExist(db *sql.DB, username string) bool {
 	if err2 != nil {
 		panic(err)
 	}
+	defer rows.Close()
 
 	return rows.Next()
 }

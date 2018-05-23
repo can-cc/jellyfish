@@ -39,7 +39,7 @@ func migrate(db *sql.DB) {
 
     `
 	_, err := db.Exec(sql)
-	// Exit if something goes wrong with our SQL statement above
+
 	if err != nil {
 		panic(err)
 	}
@@ -47,6 +47,7 @@ func migrate(db *sql.DB) {
 
 func main() {
 	db := database.InitDB("storage.sqlite3?parseTime=true&cache=shared&mode=rwc")
+	defer db.Close()
 
 	migrate(db)
 
