@@ -46,7 +46,7 @@ func migrate(db *sql.DB) {
 }
 
 func main() {
-	db := database.InitDB("storage.sqlite3?parseTime=true")
+	db := database.InitDB("storage.sqlite3?parseTime=true&cache=shared&mode=rwc")
 
 	migrate(db)
 

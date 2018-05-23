@@ -27,12 +27,11 @@ type TodoCollection struct {
 func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
 	sql := "SELECT id, content, detail, deadline, status, done, created_at FROM todos where creater_id = ?"
 	rows, err := db.Query(sql, userId)
-	// Exit if the SQL doesn't work for some reason
+	defer rows.Close()
+
 	if err != nil {
 		panic(err)
 	}
-	// make sure to cleanup when the program exits
-	defer rows.Close()
 
 	todoCollection := TodoCollection{Todos: make([]Todo, 0)}
 
