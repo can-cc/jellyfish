@@ -57,6 +57,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.POST("/signin", handlers.SignIn(db))
+	e.POST("/signup", handlers.SignUp(db))
 
 	r := e.Group("")
 	r.Use(middleware.JWT([]byte("secret")))
