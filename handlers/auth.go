@@ -15,6 +15,21 @@ import (
 
 type H2 map[string]interface{}
 
+func SignUp(db *sql.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		user := models.User{}
+		c.Bind(&user)
+
+		_, error := models.CreateUser(db, &user)
+		if error == nil {
+			return c.NoContent(http.StatusNoContent)
+		} else {
+			return error
+		}
+
+	}
+}
+
 func SignIn(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
