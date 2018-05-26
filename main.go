@@ -59,7 +59,7 @@ func main() {
 	e.POST("/signin", handlers.SignIn(db))
 	e.POST("/signup", handlers.SignUp(db))
 
-	r := e.Group("")
+	r := e.Group("/auth")
 	r.Use(middleware.JWT([]byte("secret")))
 
 	r.GET("/auth/todo", handlers.GetTodos(db))
