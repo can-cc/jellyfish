@@ -56,16 +56,16 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	e.POST("/auth/signin", handlers.SignIn(db))
-	e.POST("/auth/signup", handlers.SignUp(db))
+	e.POST("/signin", handlers.SignIn(db))
+	e.POST("/signup", handlers.SignUp(db))
 
 	r := e.Group("")
 	r.Use(middleware.JWT([]byte("secret")))
 
-	r.GET("/todo", handlers.GetTodos(db))
-	r.POST("/todo", handlers.PostTodo(db))
-	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
-	r.PUT("/todo/:id", handlers.PutTodo(db))
+	r.GET("/auth/todo", handlers.GetTodos(db))
+	r.POST("/auth/todo", handlers.PostTodo(db))
+	r.DELETE("/auth/todo/:id", handlers.DeleteTodo(db))
+	r.PUT("/auth/todo/:id", handlers.PutTodo(db))
 
 	fmt.Println("jellyfish serve on http://localhost:8000")
 	e.Logger.Fatal(e.Start("0.0.0.0:8000"))
