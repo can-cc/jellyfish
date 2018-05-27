@@ -7,6 +7,7 @@ import (
 	"jellyfish/handlers"
 
 	"fmt"
+	"github.com/dchest/captcha"
 
 	_ "github.com/labstack/gommon/log"
 
@@ -58,6 +59,8 @@ func main() {
 
 	e.POST("/signin", handlers.SignIn(db))
 	e.POST("/signup", handlers.SignUp(db))
+	e.GET("/captcha/*", echo.WrapHandler(captcha.Server(captcha.StdWidth, captcha.StdHeight)))
+	e.POST("/captcha", handlers.GenCaptcha(db))
 
 	r := e.Group("/auth")
 	r.Use(middleware.JWT([]byte("secret")))
@@ -67,6 +70,6 @@ func main() {
 	r.DELETE("/auth/todo/:id", handlers.DeleteTodo(db))
 	r.PUT("/auth/todo/:id", handlers.PutTodo(db))
 
-	fmt.Println("jellyfish serve on http://localhost:8000")
+	fmt.Println("jellyfish serve on http://0.0.0.0:8000")
 	e.Logger.Fatal(e.Start("0.0.0.0:8000"))
 }

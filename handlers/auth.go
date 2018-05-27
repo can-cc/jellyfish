@@ -8,7 +8,9 @@ import (
 	"jellyfish/models"
 	"net/http"
 
-	// "fmt"
+	"github.com/dchest/captcha"
+
+	"fmt"
 
 	"github.com/labstack/echo"
 )
@@ -18,13 +20,28 @@ type H2 map[string]interface{}
 func SignUp(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user := models.User{}
-		c.Bind(&user)
 
-		_, error := models.CreateUser(db, &user)
-		if error == nil {
-			return c.NoContent(http.StatusNoContent)
+		request := new(struct {
+			Captcha   string `json:"captcha"`
+			CaptchaId string `json:"captchaId"`
+			Username  string `json:"username"`
+			Password  string `json:"password"`
+		})
+
+		c.Bind(&request)
+		user.Username = request.Username
+		user.Password = request.Password
+
+		if !captcha.VerifyString(request.CaptchaId, request.Captcha) {
+			fmt.Println(request)
+			return c.NoContent(http.StatusUnauthorized)
 		} else {
-			return error
+			_, error := models.CreateUser(db, &user)
+			if error == nil {
+				return c.NoContent(http.StatusNoContent)
+			} else {
+				return error
+			}
 		}
 
 	}
