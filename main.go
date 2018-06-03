@@ -5,6 +5,7 @@ import (
 
 	"jellyfish/database"
 	"jellyfish/handlers"
+	"net/http"
 
 	"fmt"
 	"github.com/dchest/captcha"
@@ -57,6 +58,9 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	e.POST("/hello", func(c echo.Context) error {
+		return c.String(http.StatusOK, "hello my firend")
+	})
 	e.POST("/signin", handlers.SignIn(db))
 	e.POST("/signup", handlers.SignUp(db))
 	e.GET("/captcha/*", echo.WrapHandler(captcha.Server(captcha.StdWidth, captcha.StdHeight)))
