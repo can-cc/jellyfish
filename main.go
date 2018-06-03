@@ -58,7 +58,7 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	e.POST("/hello", func(c echo.Context) error {
+	e.GET("/hello", func(c echo.Context) error {
 		return c.String(http.StatusOK, "hello my firend")
 	})
 	e.POST("/signin", handlers.SignIn(db))
