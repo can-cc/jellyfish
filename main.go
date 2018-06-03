@@ -69,10 +69,10 @@ func main() {
 	r := e.Group("/auth")
 	r.Use(middleware.JWT([]byte("secret")))
 
-	r.GET("/auth/todo", handlers.GetTodos(db))
-	r.POST("/auth/todo", handlers.PostTodo(db))
-	r.DELETE("/auth/todo/:id", handlers.DeleteTodo(db))
-	r.PUT("/auth/todo/:id", handlers.PutTodo(db))
+	r.GET("/todo", handlers.GetTodos(db))
+	r.POST("/todo", handlers.PostTodo(db))
+	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
+	r.PUT("/todo/:id", handlers.PutTodo(db))
 
 	fmt.Println("jellyfish serve on http://0.0.0.0:8000")
 	e.Logger.Fatal(e.Start("0.0.0.0:8000"))
