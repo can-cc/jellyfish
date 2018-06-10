@@ -74,7 +74,7 @@ func SignIn(db *sql.DB) echo.HandlerFunc {
 		claims["username"] = user.Username
 		claims["id"] = user.ID
 		claims["createdAt"] = user.CreatedAt
-		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+		claims["exp"] = time.Now().Add(time.Hour * 24 * 30).Unix()
 
 		// TODO replace secret
 
