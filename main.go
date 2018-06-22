@@ -34,6 +34,7 @@ func migrate(db *sql.DB) {
     CREATE TABLE IF NOT EXISTS users(
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
+        avatar TEXT,
         hash TEXT NOT NULL,
         created_at DATE,
         updated_at DATE
@@ -73,6 +74,7 @@ func main() {
 	r.POST("/todo", handlers.PostTodo(db))
 	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
 	r.PUT("/todo/:id", handlers.PutTodo(db))
+	r.POST("/avatar", handlers.PostAvatar(db))
 
 	fmt.Println("jellyfish serve on http://0.0.0.0:8000")
 	e.Logger.Fatal(e.Start("0.0.0.0:8000"))

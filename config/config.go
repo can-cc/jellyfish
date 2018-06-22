@@ -32,6 +32,6 @@ func readConfig() {
 	if err != nil {
 		fmt.Println("error:", err)
 	}
-	fmt.Println(configuration.Users) // output: [UserA, UserB]
+	// fmt.Println(configuration.Users) // output: [UserA, UserB]
 
 }
