@@ -11,6 +11,7 @@ import (
 	"github.com/dchest/captcha"
 
 	_ "github.com/labstack/gommon/log"
+	"github.com/spf13/viper"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -48,7 +49,18 @@ func migrate(db *sql.DB) {
 	}
 }
 
+func readConfg() {
+	viper.SetConfigName("config") // name of config file (without extension)
+	viper.AddConfigPath(".")      // optionally look for config in the working directory
+	err := viper.ReadInConfig()   // Find and read the config file
+	if err != nil {               // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
+}
+
 func main() {
+	readConfg()
+
 	db := database.InitDB("storage.sqlite3?parseTime=true&cache=shared&mode=rwc")
 	defer db.Close()
 
@@ -71,10 +83,12 @@ func main() {
 	r.Use(middleware.JWT([]byte("secret")))
 
 	r.GET("/todo", handlers.GetTodos(db))
+	r.GET("/user/:userId", handlers.GetUserInfo)
 	r.POST("/todo", handlers.PostTodo(db))
 	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
 	r.PUT("/todo/:id", handlers.PutTodo(db))
 	r.POST("/avatar", handlers.PostAvatar(db))
+	r.POST("/avatar/base64", handlers.PostAvatarByBase64(db))
 
 	fmt.Println("jellyfish serve on http://0.0.0.0:8000")
 	e.Logger.Fatal(e.Start("0.0.0.0:8000"))
