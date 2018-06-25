@@ -7,8 +7,6 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
-	// "fmt"
-	"jellyfish/model"
 	"strings"
 
 	"bytes"
@@ -36,28 +34,6 @@ var (
 	ErrInvalidImage = errors.New("Invalid image!")
 )
 
-func GetUserInfo(db *sql.DB) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		userId := c.Param("userId")
-
-		sql := "SELECT username, avatar FROM users where id = ?"
-		row := db.QueryRow(sql, userId)
-		defer row.Close()
-
-		if err != nil {
-			panic(err)
-		}
-
-		user := new(model.User)
-		err := row.Scan(&user.Username, &user.Avatar)
-		if err != nil {
-			panic(err)
-		}
-		c.JSON(http.StatusOK, user)
-
-	}
-}
-
 func saveImageToDisk(fileNameBase, data string) (string, error) {
 	idx := strings.Index(data, ";base64,")
 	if idx < 0 {
@@ -69,6 +45,7 @@ func saveImageToDisk(fileNameBase, data string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	// _, fm, err := image.DecodeConfig(bytes.NewReader(buff.Bytes()))
 	_, fm, err := image.DecodeConfig(bytes.NewReader(buff.Bytes()))
 	if err != nil {
 		return "", err
@@ -77,7 +54,7 @@ func saveImageToDisk(fileNameBase, data string) (string, error) {
 	fileName := fileNameBase + "." + fm
 	ioutil.WriteFile(fileName, buff.Bytes(), 0644)
 
-	return fileName, err
+	return fm, err
 }
 
 func PostAvatarByBase64(db *sql.DB) echo.HandlerFunc {
@@ -95,7 +72,7 @@ func PostAvatarByBase64(db *sql.DB) echo.HandlerFunc {
 		avatardir := viper.GetString("avatardir")
 		fileNameHash := GetMD5Hash(request.Avatar)
 
-		_, err := saveImageToDisk(avatardir+fileNameHash, request.Avatar)
+		fm, err := saveImageToDisk(avatardir+fileNameHash, request.Avatar)
 		if err != nil {
 			panic(err)
 		}
@@ -109,15 +86,37 @@ func PostAvatarByBase64(db *sql.DB) echo.HandlerFunc {
 		}
 
 		defer stmt.Close()
-		_, err3 := stmt.Query(fileNameHash, userId)
+		_, err3 := stmt.Exec(fileNameHash+"."+fm, userId)
 		if err3 != nil {
 			panic(err3)
 		}
 
 		return c.JSON(http.StatusOK, map[string]string{
-			"avatar": avatardir + fileNameHash,
+			"avatar": avatardir + fileNameHash + "." + fm,
 		})
 
+	}
+}
+
+func GetUserInfo(db *sql.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		userId := c.Param("userId")
+
+		sql := "SELECT username, avatar FROM users where id = ?"
+		row := db.QueryRow(sql, userId)
+
+		userInfo := new(struct {
+			Username string `json:"username"`
+			Avatar   string `json:"avatar"`
+		})
+		avatardir := viper.GetString("avatardir")
+
+		err := row.Scan(&userInfo.Username, &userInfo.Avatar)
+		if err != nil {
+			panic(err)
+		}
+		userInfo.Avatar = avatardir + userInfo.Avatar
+		return c.JSON(http.StatusOK, userInfo)
 	}
 }
 
@@ -171,7 +170,7 @@ func PostAvatar(db *sql.DB) echo.HandlerFunc {
 			}
 
 			defer stmt.Close()
-			_, err3 := stmt.Query(fileNameHash, userId)
+			_, err3 := stmt.Exec(fileNameHash, userId)
 			if err3 != nil {
 				panic(err3)
 			}

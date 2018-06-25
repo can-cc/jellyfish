@@ -70,6 +70,7 @@ func main() {
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Static("/upload", "upload")
 
 	e.GET("/hello", func(c echo.Context) error {
 		return c.String(http.StatusOK, "hello my firend")
@@ -83,7 +84,7 @@ func main() {
 	r.Use(middleware.JWT([]byte("secret")))
 
 	r.GET("/todo", handlers.GetTodos(db))
-	r.GET("/user/:userId", handlers.GetUserInfo)
+	r.GET("/user/:userId", handlers.GetUserInfo(db))
 	r.POST("/todo", handlers.PostTodo(db))
 	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
 	r.PUT("/todo/:id", handlers.PutTodo(db))
