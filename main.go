@@ -32,6 +32,14 @@ func migrate(db *sql.DB) {
         updated_at DATE
     );
 
+    CREATE TABLE IF NOT EXISTS cycle_todo_status(
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        todo_id INTEGER NOT NULL,
+        status TEXT,
+        created_at DATE,
+        updated_at DATE
+    );
+
     CREATE TABLE IF NOT EXISTS users(
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,

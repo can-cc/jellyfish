@@ -33,6 +33,12 @@ func GetTodos(db *sql.DB) echo.HandlerFunc {
 	}
 }
 
+func MarkTodoDone() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+	}
+}
+
 func PutTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// user := c.Get("user").(*jwt.Token)
