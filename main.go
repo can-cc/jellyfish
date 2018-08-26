@@ -51,9 +51,10 @@ func migrate(db *sql.DB) {
 
 func readConfg() {
 	viper.SetConfigName("config") // name of config file (without extension)
-	viper.AddConfigPath(".")      // optionally look for config in the working directory
-	err := viper.ReadInConfig()   // Find and read the config file
-	if err != nil {               // Handle errors reading the config file
+
+	viper.AddConfigPath(".")    // optionally look for config in the working directory
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil {             // Handle errors reading the config file
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 }
@@ -88,6 +89,7 @@ func main() {
 	r.POST("/todo", handlers.PostTodo(db))
 	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
 	r.PUT("/todo/:id", handlers.PutTodo(db))
+
 	r.POST("/avatar", handlers.PostAvatar(db))
 	r.POST("/avatar/base64", handlers.PostAvatarByBase64(db))
 
