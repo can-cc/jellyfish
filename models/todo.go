@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -17,6 +18,14 @@ type Todo struct {
 	Status    string `json:"status"`
 	CreaterId string `json:"createrId"`
 	CreatedAt int64  `json:"createdAt"`
+}
+
+type CycleTodoStatus struct {
+	ID        int    `json:"id"`
+	Status    string `json:"status"`
+	date      string `json:"date"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
 }
 
 // TaskCollection is collection of Tasks
@@ -80,19 +89,88 @@ func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
 	return result.LastInsertId()
 }
 
-func CheckCycleTodoStatusExist(db *sql.DB, todoId string) {
+func CheckCycleTodoStatusExist(db *sql.DB, todoId string) bool {
 	sql := "SELECT id FROM cycle_todo_status where todo_id = ? and date = ?"
 	row := db.QueryRow(sql, todoId)
 
-	var todo Todo
-	err := row.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Deadline, &todo.Status, &todo.CreaterId, &todo.CreatedAt)
+	var id string
+	err := row.Scan(&id)
+	if err != nil {
+		return false
+	}
+
+	return true
+}
+
+func CreateCycleTodoStatus(db *sql.DB, todoId string, done bool) (int64, error) {
+	sql := "INSERT INTO cycle_todo_status(todo_id, status, date, created_at, updated_at) VALUES(?, ?, ?, ?, ?)"
+
+	// Create a prepared SQL statement
+	stmt, err := db.Prepare(sql)
+	// Exit if we get an error
 	if err != nil {
 		panic(err)
 	}
-	return todo
+	// Make sure to cleanup after the program exits
+	defer stmt.Close()
+
+	t := time.Now()
+	local, _ := time.LoadLocation("Asia/Shanghai")
+	dateString := t.Format("2006-01-02")
+
+	var status string
+	if done {
+		status = "DONE"
+	} else {
+		status = "UNDONE"
+	}
+
+	// Replace the '?' in our prepared statement with 'name'
+	result, err2 := stmt.Exec(todoId, status, dateString, time.Now().UnixNano()/int64(time.Millisecond), time.Now().UnixNano()/int64(time.Millisecond))
+
+	// Exit if we get an error
+	if err2 != nil {
+		panic(err2)
+	}
+
+	return result.LastInsertId()
+}
+
+func UpdateCycleTodoStatus(db *sql.DB, todoId string, done bool) (int64, error) {
+	sql := "UPDATE cycle_todo_status set status = ?, updated_at = ? where todo_id = ? and date = ?"
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		panic(err)
+	}
+
+	defer stmt.Close()
+
+	var status string
+	if done {
+		status = "DONE"
+	} else {
+		status = "UNDONE"
+	}
+
+	t := time.Now()
+	local, _ := time.LoadLocation("Asia/Shanghai")
+	dateString := t.Format("2006-01-02")
+
+	result, err2 := stmt.Exec(status, time.Now().UnixNano()/int64(time.Millisecond), todoId, dateString)
+
+	if err2 != nil {
+		panic(err2)
+	}
+	return result.LastInsertId()
 }
 
 func MarkCycleTodo(db *sql.DB, todoId string, done bool) (int64, error) {
+	cycleTodoExist := CheckCycleTodoStatusExist(db, todoId)
+	if cycleTodoExist {
+		return UpdateCycleTodoStatus(db, todoId, done)
+	} else {
+		return CreateCycleTodoStatus(db, todoId, done)
+	}
 }
 
 // PutTask into DB

@@ -46,6 +46,9 @@ func MarkCycleTodo(db *sql.DB) echo.HandlerFunc {
 		c.Bind(&request)
 
 		id, err := models.MarkCycleTodo(db, request.TodoId, request.Done)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
 		return c.JSON(http.StatusOK, id)
 	}
 }
