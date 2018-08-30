@@ -33,9 +33,20 @@ func GetTodos(db *sql.DB) echo.HandlerFunc {
 	}
 }
 
-func MarkTodoDone() echo.HandlerFunc {
+func MarkCycleTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(jwt.MapClaims)
+		jwtUserId := claims["id"].(string)
 
+		request := new(struct {
+			TodoId string `json:"todoId"`
+			Done   bool   `json:"done"`
+		})
+		c.Bind(&request)
+
+		id, err := models.MarkCycleTodo(db, request.TodoId, request.Done)
+		return c.JSON(http.StatusOK, id)
 	}
 }
 

@@ -27,6 +27,7 @@ func migrate(db *sql.DB) {
         detail TEXT,
         deadline DATE,
         status TEXT,
+        type TEXT,
         done INTEGER DEFAULT 0,
         created_at DATE,
         updated_at DATE
@@ -36,6 +37,7 @@ func migrate(db *sql.DB) {
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         todo_id INTEGER NOT NULL,
         status TEXT,
+        date TEXT,
         created_at DATE,
         updated_at DATE
     );

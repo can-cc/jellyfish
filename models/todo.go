@@ -80,6 +80,21 @@ func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
 	return result.LastInsertId()
 }
 
+func CheckCycleTodoStatusExist(db *sql.DB, todoId string) {
+	sql := "SELECT id FROM cycle_todo_status where todo_id = ? and date = ?"
+	row := db.QueryRow(sql, todoId)
+
+	var todo Todo
+	err := row.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Deadline, &todo.Status, &todo.CreaterId, &todo.CreatedAt)
+	if err != nil {
+		panic(err)
+	}
+	return todo
+}
+
+func MarkCycleTodo(db *sql.DB, todoId string, done bool) (int64, error) {
+}
+
 // PutTask into DB
 func CreateTodo(db *sql.DB, todo *Todo) (int64, error) {
 	sql := "INSERT INTO todos(content, detail, creater_id, deadline, status, created_at) VALUES(?, ?, ?, ?, ?, ?)"
