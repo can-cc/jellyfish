@@ -99,6 +99,7 @@ func main() {
 	r.POST("/todo", handlers.PostTodo(db))
 	r.DELETE("/todo/:id", handlers.DeleteTodo(db))
 	r.PUT("/todo/:id", handlers.PutTodo(db))
+	r.POST("/todo/:id/cycle", handlers.MarkCycleTodo(db))
 
 	r.POST("/avatar", handlers.PostAvatar(db))
 	r.POST("/avatar/base64", handlers.PostAvatarByBase64(db))

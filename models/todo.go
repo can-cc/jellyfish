@@ -2,7 +2,6 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -115,7 +114,6 @@ func CreateCycleTodoStatus(db *sql.DB, todoId string, done bool) (int64, error) 
 	defer stmt.Close()
 
 	t := time.Now()
-	local, _ := time.LoadLocation("Asia/Shanghai")
 	dateString := t.Format("2006-01-02")
 
 	var status string
@@ -153,7 +151,6 @@ func UpdateCycleTodoStatus(db *sql.DB, todoId string, done bool) (int64, error) 
 	}
 
 	t := time.Now()
-	local, _ := time.LoadLocation("Asia/Shanghai")
 	dateString := t.Format("2006-01-02")
 
 	result, err2 := stmt.Exec(status, time.Now().UnixNano()/int64(time.Millisecond), todoId, dateString)
