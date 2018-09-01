@@ -52,9 +52,6 @@ func MarkCycleTodo(db *sql.DB) echo.HandlerFunc {
 
 func PutTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// user := c.Get("user").(*jwt.Token)
-		// claims := user.Claims.(jwt.MapClaims)
-		// userId := claims["id"].(string)
 
 		todo := new(models.Todo)
 		c.Bind(&todo)
@@ -80,6 +77,10 @@ func PostTodo(db *sql.DB) echo.HandlerFunc {
 		todo := new(models.Todo)
 
 		c.Bind(&todo)
+
+		if todo.Type != "NORMAL" && todo.Type != "HABIT" {
+			return c.NoContent(http.StatusBadRequest)
+		}
 
 		todo.CreaterId = userId
 

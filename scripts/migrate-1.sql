@@ -1,1 +1,3 @@
 ALTER TABLE "todos" ADD type TEXT;
+
+UPDATE todos SET TYPE = "NORMAL";

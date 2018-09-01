@@ -15,6 +15,7 @@ type Todo struct {
 	Deadline  int64  `json:"deadline"`
 	Done      bool   `json:"done"`
 	Status    string `json:"status"`
+	Type      string `json:"type"`
 	CreaterId string `json:"createrId"`
 	CreatedAt int64  `json:"createdAt"`
 }
@@ -33,7 +34,7 @@ type TodoCollection struct {
 }
 
 func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
-	sql := "SELECT id, content, detail, deadline, status, done, created_at FROM todos where creater_id = ?"
+	sql := "SELECT id, content, detail, type, deadline, status, done, created_at FROM todos where creater_id = ?"
 	rows, err := db.Query(sql, userId)
 	defer rows.Close()
 
@@ -47,7 +48,7 @@ func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
 		todo := Todo{}
 		var deadline time.Time
 		var createdAt time.Time
-		err2 := rows.Scan(&todo.ID, &todo.Content, &todo.Detail, &deadline, &todo.Status, &todo.Done, &createdAt)
+		err2 := rows.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Type, &deadline, &todo.Status, &todo.Done, &createdAt)
 		todo.Deadline = deadline.UnixNano() / int64(time.Millisecond)
 		todo.CreatedAt = createdAt.UnixNano() / int64(time.Millisecond)
 
@@ -172,19 +173,15 @@ func MarkCycleTodo(db *sql.DB, todoId string, done bool) (int64, error) {
 
 // PutTask into DB
 func CreateTodo(db *sql.DB, todo *Todo) (int64, error) {
-	sql := "INSERT INTO todos(content, detail, creater_id, deadline, status, created_at) VALUES(?, ?, ?, ?, ?, ?)"
+	sql := "INSERT INTO todos(content, detail, type, creater_id, deadline, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?)"
 
-	// Create a prepared SQL statement
 	stmt, err := db.Prepare(sql)
-	// Exit if we get an error
 	if err != nil {
 		panic(err)
 	}
-	// Make sure to cleanup after the program exits
 	defer stmt.Close()
 
-	// Replace the '?' in our prepared statement with 'name'
-	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.CreaterId, todo.Deadline, todo.Status, time.Now().UnixNano()/int64(time.Millisecond))
+	result, err2 := stmt.Exec(todo.Content, todo.Detail, todo.Type, todo.CreaterId, todo.Deadline, todo.Status, time.Now().UnixNano()/int64(time.Millisecond))
 
 	// Exit if we get an error
 	if err2 != nil {
