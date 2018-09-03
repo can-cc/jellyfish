@@ -90,8 +90,10 @@ func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
 }
 
 func CheckCycleTodoStatusExist(db *sql.DB, todoId string) bool {
+	t := time.Now()
+	dateString := t.Format("2006-01-02")
 	sql := "SELECT id FROM cycle_todo_status where todo_id = ? and date = ?"
-	row := db.QueryRow(sql, todoId)
+	row := db.QueryRow(sql, todoId, dateString)
 
 	var id string
 	err := row.Scan(&id)
