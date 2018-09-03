@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	// "fmt"
+	"fmt"
 	// "time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -37,12 +37,12 @@ func MarkCycleTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		request := new(struct {
-			TodoId string `json:"todoId"`
-			Done   bool   `json:"done"`
+			TodoId int  `json:"todoId"`
+			Done   bool `json:"done"`
 		})
 		c.Bind(&request)
 
-		id, err := models.MarkCycleTodo(db, request.TodoId, request.Done)
+		id, err := models.MarkCycleTodo(db, strconv.Itoa(request.TodoId), request.Done)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, err)
 		}
@@ -53,6 +53,7 @@ func MarkCycleTodo(db *sql.DB) echo.HandlerFunc {
 func PutTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
+		// TODO get todo id in url
 		todo := new(models.Todo)
 		c.Bind(&todo)
 
