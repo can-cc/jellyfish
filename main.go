@@ -3,12 +3,14 @@ package main
 import (
 	"database/sql"
 
+	"bytes"
 	"jellyfish/database"
 	"jellyfish/handlers"
 	"net/http"
 
 	"fmt"
 	"github.com/dchest/captcha"
+	"io/ioutil"
 
 	_ "github.com/labstack/gommon/log"
 	"github.com/spf13/viper"
@@ -60,13 +62,23 @@ func migrate(db *sql.DB) {
 }
 
 func readConfg() {
-	viper.SetConfigName("config") // name of config file (without extension)
-	// viper.SetConfigName("config.custom") // name of config file (without extension)
 
-	viper.AddConfigPath(".")    // optionally look for config in the working directory
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	viper.SetConfigName("config") // name of config file (without extension)
+	viper.AddConfigPath(".")      // optionally look for config in the working directory
+	customConfigSrc, err := ioutil.ReadFile("config.custom.yaml")
+	if err != nil { // Handle errors reading the config file
+		panic(err)
+	}
+
+	err2 := viper.ReadInConfig() // Find and read the config file
+
+	if err2 != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s \n", err2))
+	}
+
+	err3 := viper.MergeConfig(bytes.NewBuffer(customConfigSrc))
+	if err3 != nil { // Handle errors reading the config file
+		panic(err3)
 	}
 }
 
