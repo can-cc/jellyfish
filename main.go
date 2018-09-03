@@ -108,6 +108,7 @@ func main() {
 	r.Use(middleware.JWT([]byte("secret")))
 
 	r.GET("/todo", handlers.GetTodos(db))
+	r.GET("/todo/cycle", handlers.GetTodoCycles(db))
 	r.GET("/user/:userId", handlers.GetUserInfo(db))
 	r.POST("/todo", handlers.PostTodo(db))
 	r.DELETE("/todo/:id", handlers.DeleteTodo(db))

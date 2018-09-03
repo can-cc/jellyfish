@@ -32,6 +32,22 @@ func GetTodos(db *sql.DB) echo.HandlerFunc {
 	}
 }
 
+func GetTodoCycles(db *sql.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		userId := c.QueryParam("userId")
+
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(jwt.MapClaims)
+		jwtUserId := claims["id"].(string)
+
+		if userId != jwtUserId {
+			return c.JSON(http.StatusUnauthorized, "")
+		}
+		tcs := models.GetTodosFromDB(db, userId).Todos
+		return c.JSON(http.StatusOK, todos)
+	}
+}
+
 func MarkCycleTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 

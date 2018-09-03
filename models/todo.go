@@ -33,6 +33,10 @@ type TodoCollection struct {
 	Todos []Todo `json:"items"`
 }
 
+type TodoCycleCollection struct {
+	TodoCycles []CycleTodoStatus `json:"items"`
+}
+
 func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
 	sql := "SELECT id, content, detail, type, deadline, status, done, created_at FROM todos where creater_id = ?"
 	rows, err := db.Query(sql, userId)
@@ -87,6 +91,10 @@ func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
 		panic(err2)
 	}
 	return result.LastInsertId()
+}
+
+func GetTodoCycles(db *sql.DB, userId string) TodoCycleCollection {
+
 }
 
 func CheckCycleTodoStatusExist(db *sql.DB, todoId string) bool {
