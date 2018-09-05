@@ -22,6 +22,7 @@ type Todo struct {
 
 type CycleTodoStatus struct {
 	ID        int    `json:"id"`
+	TodoID    int    `json:"todoId"`
 	Status    string `json:"status"`
 	date      string `json:"date"`
 	CreatedAt int64  `json:"createdAt"`
@@ -62,6 +63,33 @@ func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
 		todoCollection.Todos = append(todoCollection.Todos, todo)
 	}
 	return todoCollection
+}
+
+func GetTodoCyclesFromDB(db *sql.DB, userId string) TodoCycleCollection {
+	sql := "SELECT id, todo_id, status, date, created_at, updated_at FROM todos where creater_id = ?"
+	rows, err := db.Query(sql, userId)
+	defer rows.Close()
+
+	if err != nil {
+		panic(err)
+	}
+
+	todoCycleCollection := TodoCycleCollection{TodoCycles: make([]CycleTodoStatus, 0)}
+
+	for rows.Next() {
+		cycle := CycleTodoStatus{}
+		var createdAt time.Time
+		var updatedAt time.Time
+		err2 := rows.Scan(&cycle.ID, &cycle.TodoID, &cycle.Status, &createdAt, &updatedAt)
+		cycle.CreatedAt = createdAt.UnixNano() / int64(time.Millisecond)
+		cycle.UpdatedAt = updatedAt.UnixNano() / int64(time.Millisecond)
+
+		if err2 != nil {
+			panic(err2)
+		}
+		todoCycleCollection.TodoCycles = append(todoCycleCollection.TodoCycles, cycle)
+	}
+	return todoCycleCollection
 }
 
 func GetTodo(db *sql.DB, todoId string) Todo {
