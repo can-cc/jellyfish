@@ -43,8 +43,8 @@ func GetTodoCycles(db *sql.DB) echo.HandlerFunc {
 		if userId != jwtUserId {
 			return c.JSON(http.StatusUnauthorized, "")
 		}
-		tcs := models.GetTodosFromDB(db, userId).Todos
-		return c.JSON(http.StatusOK, todos)
+		tcs := models.GetTodoCyclesFromDB(db, userId).TodoCycles
+		return c.JSON(http.StatusOK, tcs)
 	}
 }
 

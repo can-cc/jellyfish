@@ -24,7 +24,7 @@ type CycleTodoStatus struct {
 	ID        int    `json:"id"`
 	TodoID    int    `json:"todoId"`
 	Status    string `json:"status"`
-	date      string `json:"date"`
+	Date      string `json:"date"`
 	CreatedAt int64  `json:"createdAt"`
 	UpdatedAt int64  `json:"updatedAt"`
 }
@@ -66,8 +66,12 @@ func GetTodosFromDB(db *sql.DB, userId string) TodoCollection {
 }
 
 func GetTodoCyclesFromDB(db *sql.DB, userId string) TodoCycleCollection {
-	sql := "SELECT id, todo_id, status, date, created_at, updated_at FROM todos where creater_id = ?"
-	rows, err := db.Query(sql, userId)
+	sql := "select c.id, c.todo_id, c.status, c.date, c.created_at, c.updated_at from cycle_todo_status as c inner join todos as t where c.todo_id = t.id and t.creater_id = ? and c.date = ?"
+
+	t := time.Now()
+	dateString := t.Format("2006-01-02")
+
+	rows, err := db.Query(sql, userId, dateString)
 	defer rows.Close()
 
 	if err != nil {
@@ -80,7 +84,7 @@ func GetTodoCyclesFromDB(db *sql.DB, userId string) TodoCycleCollection {
 		cycle := CycleTodoStatus{}
 		var createdAt time.Time
 		var updatedAt time.Time
-		err2 := rows.Scan(&cycle.ID, &cycle.TodoID, &cycle.Status, &createdAt, &updatedAt)
+		err2 := rows.Scan(&cycle.ID, &cycle.TodoID, &cycle.Status, &cycle.Date, &createdAt, &updatedAt)
 		cycle.CreatedAt = createdAt.UnixNano() / int64(time.Millisecond)
 		cycle.UpdatedAt = updatedAt.UnixNano() / int64(time.Millisecond)
 
@@ -119,10 +123,6 @@ func UpdateTodo(db *sql.DB, todo *Todo) (int64, error) {
 		panic(err2)
 	}
 	return result.LastInsertId()
-}
-
-func GetTodoCycles(db *sql.DB, userId string) TodoCycleCollection {
-
 }
 
 func CheckCycleTodoStatusExist(db *sql.DB, todoId string) bool {
