@@ -2,7 +2,9 @@
 /storage.sqlite3
 /vendor
 /main
+/main.exe
 /create-user
 /.idea
 /_vendor*
 /upload
+
