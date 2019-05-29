@@ -4,8 +4,8 @@ import (
 	"database/sql"
 
 	"bytes"
-	"jellyfish/database"
-	"jellyfish/handlers"
+	"github.com/fwchen/jellyfish/database"
+	"github.com/fwchen/jellyfish/handlers"
 	"net/http"
 
 	"fmt"

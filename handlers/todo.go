@@ -8,7 +8,7 @@ import (
 	// "time"
 
 	"github.com/dgrijalva/jwt-go"
-	"jellyfish/models"
+	"github.com/fwchen/jellyfish/models"
 
 	"github.com/labstack/echo"
 )
