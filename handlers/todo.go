@@ -5,127 +5,81 @@ import (
 	"net/http"
 	"strconv"
 
-	// "time"
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/fwchen/jellyfish/models"
+	"github.com/fwchen/jellyfish/repository/todo"
 
 	"github.com/labstack/echo"
 )
 
-type H map[string]interface{}
-
-// GetTasks endpoint
-func GetTodos(db *sql.DB) echo.HandlerFunc {
+// GetUserTodos :
+func GetUserTodos(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userId := c.QueryParam("userId")
+		userID := c.QueryParam("userId")
 
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(jwt.MapClaims)
-		jwtUserId := claims["id"].(string)
+		claims := user.Claims.(*JwtCustomClaims)
+		jwtUserID := claims.ID
 
-		if userId != jwtUserId {
+		if userID != jwtUserID {
 			return c.JSON(http.StatusUnauthorized, "")
 		}
-		todos := models.GetTodosFromDB(db, userId).Todos
+		todos := todo_repository.GetUserTodos(userID).Items
 		return c.JSON(http.StatusOK, todos)
 	}
 }
 
-func GetTodoCycles(db *sql.DB) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		userId := c.QueryParam("userId")
-
-		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(jwt.MapClaims)
-		jwtUserId := claims["id"].(string)
-
-		if userId != jwtUserId {
-			return c.JSON(http.StatusUnauthorized, "")
-		}
-		tcs := models.GetTodoCyclesFromDB(db, userId).TodoCycles
-		return c.JSON(http.StatusOK, tcs)
-	}
-}
-
-func MarkCycleTodo(db *sql.DB) echo.HandlerFunc {
+// UpdateTodo :
+func UpdateTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		request := new(struct {
-			TodoId int  `json:"todoId"`
-			Done   bool `json:"done"`
-		})
-		c.Bind(&request)
-
-		id, err := models.MarkCycleTodo(db, strconv.Itoa(request.TodoId), request.Done)
-		if err != nil {
-			return c.JSON(http.StatusBadRequest, err)
-		}
-		return c.JSON(http.StatusOK, id)
-	}
-}
-
-func PutTodo(db *sql.DB) echo.HandlerFunc {
-	return func(c echo.Context) error {
-
-		// TODO get todo id in url
 		todo := new(models.Todo)
 		c.Bind(&todo)
 
-		_, err := models.UpdateTodo(db, todo)
+		_, err := todo_repository.UpdateTodo(todo)
 		if err == nil {
 			return c.NoContent(http.StatusCreated)
-		} else {
-			return err
 		}
-
+		return err
 	}
 }
 
-// PutTask endpoint
-func PostTodo(db *sql.DB) echo.HandlerFunc {
+// CreateTodo :
+func CreateTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(jwt.MapClaims)
-		userId := claims["id"].(string)
+		claims := user.Claims.(*JwtCustomClaims)
+		userID := claims.ID
 
 		todo := new(models.Todo)
 
 		c.Bind(&todo)
 
-		if todo.Type != "NORMAL" && todo.Type != "HABIT" {
-			return c.NoContent(http.StatusBadRequest)
-		}
+		todo.CreatorID = userID
 
-		todo.CreaterId = userId
-
-		id, err := models.CreateTodo(db, todo)
+		id, err := todo_repository.CreateTodo(todo)
 
 		if err == nil {
-			return c.JSON(http.StatusCreated, H{
-				"id": id,
+			return c.JSON(http.StatusCreated, map[string]string{
+				"id": strconv.FormatInt(id, 10),
 			})
-		} else {
-			return err
 		}
+		return err
 	}
 }
 
-// DeleteTask endpoint
+// DeleteTodo :
 func DeleteTodo(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(jwt.MapClaims)
-		userId := claims["id"].(string)
+		claims := user.Claims.(*JwtCustomClaims)
+		userID := claims.ID
 
 		id, _ := strconv.Atoi(c.Param("id"))
-		// Use our new model to delete a task
-		_, err := models.DeleteTodo(db, id, userId)
-		// Return a JSON response on success
+		_, err := todo_repository.DeleteTodo(id, userID)
 		if err == nil {
-			return c.JSON(http.StatusOK, H{})
-			// Handle errors
+			return c.JSON(http.StatusOK, map[string]string{})
 		} else {
 			return err
 		}

@@ -60,8 +60,8 @@ func saveImageToDisk(fileNameBase, data string) (string, error) {
 func PostAvatarByBase64(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(jwt.MapClaims)
-		userId := claims["id"].(string)
+		claims := user.Claims.(*JwtCustomClaims)
+		userId := claims.ID
 
 		request := new(struct {
 			Avatar string `json:"avatar"`
@@ -123,8 +123,8 @@ func GetUserInfo(db *sql.DB) echo.HandlerFunc {
 func PostAvatar(db *sql.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(jwt.MapClaims)
-		userId := claims["id"].(string)
+		claims := user.Claims.(*JwtCustomClaims)
+		userId := claims.ID
 
 		form, err := c.MultipartForm()
 

@@ -1,1 +1,2 @@
 avatardir: "upload/avatar/"
+jwt-key: "jellyfish-app"
