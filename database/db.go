@@ -25,37 +25,7 @@ func InitDB(filepath string) *sql.DB {
 
 func Migrate(db *sql.DB) {
 	sql := `
-    CREATE TABLE IF NOT EXISTS todos(
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        creater_id INTEGER NOT NULL,
-        content TEXT NOT NULL,
-        detail TEXT,
-        deadline DATE,
-        status TEXT,
-        type TEXT,
-        done INTEGER DEFAULT 0,
-        created_at DATE,
-        updated_at DATE
-    );
-
-    CREATE TABLE IF NOT EXISTS cycle_todo_status(
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        todo_id INTEGER NOT NULL,
-        status TEXT,
-        date TEXT,
-        created_at DATE,
-        updated_at DATE
-    );
-
-    CREATE TABLE IF NOT EXISTS users(
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL UNIQUE,
-        avatar TEXT,
-        hash TEXT NOT NULL,
-        created_at DATE,
-        updated_at DATE
-    );
-
+    
     `
 	_, err := db.Exec(sql)
 

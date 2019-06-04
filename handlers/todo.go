@@ -24,7 +24,7 @@ func GetUserTodos(db *sql.DB) echo.HandlerFunc {
 		if userID != jwtUserID {
 			return c.JSON(http.StatusUnauthorized, "")
 		}
-		todos := todo_repository.GetUserTodos(userID).Items
+		todos := todorepository.GetUserTodos(userID).Items
 		return c.JSON(http.StatusOK, todos)
 	}
 }
@@ -36,7 +36,7 @@ func UpdateTodo(db *sql.DB) echo.HandlerFunc {
 		todo := new(models.Todo)
 		c.Bind(&todo)
 
-		_, err := todo_repository.UpdateTodo(todo)
+		_, err := todorepository.UpdateTodo(todo)
 		if err == nil {
 			return c.NoContent(http.StatusCreated)
 		}
@@ -58,7 +58,7 @@ func CreateTodo(db *sql.DB) echo.HandlerFunc {
 
 		todo.CreatorID = userID
 
-		id, err := todo_repository.CreateTodo(todo)
+		id, err := todorepository.CreateTodo(todo)
 
 		if err == nil {
 			return c.JSON(http.StatusCreated, map[string]string{
@@ -77,7 +77,7 @@ func DeleteTodo(db *sql.DB) echo.HandlerFunc {
 		userID := claims.ID
 
 		id, _ := strconv.Atoi(c.Param("id"))
-		_, err := todo_repository.DeleteTodo(id, userID)
+		_, err := todorepository.DeleteTodo(id, userID)
 		if err == nil {
 			return c.JSON(http.StatusOK, map[string]string{})
 		} else {

@@ -41,7 +41,7 @@ func SignUp(db *sql.DB) echo.HandlerFunc {
 			fmt.Println(request)
 			return c.NoContent(http.StatusUnauthorized)
 		} else {
-			_, error := user_repository.CreateUser(db, &user)
+			_, error := userrepository.CreateUser(db, &user)
 			if error == nil {
 				return c.NoContent(http.StatusNoContent)
 			} else {
@@ -62,13 +62,13 @@ func SignIn(db *sql.DB) echo.HandlerFunc {
 
 		c.Bind(&request)
 
-		isExist := user_repository.CheckUserExist(db, request.Username)
+		isExist := userrepository.CheckUserExist(db, request.Username)
 
 		if !isExist {
 			return c.JSON(http.StatusBadRequest, "")
 		}
 
-		user, err := user_repository.GetUserWhenCompareHashAndPassword(db, request.Username, request.Password)
+		user, err := userrepository.GetUserWhenCompareHashAndPassword(db, request.Username, request.Password)
 
 		if err != nil {
 			return c.JSON(http.StatusUnauthorized, "")
