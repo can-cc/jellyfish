@@ -1,35 +1,32 @@
 package userrepository
 
 import (
-	"database/sql"
+	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/models"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 // CreateUser :
-func CreateUser(db *sql.DB, user *models.User) (int64, error) {
+func CreateUser(user *models.User) (string, error) {
+	db := database.GetDB()
+
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		panic(err)
 	}
 
-	sql := "INSERT INTO users(username, hash, created_at) VALUES (?, ?, ?)"
-	stmt, err := db.Prepare(sql)
+	var id string
+	sqlStatement := `
+		INSERT INTO users (username, hash, created_at)
+		VALUES ($1, $2, now()) RETURNING id`
+	err2 := db.QueryRow(sqlStatement, user.Username, hash).Scan(&id)
 
-	defer stmt.Close()
-
-	result, err2 := stmt.Exec(user.Username, hash, time.Now().Unix())
-
-	if err2 != nil {
-		panic(err2)
-	}
-
-	return result.LastInsertId()
+	return id, err2
 }
 
 // CheckUserExist :
-func CheckUserExist(db *sql.DB, username string) bool {
+func CheckUserExist(username string) bool {
+	db := database.GetDB()
 	sql := "SELECT hash FROM users WHERE username = ?"
 	stmt, err := db.Prepare(sql)
 
@@ -49,7 +46,8 @@ func CheckUserExist(db *sql.DB, username string) bool {
 }
 
 // GetUserWhenCompareHashAndPassword :
-func GetUserWhenCompareHashAndPassword(db *sql.DB, username string, password string) (models.User, error) {
+func GetUserWhenCompareHashAndPassword(username string, password string) (models.User, error) {
+	db := database.GetDB()
 	sql := "SELECT id, hash, created_at FROM users WHERE username = ?"
 	stmt, err := db.Prepare(sql)
 

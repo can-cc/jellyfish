@@ -2,37 +2,14 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/lib/pq"
+	"github.com/spf13/viper"
+	"os"
+
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 )
-
-func InitDB(filepath string) *sql.DB {
-	db, err := sql.Open("sqlite3", filepath)
-
-	// Here we check for any db errors then exit
-	if err != nil {
-		panic(err)
-	}
-
-	// If we don't get any errors but somehow still don't get a db connection
-	// we exit as well
-	if db == nil {
-		panic("db nil")
-	}
-	return db
-}
-
-func Migrate(db *sql.DB) {
-	sql := `
-    
-    `
-	_, err := db.Exec(sql)
-
-	if err != nil {
-		panic(err)
-	}
-}
 
 type Instance struct {
 	DB *sql.DB
@@ -40,19 +17,37 @@ type Instance struct {
 
 var dbInstance *Instance
 
-func connectPostgres() *sql.DB {
-	connStr := "postgres://" + "pqgotest:password@localhost/pqgotest?sslmode=verify-full"
+func connectDB() *sql.DB {
+	dbName := viper.GetString("dbname")
+	dbHost := viper.GetString("dbhost")
+	dbUser := viper.GetString("dbuser")
+	dbPassword := viper.GetString("dbpassword")
+
+	connStr := "postgres://" + dbUser + ":" + dbPassword + "@" + dbHost + ":5432/" + dbName + "?sslmode=disable"
+
 	db, err := sql.Open("postgres", connStr)
+
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	return db
 }
 
 func GetDB() *sql.DB {
 	if dbInstance == nil {
 		dbInstance = new(Instance)
-		dbInstance.DB = connectPostgres()
+		dbInstance.DB = connectDB()
 	}
 	return dbInstance.DB
+}
+
+func CheckDBConnect() {
+	db := GetDB()
+	err := db.Ping()
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }

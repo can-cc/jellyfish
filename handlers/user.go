@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"database/sql"
+	"github.com/fwchen/jellyfish/database"
 
 	"crypto/md5"
 	"encoding/base64"
@@ -45,7 +45,6 @@ func saveImageToDisk(fileNameBase, data string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	// _, fm, err := image.DecodeConfig(bytes.NewReader(buff.Bytes()))
 	_, fm, err := image.DecodeConfig(bytes.NewReader(buff.Bytes()))
 	if err != nil {
 		return "", err
@@ -57,8 +56,10 @@ func saveImageToDisk(fileNameBase, data string) (string, error) {
 	return fm, err
 }
 
-func PostAvatarByBase64(db *sql.DB) echo.HandlerFunc {
+func PostAvatarByBase64() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		db := database.GetDB()
+
 		user := c.Get("user").(*jwt.Token)
 		claims := user.Claims.(*JwtCustomClaims)
 		userId := claims.ID
@@ -98,8 +99,10 @@ func PostAvatarByBase64(db *sql.DB) echo.HandlerFunc {
 	}
 }
 
-func GetUserInfo(db *sql.DB) echo.HandlerFunc {
+func GetUserInfo() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		db := database.GetDB()
+
 		userId := c.Param("userId")
 
 		sql := "SELECT username, avatar FROM users where id = ?"
@@ -120,8 +123,10 @@ func GetUserInfo(db *sql.DB) echo.HandlerFunc {
 	}
 }
 
-func PostAvatar(db *sql.DB) echo.HandlerFunc {
+func PostAvatar() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		db := database.GetDB()
+
 		user := c.Get("user").(*jwt.Token)
 		claims := user.Claims.(*JwtCustomClaims)
 		userId := claims.ID

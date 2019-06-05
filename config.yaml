@@ -1,2 +1,8 @@
 avatardir: "upload/avatar/"
 jwt-key: "jellyfish-app"
+
+# database
+dbname: "jellyfish"
+dbhost: "localhost"
+dbuser: "postgres"
+dbpassword: "mysecretpassword"

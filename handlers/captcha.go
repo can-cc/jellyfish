@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
-
 	"net/http"
 
 	"github.com/dchest/captcha"
@@ -10,7 +8,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-func GenCaptcha(db *sql.DB) echo.HandlerFunc {
+func GenCaptcha() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		d := struct {
 			CaptchaId string

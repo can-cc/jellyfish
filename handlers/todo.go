@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"database/sql"
 	"net/http"
 	"strconv"
 
@@ -13,7 +12,7 @@ import (
 )
 
 // GetUserTodos :
-func GetUserTodos(db *sql.DB) echo.HandlerFunc {
+func GetUserTodos() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		userID := c.QueryParam("userId")
 
@@ -30,7 +29,7 @@ func GetUserTodos(db *sql.DB) echo.HandlerFunc {
 }
 
 // UpdateTodo :
-func UpdateTodo(db *sql.DB) echo.HandlerFunc {
+func UpdateTodo() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		todo := new(models.Todo)
@@ -45,7 +44,7 @@ func UpdateTodo(db *sql.DB) echo.HandlerFunc {
 }
 
 // CreateTodo :
-func CreateTodo(db *sql.DB) echo.HandlerFunc {
+func CreateTodo() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		user := c.Get("user").(*jwt.Token)
@@ -70,7 +69,7 @@ func CreateTodo(db *sql.DB) echo.HandlerFunc {
 }
 
 // DeleteTodo :
-func DeleteTodo(db *sql.DB) echo.HandlerFunc {
+func DeleteTodo() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user := c.Get("user").(*jwt.Token)
 		claims := user.Claims.(*JwtCustomClaims)
