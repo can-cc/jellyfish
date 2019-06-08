@@ -1,4 +1,4 @@
-avatardir: "upload/avatar/"
+avatar-dir: "upload/avatar/"
 jwt-key: "jellyfish-app"
 
 # database

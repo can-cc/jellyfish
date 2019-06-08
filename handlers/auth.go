@@ -2,6 +2,7 @@ package handlers
 
 import (
 	userRepository "github.com/fwchen/jellyfish/repository/user"
+	"github.com/spf13/viper"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -13,7 +14,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-type JwtCustomClaims struct {
+type JwtAppClaims struct {
 	Username string `json:"username"`
 	ID       string `json:"id"`
 	jwt.StandardClaims
@@ -70,7 +71,7 @@ func SignIn() echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, "")
 		}
 
-		claims := &JwtCustomClaims{
+		claims := &JwtAppClaims{
 			user.Username,
 			user.ID,
 			jwt.StandardClaims{
@@ -81,7 +82,7 @@ func SignIn() echo.HandlerFunc {
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 		// Generate encoded token and send it as response.
-		t, err := token.SignedString([]byte("secret"))
+		t, err := token.SignedString([]byte(viper.GetString("jwt-key")))
 		if err != nil {
 			return err
 		}

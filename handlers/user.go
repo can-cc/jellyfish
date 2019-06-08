@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	sql2 "database/sql"
 	"github.com/fwchen/jellyfish/database"
 
 	"crypto/md5"
@@ -61,7 +62,7 @@ func PostAvatarByBase64() echo.HandlerFunc {
 		db := database.GetDB()
 
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(*JwtCustomClaims)
+		claims := user.Claims.(*JwtAppClaims)
 		userId := claims.ID
 
 		request := new(struct {
@@ -105,21 +106,34 @@ func GetUserInfo() echo.HandlerFunc {
 
 		userId := c.Param("userId")
 
-		sql := "SELECT username, avatar FROM users where id = ?"
+		sql := `SELECT username, avatar FROM users where id = $1`
 		row := db.QueryRow(sql, userId)
 
 		userInfo := new(struct {
-			Username string `json:"username"`
-			Avatar   string `json:"avatar"`
+			Username string
+			Avatar   sql2.NullString
 		})
-		avatardir := viper.GetString("avatardir")
+		avatarDir := viper.GetString("avatarDir")
 
 		err := row.Scan(&userInfo.Username, &userInfo.Avatar)
 		if err != nil {
 			panic(err)
 		}
-		userInfo.Avatar = avatardir + userInfo.Avatar
-		return c.JSON(http.StatusOK, userInfo)
+
+		var avatarUrl string
+		if userInfo.Avatar.Valid {
+			avatarUrl = avatarDir + userInfo.Avatar.String
+		} else {
+			avatarUrl = ""
+		}
+
+		return c.JSON(http.StatusOK, struct {
+			Username string `json:"username"`
+			Avatar   string `json:"avatar"`
+		}{
+			Username: userInfo.Username,
+			Avatar: avatarUrl,
+		})
 	}
 }
 
@@ -128,7 +142,7 @@ func PostAvatar() echo.HandlerFunc {
 		db := database.GetDB()
 
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(*JwtCustomClaims)
+		claims := user.Claims.(*JwtAppClaims)
 		userId := claims.ID
 
 		form, err := c.MultipartForm()

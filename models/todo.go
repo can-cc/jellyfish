@@ -1,19 +1,21 @@
 package models
 
 import (
-	_ "github.com/mattn/go-sqlite3"
+	"time"
+	"gopkg.in/guregu/null.v3"
 )
 
 type Todo struct {
-	ID        int    `json:"id"`
+	ID        string    `json:"id"`
 	Content   string `json:"content"`
 	Detail    string `json:"detail"`
-	Deadline  int64  `json:"deadline"`
+	Deadline  null.Time  `json:"deadline",omitempty`
 	Done      bool   `json:"done"`
 	Status    string `json:"status"`
 	Type      string `json:"type"`
 	CreatorID string `json:"creatorId"`
-	CreatedAt int64  `json:"createdAt"`
+	CreatedAt time.Time  `json:"createdAt"`
+	updatedAt time.Time  `json:"updatedAt"`
 }
 
 // TodoCollection :

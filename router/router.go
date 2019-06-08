@@ -25,10 +25,11 @@ func Route(e *echo.Echo) {
 	e.POST("/captcha", handlers.GenCaptcha())
 
 	r := e.Group("/auth")
-	r.Use(middleware.JWT(middleware.JWTWithConfig(middleware.JWTConfig{
+	r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		Claims:     &handlers.JwtAppClaims{},
 		SigningKey:  []byte(viper.GetString("jwt-key")),
 		TokenLookup: "header:App-Authorization",
-	})))
+	}))
 
 	r.GET("/todo", handlers.GetUserTodos())
 	r.GET("/user/:userId", handlers.GetUserInfo())

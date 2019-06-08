@@ -2,6 +2,7 @@ package models
 
 import (
 	_ "github.com/mattn/go-sqlite3"
+	"time"
 )
 
 type User struct {
@@ -9,5 +10,5 @@ type User struct {
 	Username  string `json:"username"`
 	Password  string `json:"password"`
 	Avatar    string `json:"avatar"`
-	CreatedAt int64  `json:createdAt`
+	CreatedAt time.Time  `json:createdAt`
 }
