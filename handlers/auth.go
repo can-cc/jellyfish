@@ -36,7 +36,7 @@ func SignUp() echo.HandlerFunc {
 		user.Password = request.Password
 
 		if !captcha.VerifyString(request.CaptchaId, request.Captcha) {
-			return c.NoContent(http.StatusUnauthorized)
+			return c.NoContent(http.StatusBadRequest)
 		} else {
 			_, error := userRepository.CreateUser(&user)
 			if error == nil {

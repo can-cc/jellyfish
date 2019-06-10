@@ -3,7 +3,7 @@ package handlers
 import (
 	sql2 "database/sql"
 	"github.com/fwchen/jellyfish/database"
-
+	"gopkg.in/guregu/null.v3"
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/hex"
@@ -66,15 +66,15 @@ func PostAvatarByBase64() echo.HandlerFunc {
 		userId := claims.ID
 
 		request := new(struct {
-			Avatar string `json:"avatar"`
+			AvatarData string `json:"avatarData"`
 		})
 
 		c.Bind(&request)
 
 		avatardir := viper.GetString("avatardir")
-		fileNameHash := GetMD5Hash(request.Avatar)
+		fileNameHash := GetMD5Hash(request.AvatarData)
 
-		fm, err := saveImageToDisk(avatardir+fileNameHash, request.Avatar)
+		fm, err := saveImageToDisk(avatardir+fileNameHash, request.AvatarData)
 		if err != nil {
 			panic(err)
 		}
@@ -94,7 +94,7 @@ func PostAvatarByBase64() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]string{
-			"avatar": avatardir + fileNameHash + "." + fm,
+			"avatarUrl": avatardir + fileNameHash + "." + fm,
 		})
 
 	}
@@ -120,19 +120,17 @@ func GetUserInfo() echo.HandlerFunc {
 			panic(err)
 		}
 
-		var avatarUrl string
+		var avatarUrl null.String
 		if userInfo.Avatar.Valid {
-			avatarUrl = avatarDir + userInfo.Avatar.String
-		} else {
-			avatarUrl = ""
+			avatarUrl.String = avatarDir + userInfo.Avatar.String
 		}
 
 		return c.JSON(http.StatusOK, struct {
 			Username string `json:"username"`
-			Avatar   string `json:"avatar"`
+			AvatarUrl   null.String `json:"avatarUrl"`
 		}{
 			Username: userInfo.Username,
-			Avatar: avatarUrl,
+			AvatarUrl: avatarUrl,
 		})
 	}
 }
