@@ -14,7 +14,7 @@ docker run --rm -v ./sql:/flyway/sql -v ./conf:/flyway/conf boxfuse/flyway migra
 
 docker command line:
 ``` bash
-docker run --rm -v ./sql:/flyway/sql boxfuse/flyway migrate -url=jdbc:postgresql://localhost:5432/jellyfish -user=postgres -password=mysecretpassword
+docker run --rm -v ${pwd}/sql:/flyway/sql boxfuse/flyway migrate -url=jdbc:postgresql://172.17.0.1:5432/jellyfish -user=postgres -password=mysecretpassword
 ```
 
 command line:

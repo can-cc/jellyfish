@@ -8,6 +8,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/fwchen/jellyfish/models"
 	"net/http"
+	"fmt"
 
 	"github.com/dchest/captcha"
 
@@ -36,12 +37,14 @@ func SignUp() echo.HandlerFunc {
 		user.Password = request.Password
 
 		if !captcha.VerifyString(request.CaptchaId, request.Captcha) {
-			return c.NoContent(http.StatusBadRequest)
+			
+			return c.String(http.StatusBadRequest, "captcha invalid")
 		} else {
 			_, error := userRepository.CreateUser(&user)
 			if error == nil {
 				return c.NoContent(http.StatusNoContent)
 			} else {
+				fmt.Print(error)
 				return error
 			}
 		}

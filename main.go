@@ -44,7 +44,7 @@ func main() {
 	e := echo.New()
 
 	e.Use(middleware.Logger())
-	//e.Use(middleware.Recover())
+	// e.Use(middleware.Recover())
 
 	e.Static("/upload", "upload")
 
