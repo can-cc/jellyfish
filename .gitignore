@@ -8,3 +8,4 @@
 /_vendor*
 /upload
 *~
+__debug_bin
