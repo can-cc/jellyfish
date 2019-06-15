@@ -24,7 +24,7 @@ func Route(e *echo.Echo) {
 	e.GET("/captcha/*", echo.WrapHandler(captcha.Server(captcha.StdWidth, captcha.StdHeight)))
 	e.POST("/captcha", handlers.GenCaptcha())
 
-	r := e.Group("/auth")
+	r := e.Group("")
 	r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
 		Claims:      &handlers.JwtAppClaims{},
 		SigningKey:  []byte(viper.GetString("jwt-key")),

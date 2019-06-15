@@ -6,7 +6,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/fwchen/jellyfish/models"
-	"github.com/fwchen/jellyfish/repository/todo"
+	todorepository "github.com/fwchen/jellyfish/repository/todo"
 
 	"github.com/labstack/echo"
 )
@@ -35,11 +35,8 @@ func UpdateTodo() echo.HandlerFunc {
 		todo := new(models.Todo)
 		c.Bind(&todo)
 
-		_, err := todorepository.UpdateTodo(todo)
-		if err == nil {
-			return c.NoContent(http.StatusCreated)
-		}
-		return err
+		todorepository.UpdateTodo(todo)
+		return c.NoContent(http.StatusCreated)
 	}
 }
 
@@ -56,6 +53,12 @@ func CreateTodo() echo.HandlerFunc {
 		c.Bind(&todo)
 
 		todo.CreatorID = userID
+		if todo.Status == "" {
+			todo.Status = "VALID"
+		}
+		if todo.Type == "" {
+			todo.Type = "NORMAL"
+		}
 
 		id, err := todorepository.CreateTodo(todo)
 

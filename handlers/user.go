@@ -124,10 +124,10 @@ func GetUserInfo() echo.HandlerFunc {
 
 		return c.JSON(http.StatusOK, struct {
 			Username  string      `json:"username"`
-			avatarURL null.String `json:"avatarUrl"`
+			AvatarURL null.String `json:"avatarUrl"`
 		}{
 			Username:  userInfo.Username,
-			avatarURL: avatarURL,
+			AvatarURL: avatarURL,
 		})
 	}
 }
