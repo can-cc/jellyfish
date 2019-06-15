@@ -1,9 +1,9 @@
 package router
 
 import (
-	"github.com/fwchen/jellyfish/handlers"
 	"net/http"
 
+	"github.com/fwchen/jellyfish/handlers"
 
 	"github.com/dchest/captcha"
 
@@ -13,8 +13,8 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
+// Route :
 func Route(e *echo.Echo) {
-
 
 	e.GET("/hello", func(c echo.Context) error {
 		return c.String(http.StatusOK, "hello my friends")
@@ -26,7 +26,7 @@ func Route(e *echo.Echo) {
 
 	r := e.Group("/auth")
 	r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		Claims:     &handlers.JwtAppClaims{},
+		Claims:      &handlers.JwtAppClaims{},
 		SigningKey:  []byte(viper.GetString("jwt-key")),
 		TokenLookup: "header:App-Authorization",
 	}))
