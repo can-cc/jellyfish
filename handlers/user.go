@@ -1,19 +1,17 @@
 package handlers
 
 import (
-	sql2 "database/sql"
-	"github.com/fwchen/jellyfish/database"
-	"gopkg.in/guregu/null.v3"
 	"crypto/md5"
+	sql2 "database/sql"
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"strings"
 
+	"github.com/fwchen/jellyfish/database"
+	"gopkg.in/guregu/null.v3"
+
 	"bytes"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo"
-	"github.com/spf13/viper"
 	"image"
 	_ "image/gif"
 	_ "image/jpeg"
@@ -22,8 +20,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/labstack/echo"
+	"github.com/spf13/viper"
 )
 
+// GetMD5Hash :
 func GetMD5Hash(text string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(text))
@@ -57,13 +60,14 @@ func saveImageToDisk(fileNameBase, data string) (string, error) {
 	return fm, err
 }
 
+// PostAvatarByBase64 :
 func PostAvatarByBase64() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		db := database.GetDB()
 
 		user := c.Get("user").(*jwt.Token)
 		claims := user.Claims.(*JwtAppClaims)
-		userId := claims.ID
+		userID := claims.ID
 
 		request := new(struct {
 			AvatarData string `json:"avatarData"`
@@ -71,7 +75,7 @@ func PostAvatarByBase64() echo.HandlerFunc {
 
 		c.Bind(&request)
 
-		avatardir := viper.GetString("avatardir")
+		avatardir := viper.GetString("avatar-dir")
 		fileNameHash := GetMD5Hash(request.AvatarData)
 
 		fm, err := saveImageToDisk(avatardir+fileNameHash, request.AvatarData)
@@ -79,18 +83,10 @@ func PostAvatarByBase64() echo.HandlerFunc {
 			panic(err)
 		}
 
-		sql := "UPDATE users set avatar = ? where id = ?"
-
-		stmt, err2 := db.Prepare(sql)
+		_, err2 := db.Exec(`UPDATE users set avatar = $1 where id = $2`, fileNameHash+"."+fm, userID)
 
 		if err2 != nil {
 			panic(err2)
-		}
-
-		defer stmt.Close()
-		_, err3 := stmt.Exec(fileNameHash+"."+fm, userId)
-		if err3 != nil {
-			panic(err3)
 		}
 
 		return c.JSON(http.StatusOK, map[string]string{
@@ -100,48 +96,51 @@ func PostAvatarByBase64() echo.HandlerFunc {
 	}
 }
 
+// GetUserInfo :
 func GetUserInfo() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		db := database.GetDB()
 
-		userId := c.Param("userId")
+		userID := c.Param("userId")
 
 		sql := `SELECT username, avatar FROM users where id = $1`
-		row := db.QueryRow(sql, userId)
+		row := db.QueryRow(sql, userID)
 
 		userInfo := new(struct {
 			Username string
 			Avatar   sql2.NullString
 		})
-		avatarDir := viper.GetString("avatarDir")
+		avatarDir := viper.GetString("avatar-dir")
 
 		err := row.Scan(&userInfo.Username, &userInfo.Avatar)
 		if err != nil {
 			panic(err)
 		}
 
-		var avatarUrl null.String
+		var avatarURL null.String
 		if userInfo.Avatar.Valid {
-			avatarUrl.String = avatarDir + userInfo.Avatar.String
+			avatarURL.Valid = true
+			avatarURL.String = avatarDir + userInfo.Avatar.String
 		}
 
 		return c.JSON(http.StatusOK, struct {
-			Username string `json:"username"`
-			AvatarUrl   null.String `json:"avatarUrl"`
+			Username  string      `json:"username"`
+			avatarURL null.String `json:"avatarUrl"`
 		}{
-			Username: userInfo.Username,
-			AvatarUrl: avatarUrl,
+			Username:  userInfo.Username,
+			avatarURL: avatarURL,
 		})
 	}
 }
 
+// PostAvatar :
 func PostAvatar() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		db := database.GetDB()
 
 		user := c.Get("user").(*jwt.Token)
 		claims := user.Claims.(*JwtAppClaims)
-		userId := claims.ID
+		userID := claims.ID
 
 		form, err := c.MultipartForm()
 
@@ -187,7 +186,7 @@ func PostAvatar() echo.HandlerFunc {
 			}
 
 			defer stmt.Close()
-			_, err3 := stmt.Exec(fileNameHash, userId)
+			_, err3 := stmt.Exec(fileNameHash, userID)
 			if err3 != nil {
 				panic(err3)
 			}
