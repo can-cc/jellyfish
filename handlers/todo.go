@@ -14,16 +14,38 @@ import (
 // GetUserTodos :
 func GetUserTodos() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userID := c.QueryParam("userId")
 
 		user := c.Get("user").(*jwt.Token)
 		claims := user.Claims.(*JwtAppClaims)
 		jwtUserID := claims.ID
 
-		if userID != jwtUserID {
-			return c.JSON(http.StatusUnauthorized, "")
-		}
-		todos := todorepository.GetUserTodos(userID).Items
+		todos := todorepository.GetUserTodos(jwtUserID, "All").Items
+		return c.JSON(http.StatusOK, todos)
+	}
+}
+
+// GetUserDoingTodos :
+func GetUserDoingTodos() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(*JwtAppClaims)
+		jwtUserID := claims.ID
+
+		todos := todorepository.GetUserTodos(jwtUserID, "Doing").Items
+		return c.JSON(http.StatusOK, todos)
+	}
+}
+
+// GetUserDoneTodos :
+func GetUserDoneTodos() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(*JwtAppClaims)
+		jwtUserID := claims.ID
+
+		todos := todorepository.GetUserTodos(jwtUserID, "Done").Items
 		return c.JSON(http.StatusOK, todos)
 	}
 }

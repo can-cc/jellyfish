@@ -13,7 +13,6 @@ import (
 
 	"bytes"
 	"image"
-	_ "image/jpeg"
 	_ "image/png"
 	"io"
 	"io/ioutil"

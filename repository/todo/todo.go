@@ -3,14 +3,21 @@ package todorepository
 import (
 	"github.com/fwchen/jellyfish/database"
 
-	. "github.com/fwchen/jellyfish/models"
+	"github.com/fwchen/jellyfish/models"
 )
 
 // GetUserTodos :
-func GetUserTodos(userID string) TodoCollection {
+func GetUserTodos(userID string, statusTag string) models.TodoCollection {
 	db := database.GetDB()
 
-	sql := `SELECT id, TRIM(content), TRIM(detail), TRIM(type), deadline, TRIM(status), done, created_at FROM todos where creater_id = $1`
+	var additionSQL string = ""
+	if statusTag == "Doing" {
+		additionSQL = " AND done = 0"
+	} else if statusTag == "Done" {
+		additionSQL = " AND done = 1"
+	}
+
+	sql := `SELECT id, TRIM(content), TRIM(detail), TRIM(type), deadline, TRIM(status), done, created_at FROM todos where creater_id = $1` + additionSQL
 	rows, err := db.Query(sql, userID)
 	defer rows.Close()
 
@@ -18,10 +25,10 @@ func GetUserTodos(userID string) TodoCollection {
 		panic(err)
 	}
 
-	todoCollection := TodoCollection{Items: make([]Todo, 0)}
+	todoCollection := models.TodoCollection{Items: make([]models.Todo, 0)}
 
 	for rows.Next() {
-		todo := Todo{}
+		todo := models.Todo{}
 		err2 := rows.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Type, &todo.Deadline, &todo.Status, &todo.Done, &todo.CreatedAt)
 
 		if err2 != nil {
@@ -33,12 +40,12 @@ func GetUserTodos(userID string) TodoCollection {
 }
 
 // GetTodo :
-func GetTodo(todoID string) Todo {
+func GetTodo(todoID string) models.Todo {
 	db := database.GetDB()
 	sql := "SELECT id, content, detail, deadline, status, creater_id, created_at FROM todos where id = ?"
 	row := db.QueryRow(sql, todoID)
 
-	var todo Todo
+	var todo models.Todo
 	err := row.Scan(&todo.ID, &todo.Content, &todo.Detail, &todo.Deadline, &todo.Status, &todo.CreatorID, &todo.CreatedAt)
 	if err != nil {
 		panic(err)
@@ -47,7 +54,7 @@ func GetTodo(todoID string) Todo {
 }
 
 // UpdateTodo :
-func UpdateTodo(todo *Todo) {
+func UpdateTodo(todo *models.Todo) {
 	db := database.GetDB()
 	sql := `UPDATE todos set content = $1, detail = $2, done = $3, deadline = $4, updated_at = now() where id = $5`
 
@@ -66,7 +73,7 @@ func UpdateTodo(todo *Todo) {
 }
 
 // CreateTodo :
-func CreateTodo(todo *Todo) (string, error) {
+func CreateTodo(todo *models.Todo) (string, error) {
 	db := database.GetDB()
 
 	var id string
@@ -83,7 +90,7 @@ func CreateTodo(todo *Todo) (string, error) {
 }
 
 // DeleteTodo : from DB
-func DeleteTodo(id int, userId string) (int64, error) {
+func DeleteTodo(id int, userID string) (int64, error) {
 	db := database.GetDB()
 	sql := "DELETE FROM todos WHERE id = ? and creater_id = ?"
 
@@ -95,7 +102,7 @@ func DeleteTodo(id int, userId string) (int64, error) {
 	}
 	defer stmt.Close()
 
-	result, err2 := stmt.Exec(id, userId)
+	result, err2 := stmt.Exec(id, userID)
 	if err2 != nil {
 		panic(err2)
 	}

@@ -31,7 +31,9 @@ func Route(e *echo.Echo) {
 		TokenLookup: "header:App-Authorization",
 	}))
 
-	r.GET("/todo", handlers.GetUserTodos())
+	r.GET("/todos", handlers.GetUserTodos())
+	r.GET("/todos/done", handlers.GetUserDoneTodos())
+	r.GET("/todos/doing", handlers.GetUserDoingTodos())
 	r.GET("/user/:userId", handlers.GetUserInfo())
 	r.POST("/todo", handlers.CreateTodo())
 	r.DELETE("/todo/:id", handlers.DeleteTodo())
