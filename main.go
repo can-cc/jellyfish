@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+
 	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/router"
 
@@ -50,6 +51,6 @@ func main() {
 
 	router.Route(e)
 
-	fmt.Println("jellyfish serve on http://0.0.0.0:8000")
-	e.Logger.Fatal(e.Start("0.0.0.0:8000"))
+	fmt.Println("jellyfish serve on http://0.0.0.0:8180")
+	e.Logger.Fatal(e.Start("0.0.0.0:8180"))
 }

@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/fwchen/jellyfish/models"
@@ -100,13 +99,12 @@ func DeleteTodo() echo.HandlerFunc {
 		claims := user.Claims.(*JwtAppClaims)
 		userID := claims.ID
 
-		id, _ := strconv.Atoi(c.Param("id"))
-		_, err := todorepository.DeleteTodo(id, userID)
+		todoID := c.Param("id")
+		error := todorepository.DeleteTodo(todoID, userID)
 
-		if err == nil {
+		if error == nil {
 			return c.JSON(http.StatusOK, map[string]string{})
-		} else {
-			return err
 		}
+		return error
 	}
 }

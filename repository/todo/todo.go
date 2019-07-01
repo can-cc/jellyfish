@@ -89,23 +89,11 @@ func CreateTodo(todo *models.Todo) (string, error) {
 	return id, err
 }
 
-// DeleteTodo : from DB
-func DeleteTodo(id int, userID string) (int64, error) {
+// DeleteTodo :
+func DeleteTodo(todoID string, userID string) error {
 	db := database.GetDB()
-	sql := "DELETE FROM todos WHERE id = ? and creater_id = ?"
 
-	// Create a prepared SQL statement
-	stmt, err := db.Prepare(sql)
-	// Exit if we get an error
-	if err != nil {
-		panic(err)
-	}
-	defer stmt.Close()
+	_, err := db.Exec(`DELETE FROM todos WHERE id = $1 and creater_id = $2`, todoID, userID)
 
-	result, err2 := stmt.Exec(id, userID)
-	if err2 != nil {
-		panic(err2)
-	}
-
-	return result.RowsAffected()
+	return err
 }
