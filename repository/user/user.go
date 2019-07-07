@@ -24,13 +24,12 @@ func CreateUser(user *User) (string, error) {
 	return id, err2
 }
 
-
 // CheckUserExist :
 func CheckUserExist(username string) bool {
 	db := database.GetDB()
 
 	var hash string
-	err := db.QueryRow(`SELECT  hash FROM users WHERE  username = $1`, username).Scan(&hash)
+	err := db.QueryRow(`SELECT hash FROM users WHERE  username = $1`, username).Scan(&hash)
 
 	return err == nil
 }

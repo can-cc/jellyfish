@@ -101,7 +101,7 @@ func GetUserInfo() echo.HandlerFunc {
 
 		userID := c.Param("userId")
 
-		sql := `SELECT username, avatar FROM users where id = $1`
+		sql := `SELECT TRIM(username), TRIM(avatar) FROM users where id = $1`
 		row := db.QueryRow(sql, userID)
 
 		userInfo := new(struct {
