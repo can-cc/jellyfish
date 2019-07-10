@@ -8,6 +8,6 @@ ENV GO111MODULE=on
 
 RUN go get -v
 
-RUN go build main.golang
+RUN go build main.go
 
 CMD ["/go/src/github.com/fwchen/jellyfish/main"]
