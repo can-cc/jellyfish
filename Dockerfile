@@ -1,4 +1,4 @@
-FROM golang:1.12.1-stretch
+FROM golang:1.12.1-stretch AS builder
 
 WORKDIR /go/src/github/fwchen/jellyfish
 
@@ -10,4 +10,14 @@ RUN go get -v
 
 RUN go build main.go
 
-CMD ["/go/src/github.com/fwchen/jellyfish/main"]
+
+
+
+
+FROM alpine
+
+WORKDIR /app
+
+COPY --from=builder /go/src/github.com/fwchen/jellyfish/main /app
+
+CMD ["/app/main"]
