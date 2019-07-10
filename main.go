@@ -20,6 +20,8 @@ import (
 func readConfig() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
+	viper.SetEnvPrefix("JFISH")
+
 	customConfigSrc, err := ioutil.ReadFile("config.custom.yaml")
 	if err != nil {
 		panic(err)
@@ -28,7 +30,7 @@ func readConfig() {
 	err2 := viper.ReadInConfig()
 
 	if err2 != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err2))
+		panic(fmt.Errorf("fatal error config file: %s \n", err2))
 	}
 
 	err3 := viper.MergeConfig(bytes.NewBuffer(customConfigSrc))

@@ -27,7 +27,7 @@ func Route(e *echo.Echo) {
 	r := e.Group("")
 	r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
 		Claims:      &handlers.JwtAppClaims{},
-		SigningKey:  []byte(viper.GetString("jwt-key")),
+		SigningKey:  []byte(viper.GetString("JWT_KEY")),
 		TokenLookup: "header:App-Authorization",
 	}))
 

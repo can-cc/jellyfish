@@ -85,7 +85,7 @@ func SignIn() echo.HandlerFunc {
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 		// Generate encoded token and send it as response.
-		t, err := token.SignedString([]byte(viper.GetString("jwt-key")))
+		t, err := token.SignedString([]byte(viper.GetString("JWT_KEY")))
 		if err != nil {
 			return err
 		}

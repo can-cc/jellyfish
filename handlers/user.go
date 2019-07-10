@@ -73,7 +73,7 @@ func PostAvatarByBase64() echo.HandlerFunc {
 
 		c.Bind(&request)
 
-		avatardir := viper.GetString("avatar-dir")
+		avatardir := viper.GetString("AVATAR_DIR")
 		fileNameHash := GetMD5Hash(request.AvatarData)
 
 		fm, err := saveImageToDisk(avatardir+fileNameHash, request.AvatarData)
@@ -108,7 +108,7 @@ func GetUserInfo() echo.HandlerFunc {
 			Username string
 			Avatar   sql2.NullString
 		})
-		avatarDir := viper.GetString("avatar-dir")
+		avatarDir := viper.GetString("AVATAR_DIR")
 
 		err := row.Scan(&userInfo.Username, &userInfo.Avatar)
 		if err != nil {

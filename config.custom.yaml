@@ -1,2 +1,2 @@
-avatar-dir: "upload/avatar/"
-jwt-key: "jellyfish-[CHANGE-ME]"
+AVATAR_DIR: "upload/avatar/"
+JWT_KEY: "jellyfish-[CHANGE-ME]"

@@ -18,12 +18,12 @@ type Instance struct {
 var dbInstance *Instance
 
 func connectDB() *sql.DB {
-	dbName := viper.GetString("dbname")
-	dbHost := viper.GetString("dbhost")
-	dbUser := viper.GetString("dbuser")
-	dbPassword := viper.GetString("dbpassword")
+	DBNAME := viper.GetString("DBNAME")
+	DBHOST := viper.GetString("DBHOST")
+	DBUSER := viper.GetString("DBUSER")
+	DBPASSWORD := viper.GetString("DBPASSWORD")
 
-	connStr := "postgres://" + dbUser + ":" + dbPassword + "@" + dbHost + ":5432/" + dbName + "?sslmode=disable"
+	connStr := "postgres://" + DBUSER + ":" + DBPASSWORD + "@" + DBHOST + ":5432/" + DBNAME + "?sslmode=disable"
 
 	db, err := sql.Open("postgres", connStr)
 
