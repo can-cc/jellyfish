@@ -18,5 +18,6 @@ FROM alpine
 WORKDIR /app
 
 COPY --from=builder /go/src/github.com/fwchen/jellyfish/main /app
+COPY --from=builder /go/src/github.com/fwchen/jellyfish/config.yaml /app
 
 ENTRYPOINT ["/app/main"]
