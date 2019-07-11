@@ -1,13 +1,10 @@
 package main
 
 import (
-	"bytes"
-
 	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/router"
 
 	"fmt"
-	"io/ioutil"
 
 	"github.com/labstack/echo/middleware"
 	_ "github.com/labstack/gommon/log"
@@ -22,20 +19,10 @@ func readConfig() {
 	viper.AddConfigPath(".")
 	viper.SetEnvPrefix("JFISH")
 
-	customConfigSrc, err := ioutil.ReadFile("config.custom.yaml")
+	err := viper.ReadInConfig()
+
 	if err != nil {
-		panic(err)
-	}
-
-	err2 := viper.ReadInConfig()
-
-	if err2 != nil {
-		panic(fmt.Errorf("fatal error config file: %s \n", err2))
-	}
-
-	err3 := viper.MergeConfig(bytes.NewBuffer(customConfigSrc))
-	if err3 != nil {
-		panic(err3)
+		panic(fmt.Errorf("fatal error config file: %s \n", err))
 	}
 }
 

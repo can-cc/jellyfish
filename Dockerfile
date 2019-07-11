@@ -12,12 +12,12 @@ RUN go build main.go
 
 
 
-
-
 FROM alpine
 
 WORKDIR /app
 
 COPY --from=builder /go/src/github.com/fwchen/jellyfish/main /app
+
+EXPOSE 8180
 
 CMD ["/app/main"]
