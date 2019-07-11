@@ -19,4 +19,4 @@ WORKDIR /app
 
 COPY --from=builder /go/src/github.com/fwchen/jellyfish/main /app
 
-CMD ["/app/main"]
+ENTRYPOINT ["/app/main"]
