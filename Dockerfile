@@ -13,7 +13,7 @@ RUN go build main.go
 RUN ls
 
 
-FROM alpine
+FROM golang:1.12.1-stretch
 
 WORKDIR /app
 
