@@ -18,6 +18,7 @@ func readConfig() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
 	viper.SetEnvPrefix("JFISH")
+	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()
 

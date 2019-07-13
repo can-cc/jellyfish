@@ -3,12 +3,14 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/lib/pq"
-	"github.com/spf13/viper"
 	"os"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
+	"github.com/spf13/viper"
+
 	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Instance struct {
