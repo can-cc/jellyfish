@@ -10,7 +10,6 @@ RUN go get -v
 
 RUN go build main.go
 
-RUN ls
 
 
 FROM golang:1.12.1-stretch
