@@ -6,7 +6,6 @@ import (
 	"github.com/fwchen/jellyfish/models"
 )
 
-// GetUserTodos :
 func GetUserTodos(userID string, statusTag string) models.TodoCollection {
 	db := database.GetDB()
 
@@ -39,7 +38,6 @@ func GetUserTodos(userID string, statusTag string) models.TodoCollection {
 	return todoCollection
 }
 
-// GetTodo :
 func GetTodo(todoID string) models.Todo {
 	db := database.GetDB()
 	sql := "SELECT id, content, detail, deadline, status, creater_id, created_at FROM todos where id = ?"
@@ -53,7 +51,6 @@ func GetTodo(todoID string) models.Todo {
 	return todo
 }
 
-// UpdateTodo :
 func UpdateTodo(todo *models.Todo) {
 	db := database.GetDB()
 	sql := `UPDATE todos set content = $1, detail = $2, done = $3, deadline = $4, updated_at = now() where id = $5`
@@ -72,7 +69,6 @@ func UpdateTodo(todo *models.Todo) {
 	}
 }
 
-// CreateTodo :
 func CreateTodo(todo *models.Todo) (string, error) {
 	db := database.GetDB()
 
@@ -89,7 +85,6 @@ func CreateTodo(todo *models.Todo) (string, error) {
 	return id, err
 }
 
-// DeleteTodo :
 func DeleteTodo(todoID string, userID string) error {
 	db := database.GetDB()
 
