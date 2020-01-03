@@ -1,14 +1,16 @@
 package handlers
 
 import (
+	"time"
+
 	userRepository "github.com/fwchen/jellyfish/repository/user"
 	"github.com/spf13/viper"
-	"time"
+
+	"fmt"
+	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/fwchen/jellyfish/models"
-	"net/http"
-	"fmt"
 
 	"github.com/dchest/captcha"
 
@@ -37,7 +39,7 @@ func SignUp() echo.HandlerFunc {
 		user.Password = request.Password
 
 		if !captcha.VerifyString(request.CaptchaId, request.Captcha) {
-			
+
 			return c.String(http.StatusBadRequest, "captcha invalid")
 		} else {
 			_, error := userRepository.CreateUser(&user)
@@ -85,7 +87,7 @@ func SignIn() echo.HandlerFunc {
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 		// Generate encoded token and send it as response.
-		t, err := token.SignedString([]byte(viper.GetString("JWT_KEY")))
+		t, err := token.SignedString([]byte(viper.GetString("JWT_SECRET")))
 		if err != nil {
 			return err
 		}

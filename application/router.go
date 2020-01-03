@@ -1,4 +1,4 @@
-package router
+package application
 
 import (
 	"net/http"
@@ -27,7 +27,7 @@ func Route(e *echo.Echo) {
 	r := e.Group("")
 	r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
 		Claims:      &handlers.JwtAppClaims{},
-		SigningKey:  []byte(viper.GetString("JWT_KEY")),
+		SigningKey:  []byte(viper.GetString("JWT_SECRET")),
 		TokenLookup: "header:App-Authorization",
 	}))
 

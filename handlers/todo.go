@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-// GetUserTodos :
+// GetUserTodos
 func GetUserTodos() echo.HandlerFunc {
 	return func(c echo.Context) error {
 

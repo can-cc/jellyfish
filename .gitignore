@@ -1,12 +1,8 @@
-/storage.db
-/storage.sqlite3
 /vendor
 /main
 /main.exe
 /create-user
 /.idea
-/_vendor*
-/upload
-*~
+log
 __debug_bin
 .project

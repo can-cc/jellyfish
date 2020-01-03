@@ -6,7 +6,6 @@ import (
 	"gopkg.in/guregu/null.v3"
 )
 
-// Todo :
 type Todo struct {
 	ID        string    `json:"id"`
 	Content   string    `json:"content"`
@@ -20,7 +19,6 @@ type Todo struct {
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-// TodoCollection :
 type TodoCollection struct {
 	Items []Todo `json:"items"`
 }

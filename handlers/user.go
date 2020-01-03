@@ -94,7 +94,6 @@ func PostAvatarByBase64() echo.HandlerFunc {
 	}
 }
 
-// GetUserInfo :
 func GetUserInfo() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		db := database.GetDB()
@@ -131,7 +130,6 @@ func GetUserInfo() echo.HandlerFunc {
 	}
 }
 
-// PostAvatar :
 func PostAvatar() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		db := database.GetDB()

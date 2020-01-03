@@ -1,8 +1,0 @@
-AVATAR_DIR: "upload/avatar/"
-JWT_KEY: "jellyfish-app"
-
-# database
-DBNAME: "jellyfish"
-DBHOST: "localhost"
-DBUSER: "postgres"
-DBPASSWORD: "mysecretpassword"

@@ -1,0 +1,15 @@
+datasource:
+  rds:
+    database_url: postgres://postgres:mysecretpassword@localhost:5432/jellyfish
+
+application:
+  jwt_secret: jellyfish-app-tXQhvSMWMS11qZ9euEhE6lf2ferf0FR6RYGd8iMXiTxxXtJ1XDVdTXPaLtV12ZGp
+  addr: 0.0.0.0:8180
+
+logger:
+  level: debug
+  error_output_paths: # NOTE: viper not support read a environment array var
+    - "stdout"
+    # - "/var/log/jellyfish_log"
+
+
