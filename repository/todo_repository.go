@@ -1,8 +1,7 @@
-package todorepository
+package repository
 
 import (
 	"github.com/fwchen/jellyfish/database"
-
 	"github.com/fwchen/jellyfish/models"
 )
 

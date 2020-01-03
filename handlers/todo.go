@@ -1,12 +1,11 @@
 package handlers
 
 import (
+	"github.com/fwchen/jellyfish/models"
+	"github.com/fwchen/jellyfish/repository"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/fwchen/jellyfish/models"
-	todorepository "github.com/fwchen/jellyfish/repository/todo"
-
 	"github.com/labstack/echo"
 )
 
@@ -18,7 +17,7 @@ func GetUserTodos() echo.HandlerFunc {
 		claims := user.Claims.(*JwtAppClaims)
 		jwtUserID := claims.ID
 
-		todos := todorepository.GetUserTodos(jwtUserID, "All").Items
+		todos := repository.GetUserTodos(jwtUserID, "All").Items
 		return c.JSON(http.StatusOK, todos)
 	}
 }
@@ -31,7 +30,7 @@ func GetUserDoingTodos() echo.HandlerFunc {
 		claims := user.Claims.(*JwtAppClaims)
 		jwtUserID := claims.ID
 
-		todos := todorepository.GetUserTodos(jwtUserID, "Doing").Items
+		todos := repository.GetUserTodos(jwtUserID, "Doing").Items
 		return c.JSON(http.StatusOK, todos)
 	}
 }
@@ -44,7 +43,7 @@ func GetUserDoneTodos() echo.HandlerFunc {
 		claims := user.Claims.(*JwtAppClaims)
 		jwtUserID := claims.ID
 
-		todos := todorepository.GetUserTodos(jwtUserID, "Done").Items
+		todos := repository.GetUserTodos(jwtUserID, "Done").Items
 		return c.JSON(http.StatusOK, todos)
 	}
 }
@@ -56,7 +55,7 @@ func UpdateTodo() echo.HandlerFunc {
 		todo := new(models.Todo)
 		c.Bind(&todo)
 
-		todorepository.UpdateTodo(todo)
+		repository.UpdateTodo(todo)
 		return c.NoContent(http.StatusCreated)
 	}
 }
@@ -69,7 +68,7 @@ func CreateTodo() echo.HandlerFunc {
 		claims := user.Claims.(*JwtAppClaims)
 		userID := claims.ID
 
-		todo := new(models.Todo)
+		todo := new(user.Todo)
 
 		c.Bind(&todo)
 
@@ -81,7 +80,7 @@ func CreateTodo() echo.HandlerFunc {
 			todo.Type = "NORMAL"
 		}
 
-		id, err := todorepository.CreateTodo(todo)
+		id, err := repository.CreateTodo(todo)
 
 		if err == nil {
 			return c.JSON(http.StatusCreated, map[string]string{
@@ -100,7 +99,7 @@ func DeleteTodo() echo.HandlerFunc {
 		userID := claims.ID
 
 		todoID := c.Param("id")
-		error := todorepository.DeleteTodo(todoID, userID)
+		error := repository.DeleteTodo(todoID, userID)
 
 		if error == nil {
 			return c.JSON(http.StatusOK, map[string]string{})

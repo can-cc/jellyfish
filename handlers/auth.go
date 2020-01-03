@@ -1,18 +1,17 @@
 package handlers
 
 import (
+	user2 "github.com/fwchen/jellyfish/domain/user"
+	"github.com/fwchen/jellyfish/repository"
 	"time"
 
-	userRepository "github.com/fwchen/jellyfish/repository/user"
 	"github.com/spf13/viper"
 
 	"fmt"
 	"net/http"
 
-	"github.com/dgrijalva/jwt-go"
-	"github.com/fwchen/jellyfish/models"
-
 	"github.com/dchest/captcha"
+	"github.com/dgrijalva/jwt-go"
 
 	"github.com/labstack/echo"
 )
@@ -25,7 +24,7 @@ type JwtAppClaims struct {
 
 func SignUp() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		user := models.User{}
+		user := user2.AppUser{}
 
 		request := new(struct {
 			Captcha   string `json:"captcha"`
@@ -42,7 +41,7 @@ func SignUp() echo.HandlerFunc {
 
 			return c.String(http.StatusBadRequest, "captcha invalid")
 		} else {
-			_, error := userRepository.CreateUser(&user)
+			_, error := repository.CreateUser(&user)
 			if error == nil {
 				return c.NoContent(http.StatusNoContent)
 			} else {
@@ -64,13 +63,13 @@ func SignIn() echo.HandlerFunc {
 
 		c.Bind(&request)
 
-		isExist := userRepository.CheckUserExist(request.Username)
+		isExist := repository.CheckUserExist(request.Username)
 
 		if !isExist {
 			return c.JSON(http.StatusBadRequest, "")
 		}
 
-		user, err := userRepository.GetUserWhenCompareHashAndPassword(request.Username, request.Password)
+		user, err := repository.GetUserWhenCompareHashAndPassword(request.Username, request.Password)
 
 		if err != nil {
 			return c.JSON(http.StatusUnauthorized, "")
