@@ -1,12 +1,13 @@
 package repository
 
-import (
-	"github.com/fwchen/jellyfish/domain/user"
-)
+import "github.com/fwchen/jellyfish/domain/user"
 
-type UserRepository interface {
-	InsertUser(user *user.AppUser, hash string) error
-	HasUser(username string) (bool, error)
-	FindUser(username string) (*user.AppUser, error)
-	FindUserHash(username string) (string, error)
+type Repository interface {
+	//InsertUser(user *AppUser, hash string) error
+	Save(user *user.AppUser) error
+	Has(username string) (bool, error)
+	FindByID(userID string) (*user.AppUser, error)
+	//FindUserHashByName(username string) (string, error)
+	//UpdateUserAvatar(user *AppUser, avatar string) error
+	//FindUerAvatar(userID string) (*Avatar, error)
 }

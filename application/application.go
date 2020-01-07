@@ -26,7 +26,7 @@ func (a *application) StartServe() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	Route(e)
+	a.Route(e)
 
 	fmt.Println(fmt.Sprintf("jellyfish serve on http://%s", a.config.Application.Addr))
 	e.Logger.Fatal(e.Start(a.config.Application.Addr))

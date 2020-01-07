@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'gradle:jdk8'
+            image 'golang:1.13.4-stretch'
         }
     }
     triggers {
@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('test') {
             steps {
-                sh 'make test'
+                sh 'go test -race -short ./...'
             }
         }
     }

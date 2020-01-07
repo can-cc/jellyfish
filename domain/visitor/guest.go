@@ -1,14 +1,14 @@
-package user
+package visitor
 
-import "os/user"
+import "github.com/fwchen/jellyfish/domain/user"
 
-type Guest struct {
+type Visitor struct {
 	Name        string
 	Password    string
 	IsCertified bool
 }
 
 // Transform : Passed identity authentication or join our application, turned into user
-func (g *Guest) TransformAppUser() (*user.User, error) {
+func (g *Visitor) TransformAppUser() (*user.AppUser, error) {
 	return nil, nil
 }

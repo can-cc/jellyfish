@@ -16,12 +16,6 @@ import (
 	"github.com/labstack/echo"
 )
 
-type JwtAppClaims struct {
-	Username string `json:"username"`
-	ID       string `json:"id"`
-	jwt.StandardClaims
-}
-
 func SignUp() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user := user2.AppUser{}

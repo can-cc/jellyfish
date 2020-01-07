@@ -1,11 +1,11 @@
 package application
 
 import (
-	"net/http"
-
-	"github.com/fwchen/jellyfish/handlers"
-
 	"github.com/dchest/captcha"
+	userHandler "github.com/fwchen/jellyfish/domain/user/handler"
+	userRepoImpl "github.com/fwchen/jellyfish/domain/user/repository/impl"
+	"github.com/fwchen/jellyfish/handlers"
+	"net/http"
 
 	"github.com/spf13/viper"
 
@@ -13,9 +13,7 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
-// Route :
-func Route(e *echo.Echo) {
-
+func (a *application) Route(e *echo.Echo) {
 	e.GET("/hello", func(c echo.Context) error {
 		return c.String(http.StatusOK, "hello my friends")
 	})
@@ -24,21 +22,27 @@ func Route(e *echo.Echo) {
 	e.GET("/captcha/*", echo.WrapHandler(captcha.Server(captcha.StdWidth, captcha.StdHeight)))
 	e.POST("/captcha", handlers.GenCaptcha())
 
-	r := e.Group("")
-	r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		Claims:      &handlers.JwtAppClaims{},
+	authorizeGroup := e.Group("")
+	authorizeGroup.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		Claims:      &JwtAppClaims{},
 		SigningKey:  []byte(viper.GetString("JWT_SECRET")),
 		TokenLookup: "header:App-Authorization",
 	}))
 
-	r.GET("/todos", handlers.GetUserTodos())
-	r.GET("/todos/done", handlers.GetUserDoneTodos())
-	r.GET("/todos/doing", handlers.GetUserDoingTodos())
-	r.GET("/user/:userId", handlers.GetUserInfo())
-	r.POST("/todo", handlers.CreateTodo())
-	r.DELETE("/todo/:id", handlers.DeleteTodo())
-	r.PUT("/todo/:id", handlers.UpdateTodo())
+	{
+		handler := userHandler.NewHandler(userRepoImpl.NewUserRepository(a.datasource))
+		authUserGroup := authorizeGroup.Group("user")
+		authUserGroup.GET("/:userID", handler.GetUserInfo)
+	}
 
-	r.POST("/avatar", handlers.PostAvatar())
-	r.POST("/avatar/base64", handlers.PostAvatarByBase64())
+	authorizeGroup.GET("/todos", handlers.GetUserTodos())
+	authorizeGroup.GET("/todos/done", handlers.GetUserDoneTodos())
+	authorizeGroup.GET("/todos/doing", handlers.GetUserDoingTodos())
+
+	authorizeGroup.POST("/todo", handlers.CreateTodo())
+	authorizeGroup.DELETE("/todo/:id", handlers.DeleteTodo())
+	authorizeGroup.PUT("/todo/:id", handlers.UpdateTodo())
+
+	authorizeGroup.POST("/avatar", handlers.PostAvatar())
+	authorizeGroup.POST("/avatar/base64", handlers.PostAvatarByBase64())
 }

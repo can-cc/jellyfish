@@ -1,0 +1,33 @@
+# The binary to build (just the basename).
+GOFILES      ?= $(shell find . -type f -name '*.go' -not -path "./vendor/*" -not -path "*/mock/*")
+
+all: mockgen build lint
+
+.PHONY: build
+build: ## Build application
+	go build main.go
+
+.PHONY: lint
+lint: ## Lint the files
+	@echo run lint...
+	@bash golangci-lint run
+
+.PHONY: test
+test:  ## Run unittests and data race detector
+	go test -race -short ./...
+
+.PHONY: mockgen
+mockgen: ## generate interfaces mock
+	mockgen -source domain/user/repository/user_repository.go -destination domain/user/repository/mock/user_repository.go -package mock
+
+
+########################################################################
+## Self-Documenting Makefile Help                                     ##
+## https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html ##
+########################################################################
+.PHONY: help
+help:
+	@ grep -h -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+log-%:
+	@ grep -h -E '^$*:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m==> %s\033[0m\n", $$2}'

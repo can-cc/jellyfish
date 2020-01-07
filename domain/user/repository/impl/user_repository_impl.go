@@ -3,33 +3,55 @@ package impl
 import (
 	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/domain/user"
+	"github.com/fwchen/jellyfish/domain/user/factory"
+	"github.com/fwchen/jellyfish/domain/user/repository"
 	"github.com/juju/errors"
+	"time"
 )
 
-type UserRepositoryImpl struct {
-	dataSource database.AppDataSource
+func NewUserRepository(dataSource *database.AppDataSource) repository.Repository {
+	return &userRepositoryImpl{dataSource: dataSource}
 }
 
-func (u *UserRepositoryImpl) InsertUser(user *user.AppUser, hash string) error {
-	sqlStatement := `INSERT INTO users (username, hash, created_at) VALUES ($1, $2, now()) RETURNING id`
-	return u.dataSource.RDS.QueryRow(sqlStatement, user.Username, hash).Scan(&user.ID)
+type userRepositoryImpl struct {
+	dataSource *database.AppDataSource
 }
 
-func (u *UserRepositoryImpl) HasUser(username string) (bool, error) {
+func (u *userRepositoryImpl) Save(user *user.AppUser) error {
+	if user.ID != nil {
+		return u.updateUser(user)
+	}
+	return u.insertUser(user)
+}
+
+func (u *userRepositoryImpl) Has(username string) (bool, error) {
 	var exist bool
-	err := u.dataSource.RDS.QueryRow(`SELECT EXISTS(SELECT id FROM user WHERE username = $1)`, username).Scan(&exist)
+	err := u.dataSource.RDS.QueryRow(`SELECT EXISTS(SELECT id FROM app_user WHERE username = $1)`, username).Scan(&exist)
 	return exist, err
 }
 
-func (u *UserRepositoryImpl) FindUser(username string) (*user.AppUser, error) {
-	var user user.AppUser
-	err := u.dataSource.RDS.QueryRow(`SELECT id, username, avatar_id, created_at, updated_at FROM user WHERE username = $1`, username).Scan(&user.ID, &user.Username, &user.AvatarID, user.CreatedAt, user.UpdatedAt)
+func (u *userRepositoryImpl) FindByID(userID string) (*user.AppUser, error) {
+	var username, hash, avatar *string
+	var createdAt, updatedAt *time.Time
+	err := u.dataSource.RDS.QueryRow(`SELECT id, username, hash, avatar, created_at, updated_at FROM app_user WHERE id = $1`, userID).Scan(username, hash, createdAt, updatedAt)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
-	return &user, nil
+	return factory.NewUser(userID, *username, *hash, *avatar, *createdAt, *updatedAt), nil
 }
 
-func (u *UserRepositoryImpl) FindUserHash(username string) (string, error) {
-	return "", nil
+func (u *userRepositoryImpl) insertUser(user *user.AppUser) error {
+	sqlStatement := `
+		INSERT INTO app_user (username, hash, created_at) 
+		VALUES ($1, $2, now()) RETURNING id`
+	return u.dataSource.RDS.QueryRow(sqlStatement, user.Username, user.GetPasswordHash()).Scan(&user.ID)
+}
+
+func (u *userRepositoryImpl) updateUser(user *user.AppUser) error {
+	_, err := u.dataSource.RDS.Exec(
+		`UPDATE app_user SET username = $1, hash = $2, avatar = $3, updated_at = now()
+                WHERE id = $5`,
+		user.Username, user.GetPasswordHash(), user.GetAvatar(),
+	)
+	return err
 }
