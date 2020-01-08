@@ -18,10 +18,7 @@ type userRepositoryImpl struct {
 }
 
 func (u *userRepositoryImpl) Save(user *user.AppUser) error {
-	if user.ID != nil {
-		return u.updateUser(user)
-	}
-	return u.insertUser(user)
+	return u.updateUser(user)
 }
 
 func (u *userRepositoryImpl) Has(username string) (bool, error) {
@@ -40,14 +37,18 @@ func (u *userRepositoryImpl) FindByID(userID string) (*user.AppUser, error) {
 	return factory.NewUser(userID, *username, *hash, *avatar, *createdAt, *updatedAt), nil
 }
 
-func (u *userRepositoryImpl) insertUser(user *user.AppUser) error {
-	sqlStatement := `
-		INSERT INTO app_user (username, hash, created_at) 
-		VALUES ($1, $2, now()) RETURNING id`
-	return u.dataSource.RDS.QueryRow(sqlStatement, user.Username, user.GetPasswordHash()).Scan(&user.ID)
-}
+//
+//func (u *userRepositoryImpl) insertUser(user *user.AppUser) error {
+//	sqlStatement := `
+//		INSERT INTO app_user (username, hash, created_at)
+//		VALUES ($1, $2, now()) RETURNING id`
+//	return u.dataSource.RDS.QueryRow(sqlStatement, user.Username, user.GetPasswordHash()).Scan(&user.ID)
+//}
 
 func (u *userRepositoryImpl) updateUser(user *user.AppUser) error {
+	if user.ID == nil {
+		return errors.New("Update user without userID")
+	}
 	_, err := u.dataSource.RDS.Exec(
 		`UPDATE app_user SET username = $1, hash = $2, avatar = $3, updated_at = now()
                 WHERE id = $5`,

@@ -16,21 +16,27 @@ var (
 
 type Logger struct{}
 
+func (l *Logger) Debugw(msg string, keysAndValues ...interface{}) {
+	if sugaredLogger != nil {
+		sugaredLogger.Debugw(msg, keysAndValues)
+	}
+}
+
 func (l *Logger) Infow(msg string, keysAndValues ...interface{}) {
 	if sugaredLogger != nil {
 		sugaredLogger.Infow(msg, keysAndValues)
 	}
 }
 
-func (l *Logger) Errorw(msg string, keysAndValues ...interface{}) {
-	if sugaredLogger != nil {
-		sugaredLogger.Errorw(msg, keysAndValues)
-	}
-}
-
 func (l *Logger) Warnw(msg string, keysAndValues ...interface{}) {
 	if sugaredLogger != nil {
 		sugaredLogger.Warnw(msg, keysAndValues)
+	}
+}
+
+func (l *Logger) Errorw(msg string, keysAndValues ...interface{}) {
+	if sugaredLogger != nil {
+		sugaredLogger.Errorw(msg, keysAndValues)
 	}
 }
 

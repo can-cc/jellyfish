@@ -3,8 +3,9 @@ datasource:
     database_url: postgres://postgres:mysecretpassword@localhost:5432/jellyfish
 
 application:
-  jwt_secret: jellyfish-app-tXQhvSMWMS11qZ9euEhE6lf2ferf0FR6RYGd8iMXiTxxXtJ1XDVdTXPaLtV12ZGp
   addr: 0.0.0.0:8180
+  jwt_secret: jellyfish-app-tXQhvSMWMS11qZ9euEhE6lf2ferf0FR6RYGd8iMXiTxxXtJ1XDVdTXPaLtV12ZGp
+  jwt_header_key: "App-Authorization"
 
 logger:
   level: debug

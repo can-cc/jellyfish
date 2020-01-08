@@ -1,19 +1,19 @@
 package application
 
 import (
+	"fmt"
 	"github.com/dchest/captcha"
+	configs "github.com/fwchen/jellyfish/config"
 	userHandler "github.com/fwchen/jellyfish/domain/user/handler"
 	userRepoImpl "github.com/fwchen/jellyfish/domain/user/repository/impl"
 	"github.com/fwchen/jellyfish/handlers"
 	"net/http"
 
-	"github.com/spf13/viper"
-
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
-func (a *application) Route(e *echo.Echo) {
+func (a *application) Route(e *echo.Echo, config *configs.AppConfig) {
 	e.GET("/hello", func(c echo.Context) error {
 		return c.String(http.StatusOK, "hello my friends")
 	})
@@ -25,8 +25,8 @@ func (a *application) Route(e *echo.Echo) {
 	authorizeGroup := e.Group("")
 	authorizeGroup.Use(middleware.JWTWithConfig(middleware.JWTConfig{
 		Claims:      &JwtAppClaims{},
-		SigningKey:  []byte(viper.GetString("JWT_SECRET")),
-		TokenLookup: "header:App-Authorization",
+		SigningKey:  []byte(config.Application.JwtSecret),
+		TokenLookup: fmt.Sprintf("header:%s", config.Application.JwtHeaderKey),
 	}))
 
 	{

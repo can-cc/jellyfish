@@ -5,8 +5,8 @@ import (
 )
 
 type Guard interface {
-	AuthenticateGuest(guest *visitor.Visitor) error
-	logGuestAccess(guest *visitor.Visitor) error
-	GenerateUserHash(guest *visitor.Visitor) (string, error)
-	compareGuestPassword(guest *visitor.Visitor) error
+	Authenticate(guest *visitor.Visitor, hash string)
+	//logGuestAccess(guest *visitor.Visitor) error
+	GeneratePasswordHash(guest *visitor.Visitor) (string, error)
+	//compareGuestPassword(guest *visitor.Visitor, hash string) error
 }

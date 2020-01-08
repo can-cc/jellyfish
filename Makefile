@@ -19,6 +19,7 @@ test:  ## Run unittests and data race detector
 .PHONY: mockgen
 mockgen: ## generate interfaces mock
 	mockgen -source domain/user/repository/user_repository.go -destination domain/user/repository/mock/user_repository.go -package mock
+	mockgen -source domain/visitor/repository/visitor_repository.go -destination domain/visitor/repository/mock/visitor_repository.go -package mock
 
 
 ########################################################################

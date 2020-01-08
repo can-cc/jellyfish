@@ -20,8 +20,9 @@ type RDSConfig struct {
 }
 
 type ApplicationConfig struct {
-	Addr      string
-	JwtSecret string
+	Addr         string
+	JwtSecret    string `jwt_secret`
+	JwtHeaderKey string `jwt_header_key`
 }
 
 type LoggerConfig struct {

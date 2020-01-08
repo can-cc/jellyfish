@@ -25,6 +25,7 @@ func (a *AppUser) MarkSynced() {
 func (a *AppUser) GetAvatar() *Avatar {
 	return a.avatar
 }
+
 func (a *AppUser) SetAvatar(avatar string) {
 	a.avatar = &Avatar{code: avatar}
 }
