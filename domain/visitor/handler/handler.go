@@ -25,9 +25,9 @@ func (h *handler) Login(c echo.Context) error {
 		password string `json:"username" validate:"required"`
 	})
 	c.Bind(request)
-	err := h.service.Login(request.username, request.password)
-	if err != nil {
-		return errors.Trace(err)
+	success := h.service.Login(request.username, request.password)
+	if !success {
+		return c.NoContent(http.StatusUnauthorized)
 	}
 	return c.NoContent(http.StatusOK)
 }

@@ -7,6 +7,7 @@ import (
 	userHandler "github.com/fwchen/jellyfish/domain/user/handler"
 	userRepoImpl "github.com/fwchen/jellyfish/domain/user/repository/impl"
 	"github.com/fwchen/jellyfish/handlers"
+	"github.com/fwchen/jellyfish/util"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -24,7 +25,7 @@ func (a *application) Route(e *echo.Echo, config *configs.AppConfig) {
 
 	authorizeGroup := e.Group("")
 	authorizeGroup.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		Claims:      &JwtAppClaims{},
+		Claims:      &util.JwtAppClaims{},
 		SigningKey:  []byte(config.Application.JwtSecret),
 		TokenLookup: fmt.Sprintf("header:%s", config.Application.JwtHeaderKey),
 	}))

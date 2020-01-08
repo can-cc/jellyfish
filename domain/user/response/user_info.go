@@ -1,6 +1,8 @@
 package response
 
-import "github.com/fwchen/jellyfish/domain/user"
+import (
+	"github.com/fwchen/jellyfish/domain/user"
+)
 
 type UserInfo struct {
 	ID       string `json:"id"`

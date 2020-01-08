@@ -9,7 +9,7 @@ application:
 
 logger:
   level: debug
-  error_output_paths: # NOTE: viper not support read a environment array var
+  output_paths: # NOTE: viper not support read a environment array var
     - "stdout"
     # - "/var/log/jellyfish_log"
 

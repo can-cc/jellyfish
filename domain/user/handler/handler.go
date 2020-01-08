@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"github.com/fwchen/jellyfish/application"
 	"github.com/fwchen/jellyfish/domain/user/repository"
 	userService "github.com/fwchen/jellyfish/domain/user/service"
+	"github.com/fwchen/jellyfish/util"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
 	"net/http"
@@ -27,7 +27,7 @@ func (h *handler) GetUserInfo(c echo.Context) error {
 }
 
 func (h *handler) UpdateUserAvatar(c echo.Context) error {
-	userID := application.GetClaimsUserID(c)
+	userID := util.GetClaimsUserID(c)
 	request := new(struct {
 		avatar string `json:"avatar" validate:"required"`
 	})

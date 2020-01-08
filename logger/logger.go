@@ -59,7 +59,7 @@ func InitLogger(loggerConfig configs.LoggerConfig) error {
 	cfg := zap.Config{
 		Level:            zap.NewAtomicLevelAt(level),
 		Encoding:         "json",
-		OutputPaths:      []string{"stdout"},
+		OutputPaths:      loggerConfig.OutputPaths,
 		ErrorOutputPaths: []string{"stderr"},
 		InitialFields: map[string]interface{}{
 			"service_name": "jellyfish_backend",

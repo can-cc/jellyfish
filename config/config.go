@@ -21,13 +21,13 @@ type RDSConfig struct {
 
 type ApplicationConfig struct {
 	Addr         string
-	JwtSecret    string `jwt_secret`
-	JwtHeaderKey string `jwt_header_key`
+	JwtSecret    string `mapstructure:"jwt_secret"`
+	JwtHeaderKey string `mapstructure:"jwt_header_key"`
 }
 
 type LoggerConfig struct {
-	Level            string
-	ErrorOutputPaths []string `mapstructure:"error_output_paths"`
+	Level       string
+	OutputPaths []string `mapstructure:"output_paths"`
 }
 
 func loadConfig(file string) (*AppConfig, error) {

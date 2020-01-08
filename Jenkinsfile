@@ -8,7 +8,7 @@ pipeline {
         pollSCM('*/1 * * * *')
     }
      environment {
-        jfish_datasource.rds.database_url = credentials('jenkins-jfish-datasource-rds-database_url')
+        JFISH_DATASOURCE.RDS.DATABASE_URL = credentials('jenkins-jfish-datasource-rds-database_url')
     }
     stages {
         stage('test') {

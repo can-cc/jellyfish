@@ -1,4 +1,4 @@
-package user
+package service
 
 import (
 	"github.com/fwchen/jellyfish/domain/user/repository"
