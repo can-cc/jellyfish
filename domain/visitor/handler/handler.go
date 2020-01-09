@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/dchest/captcha"
 	configs "github.com/fwchen/jellyfish/config"
 	"github.com/fwchen/jellyfish/domain/visitor/repository"
 	visitorService "github.com/fwchen/jellyfish/domain/visitor/service"
@@ -16,32 +17,47 @@ type handler struct {
 
 func NewHandler(visitorRepo repository.Repository, config *configs.ApplicationConfig) *handler {
 	service := visitorService.NewApplicationService(visitorRepo, config)
-	return &handler{service: service}
+	return &handler{service: service, config: config}
 }
 
 func (h *handler) Login(c echo.Context) error {
 	request := new(struct {
-		username string `json:"username" validate:"required"`
-		password string `json:"username" validate:"required"`
+		Username  string `json:"username" validate:"required"`
+		Password  string `json:"password" validate:"required"`
+		Captcha   string `json:"captcha" validate:"required"`
+		CaptchaID string `json:"captchaID" validate:"required"`
 	})
 	c.Bind(request)
-	success := h.service.Login(request.username, request.password)
-	if !success {
+	if !captcha.VerifyString(request.CaptchaID, request.Captcha) {
+		return c.NoContent(http.StatusBadRequest)
+	}
+	token, err := h.service.Login(request.Username, request.Password)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	if token == nil {
 		return c.NoContent(http.StatusUnauthorized)
 	}
+	c.Response().Header().Set(h.config.JwtHeaderKey, *token)
 	return c.NoContent(http.StatusOK)
 }
 
 func (h *handler) SignUp(c echo.Context) error {
 	request := new(struct {
-		username string `json:"username" validate:"required"`
-		password string `json:"username" validate:"required"`
+		Username string `json:"username" validate:"required"`
+		Password string `json:"password" validate:"required"`
 	})
 	c.Bind(request)
-	token, err := h.service.SignUp(request.username, request.password)
+	err := h.service.SignUp(request.Username, request.Password)
 	if err != nil {
 		return errors.Trace(err)
 	}
-	c.Response().Header().Set(h.config.JwtHeaderKey, *token)
+
 	return c.NoContent(http.StatusOK)
+}
+
+func (h *handler) GenCaptcha(c echo.Context) error {
+	return c.JSON(http.StatusCreated, map[string]string{
+		"id": captcha.New(),
+	})
 }

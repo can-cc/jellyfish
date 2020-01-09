@@ -1,8 +1,11 @@
-package util
+package middleware
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	configs "github.com/fwchen/jellyfish/config"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/spf13/viper"
 	"time"
 )
@@ -14,6 +17,17 @@ type SignData struct {
 type JwtAppClaims struct {
 	SignData
 	jwt.StandardClaims
+}
+
+func ApplyJwtInRoute(e *echo.Echo, config *configs.ApplicationConfig) *echo.Group {
+	authorizeGroup := e.Group("")
+	authorizeGroup.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		Claims:      &JwtAppClaims{},
+		ContextKey:  "user",
+		SigningKey:  []byte(config.JwtSecret),
+		TokenLookup: fmt.Sprintf("header:%s", config.JwtHeaderKey),
+	}))
+	return authorizeGroup
 }
 
 func GetClaimsUserID(c echo.Context) string {

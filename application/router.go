@@ -1,39 +1,38 @@
 package application
 
 import (
-	"fmt"
 	"github.com/dchest/captcha"
-	configs "github.com/fwchen/jellyfish/config"
+	appMiddleware "github.com/fwchen/jellyfish/application/middleware"
 	userHandler "github.com/fwchen/jellyfish/domain/user/handler"
 	userRepoImpl "github.com/fwchen/jellyfish/domain/user/repository/impl"
+	visitorHandler "github.com/fwchen/jellyfish/domain/visitor/handler"
+	"github.com/fwchen/jellyfish/domain/visitor/repository/impl"
 	"github.com/fwchen/jellyfish/handlers"
-	"github.com/fwchen/jellyfish/util"
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 )
 
-func (a *application) Route(e *echo.Echo, config *configs.AppConfig) {
-	e.GET("/hello", func(c echo.Context) error {
-		return c.String(http.StatusOK, "hello my friends")
+func (a *application) Route(e *echo.Echo) {
+	e.GET("/ping", func(c echo.Context) error {
+		return c.String(http.StatusOK, "pong")
 	})
-	e.POST("/signin", handlers.SignIn())
-	e.POST("/signup", handlers.SignUp())
-	e.GET("/captcha/*", echo.WrapHandler(captcha.Server(captcha.StdWidth, captcha.StdHeight)))
-	e.POST("/captcha", handlers.GenCaptcha())
 
-	authorizeGroup := e.Group("")
-	authorizeGroup.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		Claims:      &util.JwtAppClaims{},
-		SigningKey:  []byte(config.Application.JwtSecret),
-		TokenLookup: fmt.Sprintf("header:%s", config.Application.JwtHeaderKey),
-	}))
+	authorizeGroup := appMiddleware.ApplyJwtInRoute(e, &a.config.Application)
+
+	{
+		handler := visitorHandler.NewHandler(impl.NewVisitorRepository(a.datasource), &a.config.Application)
+		e.POST("/login", handler.Login)
+		e.POST("/signup", handler.SignUp)
+		e.GET("/captcha/*", echo.WrapHandler(captcha.Server(captcha.StdWidth, captcha.StdHeight)))
+		e.POST("/captcha", handler.GenCaptcha)
+	}
 
 	{
 		handler := userHandler.NewHandler(userRepoImpl.NewUserRepository(a.datasource))
 		authUserGroup := authorizeGroup.Group("user")
 		authUserGroup.GET("/:userID", handler.GetUserInfo)
+		authUserGroup.POST("/avatar", handler.UpdateUserAvatar)
 	}
 
 	authorizeGroup.GET("/todos", handlers.GetUserTodos())
@@ -43,7 +42,4 @@ func (a *application) Route(e *echo.Echo, config *configs.AppConfig) {
 	authorizeGroup.POST("/todo", handlers.CreateTodo())
 	authorizeGroup.DELETE("/todo/:id", handlers.DeleteTodo())
 	authorizeGroup.PUT("/todo/:id", handlers.UpdateTodo())
-
-	authorizeGroup.POST("/avatar", handlers.PostAvatar())
-	authorizeGroup.POST("/avatar/base64", handlers.PostAvatarByBase64())
 }

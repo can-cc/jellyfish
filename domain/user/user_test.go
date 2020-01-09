@@ -14,5 +14,5 @@ func TestAppUser_SetAvatar(t *testing.T) {
 func TestAppUser_SetPasswordHash(t *testing.T) {
 	var user AppUser
 	user.SetPasswordHash("***")
-	assert.Equal(t, "***", user.SetPasswordHash)
+	assert.Equal(t, "***", *user.passwordHash)
 }

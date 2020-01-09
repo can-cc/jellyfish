@@ -16,10 +16,9 @@ CREATE TABLE IF NOT EXISTS todo (
     creator_id uuid NOT NULL,
     content character(120) NOT NULL,
     detail character(500),
-    deadline DATE,
+    deadline TIMESTAMP,
     status character(20),
     type character(20),
-    done INTEGER DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (creator_id) REFERENCES app_user (id)

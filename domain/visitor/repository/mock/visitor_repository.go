@@ -34,31 +34,32 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Save mocks base method
-func (m *MockRepository) Save(visitor *visitor.Visitor) (string, error) {
+func (m *MockRepository) Save(visitor *visitor.Visitor, hash string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", visitor)
+	ret := m.ctrl.Call(m, "Save", visitor, hash)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Save indicates an expected call of Save
-func (mr *MockRepositoryMockRecorder) Save(visitor interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) Save(visitor, hash interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockRepository)(nil).Save), visitor)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockRepository)(nil).Save), visitor, hash)
 }
 
-// FindUserPasswordHash mocks base method
-func (m *MockRepository) FindUserPasswordHash(name string) (string, error) {
+// FindUserIDAndHash mocks base method
+func (m *MockRepository) FindUserIDAndHash(name string) (string, string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindUserPasswordHash", name)
+	ret := m.ctrl.Call(m, "FindUserIDAndHash", name)
 	ret0, _ := ret[0].(string)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret1, _ := ret[1].(string)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
 }
 
-// FindUserPasswordHash indicates an expected call of FindUserPasswordHash
-func (mr *MockRepositoryMockRecorder) FindUserPasswordHash(name interface{}) *gomock.Call {
+// FindUserIDAndHash indicates an expected call of FindUserIDAndHash
+func (mr *MockRepositoryMockRecorder) FindUserIDAndHash(name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUserPasswordHash", reflect.TypeOf((*MockRepository)(nil).FindUserPasswordHash), name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUserIDAndHash", reflect.TypeOf((*MockRepository)(nil).FindUserIDAndHash), name)
 }

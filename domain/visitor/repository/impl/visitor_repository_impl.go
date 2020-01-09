@@ -23,6 +23,10 @@ func (v *visitorRepositoryImpl) Save(visitor *visitor.Visitor, hash string) (str
 	return id, err
 }
 
-func (v *visitorRepositoryImpl) FindUserPasswordHash(name string) (string, error) {
-	panic("implement me")
+func (v *visitorRepositoryImpl) FindUserIDAndHash(name string) (string, string, error) {
+	var data struct{ ID, Hash string }
+	sqlStatement := `
+		SELECT id, hash FROM app_user WHERE username = $1`
+	err := v.dataSource.RDS.QueryRow(sqlStatement, name).Scan(&data.ID, &data.Hash)
+	return data.ID, data.Hash, err
 }
