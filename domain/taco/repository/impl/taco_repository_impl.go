@@ -14,17 +14,6 @@ type TacoRepositoryImpl struct {
 	dataSource *database.AppDataSource
 }
 
-func buildListTacosSQL(userID string, filter repository.ListTacoFilter) (sql string, params []interface{}, err error) {
-	statuesFilters := []exp.Expression{goqu.C("creator_id").Eq(userID)}
-	if filter.Statues != nil {
-		statuesFilters = append(statuesFilters, goqu.C("status").In(filter.Statues))
-	}
-
-	return goqu.From("test").Select("id", "TRIM(content)", "TRIM(detail)", "type", "deadline", "status", "created_at", "updated_at").Where(
-		statuesFilters...,
-	).ToSQL()
-}
-
 func (t *TacoRepositoryImpl) ListTacos(userID string, filter repository.ListTacoFilter) ([]taco.Taco, error) {
 	sql, _, err := buildListTacosSQL(userID, filter)
 	if err != nil {
@@ -43,4 +32,34 @@ func (t *TacoRepositoryImpl) ListTacos(userID string, filter repository.ListTaco
 		tacos = append(tacos, taco)
 	}
 	return tacos, nil
+}
+
+func (t *TacoRepositoryImpl) InsertTaco(taco *taco.Taco) (*string, error) {
+	sql, _, err := goqu.Insert("todo").Rows(
+		goqu.Record{
+			"content":    taco.Content,
+			"creator_id": taco.CreatorID,
+			"detail":     taco.Detail,
+			"status":     taco.Status,
+			"type":       taco.Type,
+			"deadline":   taco.Deadline,
+		},
+	).Returning("id").ToSQL()
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	var id string
+	err = t.dataSource.RDS.QueryRow(sql).Scan(&id)
+	return &id, err
+}
+
+func buildListTacosSQL(userID string, filter repository.ListTacoFilter) (sql string, params []interface{}, err error) {
+	statuesFilters := []exp.Expression{goqu.C("creator_id").Eq(userID)}
+	if filter.Statues != nil {
+		statuesFilters = append(statuesFilters, goqu.C("status").In(filter.Statues))
+	}
+
+	return goqu.From("test").Select("id", "TRIM(content)", "TRIM(detail)", "type", "deadline", "status", "created_at", "updated_at").Where(
+		statuesFilters...,
+	).ToSQL()
 }

@@ -7,7 +7,6 @@ import (
 	userRepoImpl "github.com/fwchen/jellyfish/domain/user/repository/impl"
 	visitorHandler "github.com/fwchen/jellyfish/domain/visitor/handler"
 	"github.com/fwchen/jellyfish/domain/visitor/repository/impl"
-	"github.com/fwchen/jellyfish/handlers"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -34,12 +33,4 @@ func (a *application) Route(e *echo.Echo) {
 		authUserGroup.GET("/:userID", handler.GetUserInfo)
 		authUserGroup.POST("/avatar", handler.UpdateUserAvatar)
 	}
-
-	authorizeGroup.GET("/todos", handlers.GetUserTodos())
-	authorizeGroup.GET("/todos/done", handlers.GetUserDoneTodos())
-	authorizeGroup.GET("/todos/doing", handlers.GetUserDoingTodos())
-
-	authorizeGroup.POST("/todo", handlers.CreateTodo())
-	authorizeGroup.DELETE("/todo/:id", handlers.DeleteTodo())
-	authorizeGroup.PUT("/todo/:id", handlers.UpdateTodo())
 }

@@ -48,3 +48,18 @@ func (mr *MockRepositoryMockRecorder) ListTacos(userID, filter interface{}) *gom
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTacos", reflect.TypeOf((*MockRepository)(nil).ListTacos), userID, filter)
 }
+
+// InsertTaco mocks base method
+func (m *MockRepository) InsertTaco(taco *taco.Taco) (*string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InsertTaco", taco)
+	ret0, _ := ret[0].(*string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// InsertTaco indicates an expected call of InsertTaco
+func (mr *MockRepositoryMockRecorder) InsertTaco(taco interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertTaco", reflect.TypeOf((*MockRepository)(nil).InsertTaco), taco)
+}
