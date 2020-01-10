@@ -1,7 +1,6 @@
 package configs
 
 import (
-	"fmt"
 	"os"
 	"testing"
 
@@ -17,9 +16,8 @@ func TestLoadConfig(t *testing.T) {
 }
 
 func TestLoadConfig_WithEnv(t *testing.T) {
-	os.Setenv("JFISH_LOGGER.LEVEL", "info")
-	os.Setenv("JFISH_APPLICATION.ADDR", "www.jellyfish.com:80")
-	fmt.Print(os.Getenv("jfish_logger.level"))
+	_ = os.Setenv("JFISH_LOGGER_LEVEL", "info")
+	_ = os.Setenv("JFISH_APPLICATION_ADDR", "www.jellyfish.com:80")
 	cfg, _ := LoadConfig("config.yaml")
 	assert.Equal(t, "info", cfg.Logger.Level)
 	assert.Equal(t, "www.jellyfish.com:80", cfg.Application.Addr)

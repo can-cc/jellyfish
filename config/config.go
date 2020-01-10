@@ -3,6 +3,7 @@ package configs
 import (
 	"github.com/juju/errors"
 	"github.com/spf13/viper"
+	"strings"
 )
 
 type AppConfig struct {
@@ -33,6 +34,7 @@ type LoggerConfig struct {
 func loadConfig(file string) (*AppConfig, error) {
 	var config AppConfig
 
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.SetEnvPrefix("jfish")
 	viper.AutomaticEnv()
 	viper.SetConfigFile(file)
