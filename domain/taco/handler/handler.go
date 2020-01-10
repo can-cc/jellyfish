@@ -30,8 +30,11 @@ func (h *handler) GetTacos(c echo.Context) error {
 func (h *handler) CreateTaco(c echo.Context) error {
 	userID := middleware.GetClaimsUserID(c)
 	var command tacoCommand.CreateTacoCommand
-	c.Bind(&command)
-	_, err := h.tacoService.CreateTaco(&command, userID)
+	err := c.Bind(&command)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	_, err = h.tacoService.CreateTaco(&command, userID)
 	if err != nil {
 		return errors.Trace(err)
 	}
