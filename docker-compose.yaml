@@ -1,11 +1,9 @@
 version: "3.2"
 services:
   api:
-    restart: "no"
+    restart: "always"
     build: ./
     ports:
       - "8200:8000"
-    volumes:
-      - /root/database:/jellyfish/database
     command: >
       sh -c "/jellyfish/main"

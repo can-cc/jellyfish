@@ -10,6 +10,10 @@ import (
 	"github.com/juju/errors"
 )
 
+func NewTacoRepository(dataSource *database.AppDataSource) repository.Repository {
+	return &TacoRepositoryImpl{dataSource: dataSource}
+}
+
 type TacoRepositoryImpl struct {
 	dataSource *database.AppDataSource
 }

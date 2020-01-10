@@ -1,8 +1,6 @@
 /vendor
 /main
 /main.exe
-/create-user
 /.idea
 log
-__debug_bin
 .project
