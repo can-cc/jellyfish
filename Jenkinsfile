@@ -11,9 +11,19 @@ pipeline {
         JFISH_DATASOURCE_RDS_DATABASE_URL = credentials('jenkins-jfish-datasource-rds-database_url')
     }
     stages {
-        stage('test') {
+        stage('Test') {
             steps {
-                sh 'go test -race -short ./...'
+                sh 'make test'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'make build'
+            }
+        }
+        stage('Build Tools') {
+            steps {
+                sh 'make build-tool'
             }
         }
     }

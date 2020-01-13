@@ -1,11 +1,15 @@
 # The binary to build (just the basename).
 GOFILES      ?= $(shell find . -type f -name '*.go' -not -path "./vendor/*" -not -path "*/mock/*")
 
-all: mockgen build build-tool lint
+all: mockgen build run build-tool lint
 
 .PHONY: build
 build: ## Build application
 	go build main.go
+
+.PHONY: run
+run: ## Run application server
+	go run main.go
 
 .PHONY: build-tool
 build-tool: ## Build application tools
