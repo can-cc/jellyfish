@@ -1,11 +1,15 @@
 # The binary to build (just the basename).
 GOFILES      ?= $(shell find . -type f -name '*.go' -not -path "./vendor/*" -not -path "*/mock/*")
 
-all: mockgen build lint
+all: mockgen build build-tool lint
 
 .PHONY: build
 build: ## Build application
 	go build main.go
+
+.PHONY: build-tool
+build-tool: ## Build application tools
+	go build -o cmd/jellyfish_tool/create_user cmd/jellyfish_tool/create_user.go
 
 .PHONY: lint
 lint: ## Lint the files

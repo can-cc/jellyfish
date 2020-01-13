@@ -29,11 +29,11 @@ func (t *TacoRepositoryImpl) ListTacos(userID string, filter repository.ListTaco
 	}
 	var tacos []taco.Taco
 	for rows.Next() {
-		var taco taco.Taco
-		if err := rows.Scan(&taco.ID, &taco.Content, &taco.Detail, &taco.Type, &taco.Deadline, &taco.Status, &taco.CreatedAt, &taco.UpdateAt); err != nil {
+		var t taco.Taco
+		if err := rows.Scan(&t.ID, &t.Content, &t.Detail, &t.Type, &t.Deadline, &t.Status, &t.CreatedAt, &t.UpdateAt); err != nil {
 			return nil, errors.Trace(err)
 		}
-		tacos = append(tacos, taco)
+		tacos = append(tacos, t)
 	}
 	return tacos, nil
 }

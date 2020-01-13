@@ -82,10 +82,10 @@ func InitLogger(loggerConfig configs.LoggerConfig) error {
 		return errors.Trace(err)
 	}
 	defer func() {
-		err = logger.Sync()
-		if err != nil {
-			panic(err)
-		}
+		_ = logger.Sync()
+		//if err != nil {
+		//	panic(err)
+		//}
 	}()
 
 	sugaredLogger = logger.Sugar()

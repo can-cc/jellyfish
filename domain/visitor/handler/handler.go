@@ -22,14 +22,12 @@ func NewHandler(visitorRepo repository.Repository, config *configs.ApplicationCo
 
 func (h *handler) Login(c echo.Context) error {
 	request := new(struct {
-		Username  string `json:"username" validate:"required"`
-		Password  string `json:"password" validate:"required"`
-		Captcha   string `json:"captcha" validate:"required"`
-		CaptchaID string `json:"captchaID" validate:"required"`
+		Username string `json:"username" validate:"required"`
+		Password string `json:"password" validate:"required"`
 	})
-	c.Bind(request)
-	if !captcha.VerifyString(request.CaptchaID, request.Captcha) {
-		return c.NoContent(http.StatusBadRequest)
+	err := c.Bind(request)
+	if err != nil {
+		return errors.Trace(err)
 	}
 	token, err := h.service.Login(request.Username, request.Password)
 	if err != nil {
@@ -44,11 +42,19 @@ func (h *handler) Login(c echo.Context) error {
 
 func (h *handler) SignUp(c echo.Context) error {
 	request := new(struct {
-		Username string `json:"username" validate:"required"`
-		Password string `json:"password" validate:"required"`
+		Username  string `json:"username" validate:"required"`
+		Password  string `json:"password" validate:"required"`
+		Captcha   string `json:"captcha" validate:"required"`
+		CaptchaID string `json:"captchaID" validate:"required"`
 	})
-	c.Bind(request)
-	err := h.service.SignUp(request.Username, request.Password)
+	err := c.Bind(request)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	if !captcha.VerifyString(request.CaptchaID, request.Captcha) {
+		return c.NoContent(http.StatusBadRequest)
+	}
+	err = h.service.SignUp(request.Username, request.Password)
 	if err != nil {
 		return errors.Trace(err)
 	}

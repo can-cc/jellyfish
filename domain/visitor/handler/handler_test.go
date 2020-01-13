@@ -16,15 +16,11 @@ import (
 )
 
 func TestHandler_Login(t *testing.T) {
-	captchaStore := captcha.NewMemoryStore(captcha.CollectNum, captcha.Expiration)
-	captchaStore.Set("captcha_1", []byte{5, 5, 0, 5, 5, 5})
-	captcha.SetCustomStore(captchaStore)
-
 	e := echo.New()
 	req := httptest.NewRequest(
 		http.MethodPost,
 		"/login",
-		strings.NewReader(`{"username": "moon", "password": "cloud", "captcha": "550555", "captchaID": "captcha_1"}`),
+		strings.NewReader(`{"username": "moon", "password": "cloud"}`),
 	)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
@@ -48,11 +44,15 @@ func TestHandler_Login(t *testing.T) {
 }
 
 func TestHandler_SignUp(t *testing.T) {
+	captchaStore := captcha.NewMemoryStore(captcha.CollectNum, captcha.Expiration)
+	captchaStore.Set("captcha_1", []byte{5, 5, 0, 5, 5, 5})
+	captcha.SetCustomStore(captchaStore)
+
 	e := echo.New()
 	req := httptest.NewRequest(
 		http.MethodPost,
 		"/signup",
-		strings.NewReader(`{"username": "moon", "password": "cloud"}`),
+		strings.NewReader(`{"username": "moon", "password": "cloud", "captcha": "550555", "captchaID": "captcha_1"}`),
 	)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
