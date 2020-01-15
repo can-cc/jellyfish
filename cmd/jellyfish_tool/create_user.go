@@ -19,6 +19,9 @@ func main() {
 	}
 
 	datasource, err := database.GetDatabase(config.DataSource)
+	if err != nil {
+		panic(err)
+	}
 	service := visitorService.NewApplicationService(impl.NewVisitorRepository(datasource), &config.Application)
 	err = service.SignUp(username, password)
 	if err != nil {

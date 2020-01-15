@@ -18,7 +18,7 @@ build-tool: ## Build application tools
 .PHONY: lint
 lint: ## Lint the files
 	@echo run lint...
-	@bash golangci-lint run
+	golangci-lint run
 
 .PHONY: test
 test:  ## Run unittests and data race detector

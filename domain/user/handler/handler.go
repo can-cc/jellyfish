@@ -31,8 +31,11 @@ func (h *handler) UpdateUserAvatar(c echo.Context) error {
 	request := new(struct {
 		Avatar string `json:"avatar" validate:"required"`
 	})
-	c.Bind(&request)
-	err := h.service.UpdateUserAvatar(userID, request.Avatar)
+	err := c.Bind(&request)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	err = h.service.UpdateUserAvatar(userID, request.Avatar)
 	if err != nil {
 		return errors.Trace(err)
 	}

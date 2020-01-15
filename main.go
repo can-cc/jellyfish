@@ -16,7 +16,10 @@ func main() {
 		panic(err)
 	}
 
-	logger.InitLogger(config.Logger)
+	err = logger.InitLogger(config.Logger)
+	if err != nil {
+		panic(err)
+	}
 	datasource, err := database.GetDatabase(config.DataSource)
 	if err != nil {
 		panic(err)
