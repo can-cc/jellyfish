@@ -26,7 +26,7 @@ func (a *ApplicationService) Login(username, password string) (*string, error) {
 		return nil, errors.Trace(err)
 	}
 	a.guard.Authenticate(visitor, hash)
-	token, err := middleware.SignedToken(middleware.SignData{ID: id})
+	token, err := middleware.SignedToken(middleware.SignData{ID: id}, a.config.JwtSecret)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}

@@ -6,7 +6,6 @@ import (
 	configs "github.com/fwchen/jellyfish/config"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/spf13/viper"
 	"time"
 )
 
@@ -36,13 +35,13 @@ func GetClaimsUserID(c echo.Context) string {
 	return claims.ID
 }
 
-func SignedToken(data SignData) (string, error) {
+func SignedToken(data SignData, jwtSecretKey string) (string, error) {
 	claims := &JwtAppClaims{
 		data,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(),
+			ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(), // TODO: configure
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(viper.GetString("JWT_SECRET")))
+	return token.SignedString([]byte(jwtSecretKey))
 }
