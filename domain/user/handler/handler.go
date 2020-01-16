@@ -18,7 +18,7 @@ func NewHandler(userRepo repository.Repository) *handler {
 }
 
 func (h *handler) GetUserInfo(c echo.Context) error {
-	userID := c.Param("userID")
+	userID := middleware.GetClaimsUserID(c)
 	userInfo, err := h.service.GetUserInfo(userID)
 	if err != nil {
 		return errors.Trace(err)

@@ -27,7 +27,12 @@ func (a *AppUser) GetAvatar() *Avatar {
 }
 
 func (a *AppUser) SetAvatar(avatar string) {
-	a.avatar = &Avatar{code: avatar}
+	if avatar == "" {
+		a.avatar = nil
+	} else {
+		a.avatar = &Avatar{Code: avatar}
+	}
+
 }
 
 func (a *AppUser) GetPasswordHash() string {

@@ -1,5 +1,5 @@
 package user
 
 type Avatar struct {
-	code string // base64 encoded image
+	Code string // base64 encoded image
 }

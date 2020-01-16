@@ -21,7 +21,7 @@ type Taco struct {
 	ID        string     `json:"id"`
 	CreatorID string     `json:"creatorID"`
 	Content   string     `json:"content"`
-	Detail    string     `json:"detail"`
+	Detail    *string    `json:"detail"`
 	Status    Status     `json:"status"`
 	Type      Type       `json:"type"`
 	Deadline  *time.Time `json:"deadline"`

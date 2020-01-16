@@ -1,6 +1,7 @@
 package impl
 
 import (
+	"database/sql"
 	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/domain/user"
 	"github.com/fwchen/jellyfish/domain/user/factory"
@@ -28,22 +29,15 @@ func (u *userRepositoryImpl) Has(username string) (bool, error) {
 }
 
 func (u *userRepositoryImpl) FindByID(userID string) (*user.AppUser, error) {
-	var username, hash, avatar *string
-	var createdAt, updatedAt *time.Time
-	err := u.dataSource.RDS.QueryRow(`SELECT id, username, hash, avatar, created_at, updated_at FROM app_user WHERE id = $1`, userID).Scan(username, hash, createdAt, updatedAt)
+	var username, hash string
+	var avatar sql.NullString
+	var createdAt, updatedAt time.Time
+	err := u.dataSource.RDS.QueryRow(`SELECT TRIM(username), TRIM(hash), avatar, created_at, updated_at FROM app_user WHERE id = $1`, userID).Scan(&username, &hash, &avatar, &createdAt, &updatedAt)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
-	return factory.NewUser(userID, *username, *hash, *avatar, *createdAt, *updatedAt), nil
+	return factory.NewUser(userID, username, hash, avatar.String, createdAt, updatedAt), nil
 }
-
-//
-//func (u *userRepositoryImpl) insertUser(user *user.AppUser) error {
-//	sqlStatement := `
-//		INSERT INTO app_user (username, hash, created_at)
-//		VALUES ($1, $2, now()) RETURNING id`
-//	return u.dataSource.RDS.QueryRow(sqlStatement, user.Username, user.GetPasswordHash()).Scan(&user.ID)
-//}
 
 func (u *userRepositoryImpl) updateUser(user *user.AppUser) error {
 	if user.ID == nil {
@@ -51,8 +45,8 @@ func (u *userRepositoryImpl) updateUser(user *user.AppUser) error {
 	}
 	_, err := u.dataSource.RDS.Exec(
 		`UPDATE app_user SET username = $1, hash = $2, avatar = $3, updated_at = now()
-                WHERE id = $5`,
-		user.Username, user.GetPasswordHash(), user.GetAvatar(),
+                WHERE id = $4`,
+		user.Username, user.GetPasswordHash(), user.GetAvatar().Code, user.ID,
 	)
 	return err
 }

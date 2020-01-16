@@ -5,7 +5,7 @@ import (
 )
 
 type CreateTacoCommand struct {
-	Content  string     `json:"content"`
-	Detail   string     `json:"detail"`
+	Content  string     `json:"content" validate:"required"`
+	Detail   *string    `json:"detail"`
 	Deadline *time.Time `json:"deadline"`
 }

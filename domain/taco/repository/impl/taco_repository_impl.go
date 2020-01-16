@@ -27,7 +27,7 @@ func (t *TacoRepositoryImpl) ListTacos(userID string, filter repository.ListTaco
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
-	var tacos []taco.Taco
+	tacos := make([]taco.Taco, 0)
 	for rows.Next() {
 		var t taco.Taco
 		if err := rows.Scan(&t.ID, &t.Content, &t.Detail, &t.Type, &t.Deadline, &t.Status, &t.CreatedAt, &t.UpdateAt); err != nil {
@@ -57,13 +57,22 @@ func (t *TacoRepositoryImpl) InsertTaco(taco *taco.Taco) (*string, error) {
 	return &id, err
 }
 
+func newIdentifierFunc(name string, col interface{}) exp.SQLFunctionExpression {
+	if s, ok := col.(string); ok {
+		col = goqu.I(s)
+	}
+	return goqu.Func(name, col)
+}
+
+func TRIM(col interface{}) exp.SQLFunctionExpression { return newIdentifierFunc("TRIM", col) }
+
 func buildListTacosSQL(userID string, filter repository.ListTacoFilter) (sql string, params []interface{}, err error) {
 	statuesFilters := []exp.Expression{goqu.C("creator_id").Eq(userID)}
 	if filter.Statues != nil {
 		statuesFilters = append(statuesFilters, goqu.C("status").In(filter.Statues))
 	}
 
-	return goqu.From("test").Select("id", "TRIM(content)", "TRIM(detail)", "type", "deadline", "status", "created_at", "updated_at").Where(
+	return goqu.From("todo").Select("id", TRIM("content"), TRIM("detail"), TRIM("type"), "deadline", TRIM("status"), "created_at", "updated_at").Where(
 		statuesFilters...,
 	).ToSQL()
 }

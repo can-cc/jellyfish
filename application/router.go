@@ -14,7 +14,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-func (a *application) Route(e *echo.Echo) {
+func (a *Application) Route(e *echo.Echo) {
+
 	e.GET("/ping", func(c echo.Context) error {
 		return c.String(http.StatusOK, "pong")
 	})
@@ -32,7 +33,7 @@ func (a *application) Route(e *echo.Echo) {
 	{
 		handler := userHandler.NewHandler(userRepoImpl.NewUserRepository(a.datasource))
 		authUserGroup := authorizeGroup.Group("user")
-		authUserGroup.GET("/:userID", handler.GetUserInfo)
+		authUserGroup.GET("/me", handler.GetUserInfo)
 		authUserGroup.POST("/avatar", handler.UpdateUserAvatar)
 	}
 

@@ -10,20 +10,20 @@ require (
 	github.com/juju/errors v0.0.0-20190930114154-d42613fe1ab9
 	github.com/juju/loggo v0.0.0-20190526231331-6e530bcce5d8 // indirect
 	github.com/juju/testing v0.0.0-20191001232224-ce9dec17d28b // indirect
-	github.com/labstack/echo v3.3.5+incompatible
-	github.com/labstack/gommon v0.2.2-0.20180426014445-588f4e8bddc6
+	github.com/labstack/echo v3.3.10+incompatible
+	github.com/labstack/gommon v0.3.0
 	github.com/lib/pq v1.3.0
 	github.com/magiconair/properties v1.8.1
-	github.com/mattn/go-colorable v0.0.9 // indirect
-	github.com/mattn/go-isatty v0.0.3 // indirect
+	github.com/mattn/go-colorable v0.1.4 // indirect
+	github.com/mattn/go-isatty v0.0.11 // indirect
 	github.com/mattn/go-sqlite3 v1.11.0
 	github.com/spf13/viper v1.6.1
 	github.com/stretchr/testify v1.4.0
-	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasttemplate v0.0.0-20170224212429-dcecefd839c4 // indirect
+	github.com/valyala/fasttemplate v1.1.0 // indirect
 	go.uber.org/zap v1.13.0
-	golang.org/x/crypto v0.0.0-20191227163750-53104e6ec876
-	golang.org/x/sys v0.0.0-20200102141924-c96a22e43c9c // indirect
+	golang.org/x/crypto v0.0.0-20200109152110-61a87790db17
+	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa // indirect
+	golang.org/x/sys v0.0.0-20200113162924-86b910548bc1 // indirect
 	gopkg.in/guregu/null.v3 v3.4.0
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect
 )
