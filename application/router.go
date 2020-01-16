@@ -35,6 +35,7 @@ func (a *Application) Route(e *echo.Echo) {
 		authUserGroup := authorizeGroup.Group("user")
 		authUserGroup.GET("/me", handler.GetUserInfo)
 		authUserGroup.POST("/avatar", handler.UpdateUserAvatar)
+		e.GET("/avatar/:userID", handler.GetUserAvatar)
 	}
 
 	{

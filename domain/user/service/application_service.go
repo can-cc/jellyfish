@@ -31,3 +31,11 @@ func (a *ApplicationService) GetUserInfo(userID string) (*response.UserInfo, err
 	}
 	return response.TransformToUserInfo(user), nil
 }
+
+func (a *ApplicationService) GetUserAvatar(userID string) (*string, error) {
+	user, err := a.userRepo.FindByID(userID)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	return &user.GetAvatar().Code, nil
+}

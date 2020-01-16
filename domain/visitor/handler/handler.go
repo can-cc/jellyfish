@@ -31,10 +31,10 @@ func (h *handler) Login(c echo.Context) error {
 	}
 	token, err := h.service.Login(request.Username, request.Password)
 	if err != nil {
-		return errors.Trace(err)
+		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
 	if token == nil {
-		return c.NoContent(http.StatusUnauthorized)
+		return echo.NewHTTPError(http.StatusUnauthorized)
 	}
 	c.Response().Header().Set(h.config.JwtHeaderKey, *token)
 	return c.NoContent(http.StatusOK)

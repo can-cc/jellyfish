@@ -26,6 +26,9 @@ func (a *ApplicationService) Login(username, password string) (*string, error) {
 		return nil, errors.Trace(err)
 	}
 	a.guard.Authenticate(visitor, hash)
+	if !visitor.IsCertified {
+		return nil, errors.New("username or password not match")
+	}
 	token, err := middleware.SignedToken(middleware.SignData{ID: id}, a.config.JwtSecret)
 	if err != nil {
 		return nil, errors.Trace(err)

@@ -26,7 +26,7 @@ func TestHandler_Login(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	hash, _ := visitorUtil.GenerateFromPassword("cloud2")
+	hash, _ := visitorUtil.GenerateFromPassword("cloud")
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -41,6 +41,22 @@ func TestHandler_Login(t *testing.T) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.NotNil(t, rec.Header().Get("Test-Authorization"))
 	}
+
+	req2 := httptest.NewRequest(
+		http.MethodPost,
+		"/login",
+		strings.NewReader(`{"username": "moon", "password": "cloud"}`),
+	)
+	req2.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec2 := httptest.NewRecorder()
+	c2 := e.NewContext(req2, rec2)
+	hash2, _ := visitorUtil.GenerateFromPassword("cloud2")
+	mockRepo2 := mock.NewMockRepository(ctrl)
+	mockRepo2.EXPECT().FindUserIDAndHash("moon").Return("id1", hash2, nil)
+	h2 := NewHandler(mockRepo2, &configs.ApplicationConfig{
+		JwtHeaderKey: "Test-Authorization",
+	})
+	assert.Error(t, h2.Login(c2))
 }
 
 func TestHandler_SignUp(t *testing.T) {

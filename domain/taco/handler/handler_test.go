@@ -35,7 +35,7 @@ func TestHandler_GetTacos(t *testing.T) {
 			ID:        "id_123",
 			CreatorID: "u123",
 			Content:   "watch tv",
-			Detail:    "watch AC",
+			Detail:    util.PointerStr("watch AC"),
 			Status:    "Doing",
 			Type:      "Task",
 			Deadline:  nil,
@@ -48,7 +48,7 @@ func TestHandler_GetTacos(t *testing.T) {
 
 	if assert.NoError(t, h.GetTacos(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, `[{"id":"id_123","creatorID":"u123","content":"watch tv","detail":"watch AC","status":"Doing","type":"Task","deadline":null,"createdAt":"2020-01-02T00:00:00Z","updatedAt":null}]`, rec.Body.String())
+		assert.Equal(t, `[{"id":"id_123","creatorID":"u123","content":"watch tv","detail":"watch AC","status":"Doing","type":"Task","deadline":null,"createdAt":"2020-01-02T00:00:00Z","updatedAt":null}]\n`, rec.Body.String())
 	}
 }
 
@@ -68,7 +68,7 @@ func TestHandler_CreateTaco(t *testing.T) {
 	mockRepo.EXPECT().InsertTaco(&taco.Taco{
 		CreatorID: "u123",
 		Content:   "Read book",
-		Detail:    "《Refactor》",
+		Detail:    util.PointerStr("《Refactor》"),
 		Status:    "Doing",
 		Type:      "Task",
 		Deadline:  util.PointerTime(time.Date(2020, 1, 16, 0, 0, 0, 0, time.UTC)),
