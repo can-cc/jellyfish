@@ -12,6 +12,7 @@ func TestTacoRepositoryImpl_buildListTacosSQL(t *testing.T) {
 		Statues: []taco.Status{taco.Done},
 	})
 	assert.Equal(t,
-		`SELECT "id", "TRIM(content)", "TRIM(detail)", "type", "deadline", "status", "created_at", "updated_at" FROM "test" WHERE (("creator_id" = 'u1') AND ("status" IN ('Done')))`,
-		sql)
+		sql,
+		`SELECT "id", TRIM("content"), TRIM("detail"), TRIM("type"), "deadline", TRIM("status"), "created_at", "updated_at" FROM "todo" WHERE (("creator_id" = 'u1') AND ("status" IN ('Done')))`,
+	)
 }

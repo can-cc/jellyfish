@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"github.com/dgrijalva/jwt-go"
+	"github.com/fwchen/jellyfish/application/middleware"
 	"github.com/fwchen/jellyfish/domain/user"
 	"github.com/fwchen/jellyfish/domain/user/repository/mock"
 	userService "github.com/fwchen/jellyfish/domain/user/service"
@@ -20,8 +22,9 @@ func TestHandler_GetUserInfo(t *testing.T) {
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	c.SetParamNames("userID")
-	c.SetParamValues("u123")
+	c.Set("user", &jwt.Token{Claims: &middleware.JwtAppClaims{
+		SignData: middleware.SignData{ID: "u123"},
+	}})
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -37,6 +40,7 @@ func TestHandler_GetUserInfo(t *testing.T) {
 
 	if assert.NoError(t, h.GetUserInfo(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, `{"id":"123-456","username":"oyx"}`, rec.Body.String())
+		assert.Equal(t, `{"id":"123-456","username":"oyx"}
+`, rec.Body.String())
 	}
 }

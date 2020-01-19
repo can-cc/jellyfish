@@ -1,6 +1,6 @@
 datasource:
   rds:
-    database_url: postgres://postgres:mysecretpassword@localhost:5432/jellyfish
+    database_url: postgres://postgres:mysecretpassword@localhost:5432/jellyfish?sslmode=disable
 
 application:
   addr: 0.0.0.0:8180

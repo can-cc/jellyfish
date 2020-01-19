@@ -48,7 +48,8 @@ func TestHandler_GetTacos(t *testing.T) {
 
 	if assert.NoError(t, h.GetTacos(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, `[{"id":"id_123","creatorID":"u123","content":"watch tv","detail":"watch AC","status":"Doing","type":"Task","deadline":null,"createdAt":"2020-01-02T00:00:00Z","updatedAt":null}]\n`, rec.Body.String())
+		assert.Equal(t, `[{"id":"id_123","creatorID":"u123","content":"watch tv","detail":"watch AC","status":"Doing","type":"Task","deadline":null,"createdAt":"2020-01-02T00:00:00Z","updatedAt":null}]
+`, rec.Body.String())
 	}
 }
 
