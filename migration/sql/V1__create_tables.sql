@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS app_user (
 
 comment on column app_user.avatar is 'base64 encoded data';
 
-CREATE TABLE IF NOT EXISTS todo (
+CREATE TABLE IF NOT EXISTS taco (
     id uuid DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     creator_id uuid NOT NULL,
     content character(120) NOT NULL,

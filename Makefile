@@ -29,6 +29,7 @@ mockgen: ## generate interfaces mock
 	mockgen -source domain/user/repository/user_repository.go -destination domain/user/repository/mock/user_repository.go -package mock
 	mockgen -source domain/visitor/repository/visitor_repository.go -destination domain/visitor/repository/mock/visitor_repository.go -package mock
 	mockgen -source domain/taco/repository/taco_repository.go -destination domain/taco/repository/mock/taco_repository.go -package mock
+	mockgen -source domain/taco_box/repository/taco_box_repository.go -destination domain/taco_box/repository/mock/taco_box_repository.go -package mock
 
 ########################################################################
 ## Self-Documenting Makefile Help                                     ##

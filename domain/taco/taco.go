@@ -25,6 +25,11 @@ type Taco struct {
 	Status    Status     `json:"status"`
 	Type      Type       `json:"type"`
 	Deadline  *time.Time `json:"deadline"`
+	BoxId     *string    `json:"boxID"`
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdateAt  *time.Time `json:"updatedAt"`
+}
+
+func (t *Taco) IsNew() bool {
+	return t.ID == ""
 }

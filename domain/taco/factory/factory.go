@@ -5,8 +5,8 @@ import (
 	"github.com/fwchen/jellyfish/domain/taco/command"
 )
 
-func NewTacoFromCommand(command *command.CreateTacoCommand, userID string) *taco.Taco {
-	taco := &taco.Taco{
+func NewTacoFromCreateCommand(command *command.CreateTacoCommand, userID string) *taco.Taco {
+	t := &taco.Taco{
 		CreatorID: userID,
 		Content:   command.Content,
 		Detail:    command.Detail,
@@ -14,5 +14,5 @@ func NewTacoFromCommand(command *command.CreateTacoCommand, userID string) *taco
 		Type:      taco.Task,
 		Deadline:  command.Deadline,
 	}
-	return taco
+	return t
 }

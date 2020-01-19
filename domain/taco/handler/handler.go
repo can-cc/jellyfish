@@ -40,3 +40,16 @@ func (h *handler) CreateTaco(c echo.Context) error {
 	}
 	return c.NoContent(http.StatusCreated)
 }
+
+func (h *handler) UpdateTaco(c echo.Context) error {
+	userID := middleware.GetClaimsUserID(c)
+	tacoID := c.Param("tacoID")
+	var command tacoCommand.UpdateTacoCommand
+	command.TacoID = tacoID
+	command.OperationUserID = userID
+	err := h.tacoService.UpdateTaco(command)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	return c.NoContent(http.StatusOK)
+}

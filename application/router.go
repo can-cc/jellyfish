@@ -43,5 +43,6 @@ func (a *Application) Route(e *echo.Echo) {
 		tacoGroup := authorizeGroup.Group("taco")
 		tacoGroup.GET("s", handler.GetTacos)
 		tacoGroup.POST("", handler.CreateTaco)
+		tacoGroup.PUT("/:tacoID", handler.UpdateTaco)
 	}
 }

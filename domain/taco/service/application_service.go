@@ -5,6 +5,7 @@ import (
 	"github.com/fwchen/jellyfish/domain/taco/command"
 	"github.com/fwchen/jellyfish/domain/taco/factory"
 	"github.com/fwchen/jellyfish/domain/taco/repository"
+	"github.com/juju/errors"
 )
 
 func NewTacoApplicationService(tacoRepo repository.Repository) *TacoApplicationService {
@@ -20,6 +21,19 @@ func (t *TacoApplicationService) GetTacos(userID string, filter repository.ListT
 }
 
 func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, userID string) (*string, error) {
-	taco := factory.NewTacoFromCommand(command, userID)
-	return t.tacoRepo.InsertTaco(taco)
+	ta := factory.NewTacoFromCreateCommand(command, userID)
+	return t.tacoRepo.SaveTaco(ta)
+}
+
+func (t *TacoApplicationService) UpdateTaco(command command.UpdateTacoCommand) error {
+	ta, err := t.tacoRepo.FindTaco(command.TacoID)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	ta.Content = command.Content
+	ta.Detail = command.Detail
+	ta.Deadline = command.Deadline
+	ta.Status = command.Status
+	_, err = t.tacoRepo.SaveTaco(ta)
+	return err
 }

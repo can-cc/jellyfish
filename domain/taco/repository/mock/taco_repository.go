@@ -63,3 +63,32 @@ func (mr *MockRepositoryMockRecorder) InsertTaco(taco interface{}) *gomock.Call 
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertTaco", reflect.TypeOf((*MockRepository)(nil).InsertTaco), taco)
 }
+
+// FindTaco mocks base method
+func (m *MockRepository) FindTaco(tacoID string) (*taco.Taco, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindTaco", tacoID)
+	ret0, _ := ret[0].(*taco.Taco)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindTaco indicates an expected call of FindTaco
+func (mr *MockRepositoryMockRecorder) FindTaco(tacoID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTaco", reflect.TypeOf((*MockRepository)(nil).FindTaco), tacoID)
+}
+
+// UpdateTaco mocks base method
+func (m *MockRepository) UpdateTaco(taco *taco.Taco) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateTaco", taco)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateTaco indicates an expected call of UpdateTaco
+func (mr *MockRepositoryMockRecorder) UpdateTaco(taco interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTaco", reflect.TypeOf((*MockRepository)(nil).UpdateTaco), taco)
+}
