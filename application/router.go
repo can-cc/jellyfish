@@ -5,6 +5,8 @@ import (
 	appMiddleware "github.com/fwchen/jellyfish/application/middleware"
 	tacoHandler "github.com/fwchen/jellyfish/domain/taco/handler"
 	tacoRepoImpl "github.com/fwchen/jellyfish/domain/taco/repository/impl"
+	tacoBoxHandler "github.com/fwchen/jellyfish/domain/taco_box/handler"
+	tacoBoxImpl "github.com/fwchen/jellyfish/domain/taco_box/repository/impl"
 	userHandler "github.com/fwchen/jellyfish/domain/user/handler"
 	userRepoImpl "github.com/fwchen/jellyfish/domain/user/repository/impl"
 	visitorHandler "github.com/fwchen/jellyfish/domain/visitor/handler"
@@ -44,5 +46,13 @@ func (a *Application) Route(e *echo.Echo) {
 		tacoGroup.GET("s", handler.GetTacos)
 		tacoGroup.POST("", handler.CreateTaco)
 		tacoGroup.PUT("/:tacoID", handler.UpdateTaco)
+	}
+
+	{
+		handler := tacoBoxHandler.NewHandler(tacoBoxImpl.NewTacoBoxRepositoryImpl(a.datasource))
+		tacoBoxGroup := authorizeGroup.Group("box")
+		tacoBoxGroup.GET("es", handler.GetTacoBoxes)
+		tacoBoxGroup.POST("", handler.CreateTacoBox)
+		tacoBoxGroup.PUT("/:tacoBoxID", handler.UpdateTacoBox)
 	}
 }

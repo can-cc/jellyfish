@@ -5,6 +5,7 @@ import (
 	"github.com/fwchen/jellyfish/domain/taco_box/command"
 	"github.com/fwchen/jellyfish/domain/taco_box/factory"
 	"github.com/fwchen/jellyfish/domain/taco_box/repository"
+	"github.com/juju/errors"
 )
 
 func NewTacoBoxApplicationService(repo repository.TacoBoxRepository) *TacoBoxApplicationService {
@@ -18,4 +19,19 @@ type TacoBoxApplicationService struct {
 func (t *TacoBoxApplicationService) CreateTacoBox(command command.CreateTacoBoxCommand) (*taco_box.TacoBoxID, error) {
 	taco := factory.NewTacoBox(command.Name, command.Icon, command.CreatorId)
 	return t.tacoBoxRepo.SaveTacoBox(taco)
+}
+
+func (t *TacoBoxApplicationService) GetTacoBoxes(userID string) ([]taco_box.TacoBox, error) {
+	return t.tacoBoxRepo.ListTacoBoxes(userID)
+}
+
+func (t *TacoBoxApplicationService) UpdateTacoBox(command command.UpdateTacoCommand) error {
+	tb, err := t.tacoBoxRepo.FindTacoBox(command.TacoBoxID)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	tb.Name = command.Name
+	tb.Icon = command.Icon
+	_, err = t.tacoBoxRepo.SaveTacoBox(tb)
+	return err
 }

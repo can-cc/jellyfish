@@ -5,3 +5,10 @@ type CreateTacoBoxCommand struct {
 	Name      string `json:"name"`
 	Icon      string `json:"icon"`
 }
+
+type UpdateTacoCommand struct {
+	Name            string `json:"name"`
+	Icon            string `json:"icon"`
+	OperationUserID string
+	TacoBoxID       string
+}

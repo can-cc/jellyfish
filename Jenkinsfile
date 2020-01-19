@@ -9,7 +9,7 @@ pipeline {
     }
      environment {
         JFISH_DATASOURCE_RDS_DATABASE_URL = credentials('jenkins-jfish-datasource-rds-database_url')
-        GOPROXY = null
+        GOPROXY = ''
     }
     stages {
         stage('Test') {
