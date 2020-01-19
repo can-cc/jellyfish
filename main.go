@@ -6,8 +6,6 @@ import (
 	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/logger"
 	_ "github.com/labstack/gommon/log"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
