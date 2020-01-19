@@ -49,19 +49,19 @@ func (mr *MockRepositoryMockRecorder) ListTacos(userID, filter interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTacos", reflect.TypeOf((*MockRepository)(nil).ListTacos), userID, filter)
 }
 
-// InsertTaco mocks base method
-func (m *MockRepository) InsertTaco(taco *taco.Taco) (*string, error) {
+// SaveTaco mocks base method
+func (m *MockRepository) SaveTaco(taco *taco.Taco) (*string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "InsertTaco", taco)
+	ret := m.ctrl.Call(m, "SaveTaco", taco)
 	ret0, _ := ret[0].(*string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// InsertTaco indicates an expected call of InsertTaco
-func (mr *MockRepositoryMockRecorder) InsertTaco(taco interface{}) *gomock.Call {
+// SaveTaco indicates an expected call of SaveTaco
+func (mr *MockRepositoryMockRecorder) SaveTaco(taco interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertTaco", reflect.TypeOf((*MockRepository)(nil).InsertTaco), taco)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveTaco", reflect.TypeOf((*MockRepository)(nil).SaveTaco), taco)
 }
 
 // FindTaco mocks base method
@@ -77,18 +77,4 @@ func (m *MockRepository) FindTaco(tacoID string) (*taco.Taco, error) {
 func (mr *MockRepositoryMockRecorder) FindTaco(tacoID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTaco", reflect.TypeOf((*MockRepository)(nil).FindTaco), tacoID)
-}
-
-// UpdateTaco mocks base method
-func (m *MockRepository) UpdateTaco(taco *taco.Taco) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateTaco", taco)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// UpdateTaco indicates an expected call of UpdateTaco
-func (mr *MockRepositoryMockRecorder) UpdateTaco(taco interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateTaco", reflect.TypeOf((*MockRepository)(nil).UpdateTaco), taco)
 }
