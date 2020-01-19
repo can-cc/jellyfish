@@ -62,3 +62,18 @@ func (mr *MockTacoBoxRepositoryMockRecorder) ListTacoBoxes(userID interface{}) *
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTacoBoxes", reflect.TypeOf((*MockTacoBoxRepository)(nil).ListTacoBoxes), userID)
 }
+
+// FindTacoBox mocks base method
+func (m *MockTacoBoxRepository) FindTacoBox(boxID string) (*taco_box.TacoBox, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindTacoBox", boxID)
+	ret0, _ := ret[0].(*taco_box.TacoBox)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindTacoBox indicates an expected call of FindTacoBox
+func (mr *MockTacoBoxRepositoryMockRecorder) FindTacoBox(boxID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTacoBox", reflect.TypeOf((*MockTacoBoxRepository)(nil).FindTacoBox), boxID)
+}
