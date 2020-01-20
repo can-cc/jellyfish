@@ -31,7 +31,7 @@ func (t *TacoRepositoryImpl) ListTacos(userID string, filter repository.ListTaco
 	tacos := make([]taco.Taco, 0)
 	for rows.Next() {
 		var t taco.Taco
-		if err := rows.Scan(&t.ID, &t.Content, &t.Detail, &t.Type, &t.Deadline, &t.Status, &t.BoxId, &t.CreatedAt, &t.UpdateAt); err != nil {
+		if err := rows.Scan(&t.ID, &t.CreatorID, &t.Content, &t.Detail, &t.Type, &t.Deadline, &t.Status, &t.BoxId, &t.CreatedAt, &t.UpdateAt); err != nil {
 			return nil, errors.Trace(err)
 		}
 		tacos = append(tacos, t)
@@ -53,7 +53,7 @@ func (t *TacoRepositoryImpl) FindTaco(tacoID string) (*taco.Taco, error) {
 		return nil, errors.Trace(err)
 	}
 	var ta taco.Taco
-	err = t.dataSource.RDS.QueryRow(sql).Scan(&ta.ID, &ta.Content, &ta.Detail, &ta.Type, &ta.Deadline, &ta.Status, &ta.BoxId, &ta.CreatedAt, &ta.UpdateAt)
+	err = t.dataSource.RDS.QueryRow(sql).Scan(&ta.ID, &ta.CreatorID, &ta.Content, &ta.Detail, &ta.Type, &ta.Deadline, &ta.Status, &ta.BoxId, &ta.CreatedAt, &ta.UpdateAt)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -82,15 +82,15 @@ func (t *TacoRepositoryImpl) insertTaco(taco *taco.Taco) (*string, error) {
 func (t *TacoRepositoryImpl) updateTaco(taco *taco.Taco) error {
 	sql, _, err := goqu.Update("taco").Set(
 		goqu.Record{
-			"content":   taco.Content,
-			"detail":    taco.Detail,
-			"status":    taco.Status,
-			"box_id":    taco.BoxId,
-			"type":      taco.Type,
-			"deadline":  taco.Deadline,
-			"updatedAt": time.Now(),
+			"content":    taco.Content,
+			"detail":     taco.Detail,
+			"status":     taco.Status,
+			"box_id":     taco.BoxId,
+			"type":       taco.Type,
+			"deadline":   taco.Deadline,
+			"updated_at": time.Now(),
 		},
-	).ToSQL()
+	).Where(goqu.C("id").Eq(taco.ID)).ToSQL()
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -112,6 +112,7 @@ func buildListTacosSQL(userID string, filter repository.ListTacoFilter) (sql str
 func getGoquTacoSelection() *goqu.SelectDataset {
 	return goqu.From("taco").Select(
 		"id",
+		"creator_id",
 		database.TRIM("content"),
 		database.TRIM("detail"),
 		database.TRIM("type"),

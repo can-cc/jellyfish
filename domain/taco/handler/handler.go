@@ -45,9 +45,13 @@ func (h *handler) UpdateTaco(c echo.Context) error {
 	userID := middleware.GetClaimsUserID(c)
 	tacoID := c.Param("tacoID")
 	var command tacoCommand.UpdateTacoCommand
+	err := c.Bind(&command)
+	if err != nil {
+		return errors.Trace(err)
+	}
 	command.TacoID = tacoID
 	command.OperationUserID = userID
-	err := h.tacoService.UpdateTaco(command)
+	err = h.tacoService.UpdateTaco(command)
 	if err != nil {
 		return errors.Trace(err)
 	}
