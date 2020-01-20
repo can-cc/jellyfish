@@ -1,6 +1,7 @@
 package taco
 
 import (
+	"strings"
 	"time"
 )
 
@@ -10,6 +11,17 @@ const (
 	Doing Status = "Doing"
 	Done  Status = "Done"
 )
+
+func ParseStatues(str string) (statues []Status) {
+	if str == "" {
+		return
+	}
+	ss := strings.Split(str, ",")
+	for _, s := range ss {
+		statues = append(statues, Status(strings.Trim(s, " ")))
+	}
+	return
+}
 
 type Type string
 

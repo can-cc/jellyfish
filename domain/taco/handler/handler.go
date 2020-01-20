@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/fwchen/jellyfish/application/middleware"
+	"github.com/fwchen/jellyfish/domain/taco"
 	tacoCommand "github.com/fwchen/jellyfish/domain/taco/command"
 	"github.com/fwchen/jellyfish/domain/taco/repository"
 	"github.com/fwchen/jellyfish/domain/taco/service"
@@ -20,7 +21,10 @@ func NewHandler(tacoRepo repository.Repository) *handler {
 
 func (h *handler) GetTacos(c echo.Context) error {
 	userID := middleware.GetClaimsUserID(c)
-	tacos, err := h.tacoService.GetTacos(userID, repository.ListTacoFilter{})
+	statues := taco.ParseStatues(c.QueryParam("status"))
+	tacos, err := h.tacoService.GetTacos(userID, repository.ListTacoFilter{
+		Statues: statues,
+	})
 	if err != nil {
 		return errors.Trace(err)
 	}
