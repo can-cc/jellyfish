@@ -5,11 +5,11 @@ all: mockgen build run build-tool lint
 
 .PHONY: build
 build: ## Build application
-	go build main.go
+	go build cmd/jellyfish-server/main.go
 
 .PHONY: run
 run: ## Run application server
-	go run main.go
+	go run cmd/jellyfish-server/main.go
 
 .PHONY: build-tool
 build-tool: ## Build application tools

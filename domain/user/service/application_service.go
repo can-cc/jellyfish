@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/fwchen/jellyfish/domain/user/repository"
 	"github.com/fwchen/jellyfish/domain/user/response"
+	"github.com/fwchen/jellyfish/util"
 	"github.com/juju/errors"
 )
 
@@ -37,5 +38,8 @@ func (a *ApplicationService) GetUserAvatar(userID string) (*string, error) {
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
-	return &user.GetAvatar().Code, nil
+	if user.GetAvatar() != nil {
+		return &user.GetAvatar().Code, nil
+	}
+	return util.PointerStr(""), nil
 }
