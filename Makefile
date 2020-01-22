@@ -7,10 +7,6 @@ all: mockgen build run build-tool lint
 build: ## Build application
 	go build cmd/jellyfish-server/main.go
 
-.PHONY: build-watch
-build-watch: ## Build application watch
-    watchman-make -p '**/*.go' --make='make build'
-
 .PHONY: run
 run: ## Run application server
 	go run cmd/jellyfish-server/main.go
