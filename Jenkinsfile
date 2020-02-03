@@ -41,49 +41,53 @@ pipeline {
         }
         stage('Dockerize') {
             when { changelog '.*^\\[publish docker\\] .+$' }
-            agent {
-                docker {
-                    image 'docker:19.03.5'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+            stages {
+                stage('Build Image') {
+                    agent {
+                        docker {
+                            image 'docker:19.03.5'
+                            args '-v /var/run/docker.sock:/var/run/docker.sock'
+                        }
+                    }
+                    steps {
+                        sh "docker build . -t $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
+                    }
                 }
-            }
-            steps {
-                sh "docker build . -t $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
-            }
-        }
-        stage('Registry Login') {
-            agent {
-                docker {
-                    image 'docker:19.03.5'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                stage('Registry Login') {
+                    agent {
+                        docker {
+                            image 'docker:19.03.5'
+                            args '-v /var/run/docker.sock:/var/run/docker.sock'
+                        }
+                    }
+                    steps {
+                        sh "echo credentials('docker_hub_password') | docker login -u credentials('docker_hub_username') --password-stdin"
+                    }
                 }
-            }
-            steps {
-                sh "echo credentials('docker_hub_password') | docker login -u credentials('docker_hub_username') --password-stdin"
-            }
-        }
-        stage('Publish image') {
-            agent {
-                docker {
-                    image 'docker:19.03.5'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                stage('Publish image') {
+                    agent {
+                        docker {
+                            image 'docker:19.03.5'
+                            args '-v /var/run/docker.sock:/var/run/docker.sock'
+                        }
+                    }
+                    steps {
+                        sh 'docker push $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER'
+                        sh 'echo "$DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER" > .artifacts'
+                        archiveArtifacts(artifacts: '.artifacts')
+                    }
                 }
-            }
-            steps {
-                sh 'docker push $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER'
-                sh 'echo "$DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER" > .artifacts'
-                archiveArtifacts(artifacts: '.artifacts')
-            }
-        }
-        stage('Remove image') {
-            agent {
-                docker {
-                    image 'docker:19.03.5'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                stage('Remove image') {
+                    agent {
+                        docker {
+                            image 'docker:19.03.5'
+                            args '-v /var/run/docker.sock:/var/run/docker.sock'
+                        }
+                    }
+                    steps {
+                        sh "docker image rm $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
+                    }
                 }
-            }
-            steps {
-                sh "docker image rm $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
             }
         }
     }
