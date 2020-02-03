@@ -8,6 +8,8 @@ pipeline {
         JFISH_DATASOURCE_RDS_DATABASE_URL = credentials('jenkins-jfish-datasource-rds-database_url')
         GOPROXY = 'goproxy.cn'
         DOCKER_REGISTER = 'fwchen'
+        docker_hub_username = credentials('docker_hub_username')
+        docker_hub_password = credentials('docker_hub_password')
     }
     stages {
         stage('Test') {
@@ -55,7 +57,7 @@ pipeline {
                 }
                 stage('Registry Login') {
                     steps {
-                        sh "echo $credentials('docker_hub_password') | docker login -u credentials('docker_hub_username') --password-stdin"
+                        sh "echo $docker_hub_password | docker login -u $docker_hub_username --password-stdin"
                     }
                 }
                 stage('Publish image') {
