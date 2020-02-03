@@ -7,7 +7,6 @@ COPY . .
 ENV GO111MODULE=on
 
 RUN go get -v
-
 RUN go build cmd/jellyfish-server/main.go
 
 FROM golang:1.12.1-stretch
