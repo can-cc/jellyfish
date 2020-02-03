@@ -41,7 +41,6 @@ pipeline {
             }
         }
         stage('Dockerize') {
-            when { changelog '\\[publish docker\\]' }
             agent {
                 docker {
                     image 'docker:19.03.5'
