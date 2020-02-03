@@ -40,7 +40,7 @@ pipeline {
             }
         }
         stage('Dockerize') {
-            when { changelog '.*^\\[publish docker\\] .+$' }
+            when { changelog '\\[publish docker\\]' }
             stages {
                 stage('Build Image') {
                     agent {
