@@ -55,7 +55,7 @@ pipeline {
                 }
                 stage('Registry Login') {
                     steps {
-                        sh "echo credentials('docker_hub_password') | docker login -u credentials('docker_hub_username') --password-stdin"
+                        sh "echo $credentials('docker_hub_password') | docker login -u credentials('docker_hub_username') --password-stdin"
                     }
                 }
                 stage('Publish image') {
