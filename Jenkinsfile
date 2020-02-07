@@ -52,6 +52,7 @@ pipeline {
             stages {
                 stage('Build Image') {
                     steps {
+                        sh "cd migration && docker build . -t $DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER"
                         sh "docker build . -t $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
                     }
                 }
@@ -63,13 +64,16 @@ pipeline {
                 stage('Publish image') {
                     steps {
                         sh 'docker push $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER'
-                        sh 'echo "$DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER" > .artifacts'
+                        sh 'docker push $DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER'
+                        sh 'echo "$DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"\n > .artifacts'
+                        sh 'echo "$DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER" >> .artifacts'
                         archiveArtifacts(artifacts: '.artifacts')
                     }
                 }
                 stage('Remove image') {
                     steps {
                         sh "docker image rm $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
+                        sh "docker image rm $DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER"
                     }
                 }
             }

@@ -14,6 +14,5 @@ FROM golang:1.12.1-stretch
 WORKDIR /app
 
 COPY --from=builder /go/src/github.com/fwchen/jellyfish/main /app
-COPY --from=builder /go/src/github.com/fwchen/jellyfish/config /config
 
 ENTRYPOINT ["/app/main"]
