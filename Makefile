@@ -13,7 +13,7 @@ run: ## Run application server
 
 .PHONY: build-tool
 build-tool: ## Build application tools
-	go build -o cmd/jellyfish-tool/create_user cmd/jellyfish-tool/create_user.go
+	go build -o cmd/jellyfish-tool/main cmd/jellyfish-tool/main.go
 
 .PHONY: lint
 lint: ## Lint the files

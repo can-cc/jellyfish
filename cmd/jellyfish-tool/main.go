@@ -2,17 +2,14 @@ package main
 
 import (
 	"fmt"
+	"os"
 	configs "github.com/fwchen/jellyfish/config"
 	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/domain/visitor/repository/impl"
 	visitorService "github.com/fwchen/jellyfish/domain/visitor/service"
-	"os"
 )
 
-func main() {
-	var username = os.Args[1]
-	var password = os.Args[2]
-
+func createUser(username, password string) {
 	config, err := configs.LoadConfig("config/config.yaml")
 	if err != nil {
 		panic(err)
@@ -30,4 +27,16 @@ func main() {
 
 	fmt.Print("Create user successful:\n")
 	fmt.Print("username: ", username, "\npassword: ", password, "\n")
+}
+
+func main() {
+	var command string = os.Args[1]
+	
+	if command == "create-user" {
+		var username = os.Args[2]
+		var password = os.Args[3]
+		createUser(username, password)
+	} else {
+		fmt.Println("input invalid")
+	}
 }

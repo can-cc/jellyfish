@@ -24,3 +24,8 @@ flyway migrate -url=jdbc:postgresql://localhost:5432/jellyfish -user=postgres -p
 
 ### create user
 `./create-user fwchen 123456`
+
+
+## postgres permission
+postgres user must be supperuser
+`ALTER USER jellyfish WITH SUPERUSER;`      
