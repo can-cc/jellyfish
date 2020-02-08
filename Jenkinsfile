@@ -65,7 +65,7 @@ pipeline {
                     steps {
                         sh 'docker push $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER'
                         sh 'docker push $DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER'
-                        sh 'echo "$DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"\n > .artifacts'
+                        sh 'echo "$DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER" > .artifacts'
                         sh 'echo "$DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER" >> .artifacts'
                         archiveArtifacts(artifacts: '.artifacts')
                     }
