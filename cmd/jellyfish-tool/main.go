@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+
 	configs "github.com/fwchen/jellyfish/config"
 	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/domain/visitor/repository/impl"
@@ -31,7 +32,7 @@ func createUser(username, password string) {
 
 func main() {
 	var command string = os.Args[1]
-	
+
 	if command == "create-user" {
 		var username = os.Args[2]
 		var password = os.Args[3]
