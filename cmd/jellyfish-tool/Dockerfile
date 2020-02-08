@@ -6,7 +6,6 @@ COPY . .
 
 ENV GO111MODULE=on
 
-RUN GOPROXY='https://goproxy.cn' go get -v
 RUN GOPROXY='https://goproxy.cn' go build -o tool cmd/jellyfish-tool/main.go
 
 FROM golang:1.12.1-stretch
