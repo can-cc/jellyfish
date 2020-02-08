@@ -53,7 +53,7 @@ pipeline {
                 stage('Build Image') {
                     steps {
                         sh "cd migration && docker build . -t $DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER"
-                        sh "cd cmd/jellyfish-tool && docker build . -t $DOCKER_REGISTER/jellyfish-tool:v0.0.$BUILD_NUMBER"
+                        sh "docker build . -f cmd/jellyfish-tool/Dockerfile -t $DOCKER_REGISTER/jellyfish-tool:v0.0.$BUILD_NUMBER"
                         sh "docker build . -t $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
                     }
                 }
