@@ -11,7 +11,7 @@ import (
 func TestStorageService_MakeBucket(t *testing.T) {
 	cfg, _ := configs.LoadConfig("../config/config.yaml")
 	storageService := NewStorageService(&cfg.Storage)
-	err := storageService.init()
+	err := storageService.Init()
 	assert.Nil(t, err)
 	bucketName := fmt.Sprintf("jellyfish-storage-test-%d", time.Now().Nanosecond())
 	err = storageService.MakeBucket(bucketName)

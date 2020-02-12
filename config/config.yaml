@@ -19,3 +19,6 @@ storage:
   secret_access_key_id: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
   use_ssl: false
   location: "us-east-1"
+
+bucket:
+  image: "jellyfish-image-bucket"

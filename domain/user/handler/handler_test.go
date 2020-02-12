@@ -36,11 +36,11 @@ func TestHandler_GetUserInfo(t *testing.T) {
 		UpdatedAt: nil,
 	}, nil)
 
-	h := &handler{userService.NewApplicationService(mockRepo)}
+	h := &handler{userService.NewApplicationService(mockRepo, nil)}
 
 	if assert.NoError(t, h.GetUserInfo(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, `{"id":"123-456","username":"oyx"}
+		assert.Equal(t, `{"id":"123-456","username":"oyx","avatar":""}
 `, rec.Body.String())
 	}
 }

@@ -3,6 +3,7 @@ package application
 import (
 	"github.com/dchest/captcha"
 	appMiddleware "github.com/fwchen/jellyfish/application/middleware"
+	"github.com/fwchen/jellyfish/application/route"
 	tacoHandler "github.com/fwchen/jellyfish/domain/taco/handler"
 	tacoRepoImpl "github.com/fwchen/jellyfish/domain/taco/repository/impl"
 	tacoBoxHandler "github.com/fwchen/jellyfish/domain/taco_box/handler"
@@ -25,6 +26,10 @@ func (a *Application) Route(e *echo.Echo) {
 	authorizeGroup := appMiddleware.ApplyJwtInRoute(e, &a.config.Application)
 
 	{
+		e.GET("/image/:fileName", route.GetImageRoute(a.imageStorageService))
+	}
+
+	{
 		handler := visitorHandler.NewHandler(visitorRepoImpl.NewVisitorRepository(a.datasource), &a.config.Application)
 		e.POST("/login", handler.Login)
 		e.POST("/signup", handler.SignUp)
@@ -33,11 +38,10 @@ func (a *Application) Route(e *echo.Echo) {
 	}
 
 	{
-		handler := userHandler.NewHandler(userRepoImpl.NewUserRepository(a.datasource))
+		handler := userHandler.NewHandler(userRepoImpl.NewUserRepository(a.datasource), a.imageStorageService)
 		authUserGroup := authorizeGroup.Group("user")
 		authUserGroup.GET("/me", handler.GetUserInfo)
 		authUserGroup.POST("/avatar", handler.UpdateUserAvatar)
-		e.GET("/avatar/:userID", handler.GetUserAvatar)
 	}
 
 	{

@@ -5,6 +5,7 @@ import (
 	configs "github.com/fwchen/jellyfish/config"
 	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/logger"
+	"github.com/fwchen/jellyfish/service"
 	_ "github.com/labstack/gommon/log"
 )
 
@@ -23,6 +24,16 @@ func main() {
 		panic(err)
 	}
 
-	app := application.NewApplication(config, datasource)
+	storageService := service.NewStorageService(&config.Storage)
+	err = storageService.Init()
+	if err != nil {
+		panic(err)
+	}
+	imageStorageService, err := service.NewImageStorageService(config.Bucket.Image, storageService)
+	if err != nil {
+		panic(err)
+	}
+
+	app := application.NewApplication(config, datasource, imageStorageService)
 	app.StartServe()
 }

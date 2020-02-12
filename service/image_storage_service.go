@@ -26,7 +26,10 @@ func NewImageStorageService(bucketName string, storageService *StorageService) (
 
 func (i *ImageStorageService) SaveBase64Image(code string) (string, error) {
 	h := md5.New()
-	io.WriteString(h, code)
+	_, err := io.WriteString(h, code)
+	if err != nil {
+		return "", errors.Trace(err)
+	}
 	fileName := fmt.Sprintf("%x", h.Sum(nil))
 	dec, err := base64.StdEncoding.DecodeString(code)
 	if err != nil {
@@ -40,4 +43,8 @@ func (i *ImageStorageService) SaveBase64Image(code string) (string, error) {
 		return "", errors.Trace(err)
 	}
 	return fileName, nil
+}
+
+func (i *ImageStorageService) GetImage(fileName string) (io.Reader, error) {
+	return i.storageService.GetObject(i.bucketName, fileName, minio.GetObjectOptions{})
 }

@@ -11,6 +11,7 @@ type AppConfig struct {
 	DataSource  DataSourceConfig
 	Logger      LoggerConfig
 	Storage     StorageConfig
+	Bucket      BucketConfig
 }
 
 type DataSourceConfig struct {
@@ -38,6 +39,10 @@ type StorageConfig struct {
 	SecretAccessKeyID string `mapstructure:"secret_access_key_id"`
 	UseSSL            bool   `mapstructure:"use_ssl"`
 	Location          string `mapstructure:"location"`
+}
+
+type BucketConfig struct {
+	Image string
 }
 
 func loadConfig(file string) (*AppConfig, error) {

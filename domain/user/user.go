@@ -26,11 +26,11 @@ func (a *AppUser) GetAvatar() *Avatar {
 	return a.avatar
 }
 
-func (a *AppUser) SetAvatar(avatar string) {
-	if avatar == "" {
+func (a *AppUser) SetAvatar(fileName string) {
+	if fileName == "" {
 		a.avatar = nil
 	} else {
-		a.avatar = &Avatar{Code: avatar}
+		a.avatar = &Avatar{FileName: fileName}
 	}
 
 }

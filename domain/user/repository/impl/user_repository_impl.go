@@ -32,7 +32,7 @@ func (u *userRepositoryImpl) FindByID(userID string) (*user.AppUser, error) {
 	var username, hash string
 	var avatar sql.NullString
 	var createdAt, updatedAt time.Time
-	err := u.dataSource.RDS.QueryRow(`SELECT TRIM(username), TRIM(hash), avatar, created_at, updated_at FROM app_user WHERE id = $1`, userID).Scan(&username, &hash, &avatar, &createdAt, &updatedAt)
+	err := u.dataSource.RDS.QueryRow(`SELECT TRIM(username), TRIM(hash), TRIM(avatar), created_at, updated_at FROM app_user WHERE id = $1`, userID).Scan(&username, &hash, &avatar, &createdAt, &updatedAt)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -46,7 +46,7 @@ func (u *userRepositoryImpl) updateUser(user *user.AppUser) error {
 	_, err := u.dataSource.RDS.Exec(
 		`UPDATE app_user SET username = $1, hash = $2, avatar = $3, updated_at = now()
                 WHERE id = $4`,
-		user.Username, user.GetPasswordHash(), user.GetAvatar().Code, user.ID,
+		user.Username, user.GetPasswordHash(), user.GetAvatar().FileName, user.ID,
 	)
 	return err
 }

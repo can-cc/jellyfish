@@ -4,6 +4,7 @@ import (
 	"github.com/fwchen/jellyfish/application/middleware"
 	"github.com/fwchen/jellyfish/domain/user/repository"
 	userService "github.com/fwchen/jellyfish/domain/user/service"
+	"github.com/fwchen/jellyfish/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
 	"net/http"
@@ -13,8 +14,8 @@ type handler struct {
 	service *userService.ApplicationService
 }
 
-func NewHandler(userRepo repository.Repository) *handler {
-	return &handler{service: userService.NewApplicationService(userRepo)}
+func NewHandler(userRepo repository.Repository, imageStorageService *service.ImageStorageService) *handler {
+	return &handler{service: userService.NewApplicationService(userRepo, imageStorageService)}
 }
 
 func (h *handler) GetUserInfo(c echo.Context) error {
@@ -40,13 +41,4 @@ func (h *handler) UpdateUserAvatar(c echo.Context) error {
 		return errors.Trace(err)
 	}
 	return c.NoContent(http.StatusOK)
-}
-
-func (h *handler) GetUserAvatar(c echo.Context) error {
-	userID := c.Param("userID")
-	avatar, err := h.service.GetUserAvatar(userID)
-	if err != nil {
-		return errors.Trace(err)
-	}
-	return c.String(http.StatusOK, *avatar)
 }

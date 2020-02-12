@@ -4,21 +4,24 @@ import (
 	"fmt"
 	configs "github.com/fwchen/jellyfish/config"
 	"github.com/fwchen/jellyfish/database"
+	"github.com/fwchen/jellyfish/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
-func NewApplication(config *configs.AppConfig, datasource *database.AppDataSource) Application {
+func NewApplication(config *configs.AppConfig, datasource *database.AppDataSource, imageStorageService *service.ImageStorageService) Application {
 	return Application{
-		config:     config,
-		datasource: datasource,
+		config:              config,
+		datasource:          datasource,
+		imageStorageService: imageStorageService,
 	}
 }
 
 type Application struct {
-	config     *configs.AppConfig
-	datasource *database.AppDataSource
+	config              *configs.AppConfig
+	datasource          *database.AppDataSource
+	imageStorageService *service.ImageStorageService
 }
 
 func (a *Application) StartServe() {
@@ -32,7 +35,6 @@ func (a *Application) StartServe() {
 	a.Route(e)
 
 	e.HTTPErrorHandler = func(err error, context echo.Context) {
-		// TODO config.DeployEnv 来判断一下
 		e.DefaultHTTPErrorHandler(err, context)
 		fmt.Println()
 		fmt.Println(errors.ErrorStack(err))

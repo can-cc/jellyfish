@@ -20,7 +20,7 @@ func NewStorageService(config *configs.StorageConfig) *StorageService {
 	}
 }
 
-func (ss *StorageService) init() error {
+func (ss *StorageService) Init() error {
 	minioClient, err := minio.New(ss.configure.Endpoint, ss.configure.AccessKeyID, ss.configure.SecretAccessKeyID, ss.configure.UseSSL)
 	if err != nil {
 		return errors.Trace(err)
@@ -49,4 +49,8 @@ func (ss *StorageService) PutObject(bucketName string, objectName string, reader
 	}
 	logger.L.Infow(fmt.Sprintf("Successfully uploaded %s of size %d\n", objectName, uploadedBytes))
 	return nil
+}
+
+func (ss *StorageService) GetObject(bucketName, objectName string, opts minio.GetObjectOptions) (*minio.Object, error) {
+	return ss.client.GetObject(bucketName, objectName, opts)
 }

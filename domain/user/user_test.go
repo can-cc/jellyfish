@@ -8,7 +8,7 @@ import (
 func TestAppUser_SetAvatar(t *testing.T) {
 	var user AppUser
 	user.SetAvatar("mock_base64")
-	assert.Equal(t, "mock_base64", user.avatar.Code)
+	assert.Equal(t, "mock_base64", user.avatar.FileName)
 }
 
 func TestAppUser_SetPasswordHash(t *testing.T) {
