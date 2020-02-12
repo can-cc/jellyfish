@@ -15,7 +15,7 @@ pipeline {
         docker_hub_password = credentials('docker_hub_password')
     }
     stages {
-        stage('Test') {
+        stage('Lint') {
             agent {
                 docker {
                     image 'golangci/golangci-lint:v1.23.6'

@@ -24,20 +24,20 @@ func NewImageStorageService(bucketName string, storageService *StorageService) (
 	return s, nil
 }
 
-func (i *ImageStorageService) SaveBase64Image(code string) error {
+func (i *ImageStorageService) SaveBase64Image(code string) (string, error) {
 	h := md5.New()
 	io.WriteString(h, code)
 	fileName := fmt.Sprintf("%x", h.Sum(nil))
 	dec, err := base64.StdEncoding.DecodeString(code)
 	if err != nil {
-		return errors.Trace(err)
+		return "", errors.Trace(err)
 	}
 	reader := bytes.NewReader(dec)
 	contentType := "image/png"
 	opts := minio.PutObjectOptions{ContentType: contentType}
 	err = i.storageService.PutObject(i.bucketName, fileName, reader, reader.Size(), opts)
 	if err != nil {
-		return errors.Trace(err)
+		return "", errors.Trace(err)
 	}
-	return nil
+	return fileName, nil
 }

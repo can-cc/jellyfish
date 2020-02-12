@@ -17,7 +17,8 @@ func TestImageStorageService_SaveBase64Image(t *testing.T) {
 	bucketName := fmt.Sprintf("jellyfish-image-storage-test-%d", time.Now().Nanosecond())
 	imageStorageService, err := NewImageStorageService(bucketName, storageService)
 	assert.Nil(t, err)
-	err = imageStorageService.SaveBase64Image(code)
+	fileName, err := imageStorageService.SaveBase64Image(code)
 	assert.Nil(t, err)
+	_ = imageStorageService.storageService.client.RemoveObject(bucketName, fileName)
 	_ = imageStorageService.storageService.client.RemoveBucket(bucketName)
 }
