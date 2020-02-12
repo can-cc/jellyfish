@@ -15,6 +15,16 @@ pipeline {
         stage('Test') {
             agent {
                 docker {
+                    image 'golangci/golangci-lint:v1.23.6'
+                }
+            }
+            steps {
+                sh 'golangci-lint run -v'
+            }
+        }
+        stage('Test') {
+            agent {
+                docker {
                     image 'golang:1.13.4-stretch'
                 }
             }
