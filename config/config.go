@@ -10,6 +10,7 @@ type AppConfig struct {
 	Application ApplicationConfig
 	DataSource  DataSourceConfig
 	Logger      LoggerConfig
+	Storage     StorageConfig
 }
 
 type DataSourceConfig struct {
@@ -29,6 +30,14 @@ type ApplicationConfig struct {
 type LoggerConfig struct {
 	Level       string
 	OutputPaths []string `mapstructure:"output_paths"`
+}
+
+type StorageConfig struct {
+	Endpoint          string `mapstructure:"endpoint"`
+	AccessKeyID       string `mapstructure:"access_key_id"`
+	SecretAccessKeyID string `mapstructure:"secret_access_key_id"`
+	UseSSL            bool   `mapstructure:"use_ssl"`
+	Location          string `mapstructure:"location"`
 }
 
 func loadConfig(file string) (*AppConfig, error) {

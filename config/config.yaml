@@ -13,4 +13,9 @@ logger:
     - "stdout"
     # - "/var/log/jellyfish_log"
 
-
+storage:
+  endpoint: "localhost:9000"
+  access_key_id: "AKIAIOSFODNN7EXAMPLE"
+  secret_access_key_id: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+  use_ssl: false
+  location: "us-east-1"

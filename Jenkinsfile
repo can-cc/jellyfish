@@ -8,6 +8,9 @@ pipeline {
         JFISH_DATASOURCE_RDS_DATABASE_URL = credentials('jenkins-jfish-datasource-rds-database_url')
         GOPROXY = 'goproxy.cn'
         DOCKER_REGISTER = 'fwchen'
+        JFISH_STORAGE_ENDPOINT = credentials('s3_storage_endpoint')
+        JFISH_STORAGE_ACCESS_KEY_ID = credentials('s3_storage_access_key_id')
+        JFISH_STORAGE_SECRET_ACCESS_KEY_ID = credentials('s3_storage_secret_access_key_id')
         docker_hub_username = credentials('docker_hub_username')
         docker_hub_password = credentials('docker_hub_password')
     }

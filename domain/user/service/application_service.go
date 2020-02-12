@@ -20,7 +20,7 @@ func (a *ApplicationService) UpdateUserAvatar(userID string, avatar string) erro
 	if err != nil {
 		return errors.Trace(err)
 	}
-	user.SetAvatar(avatar)
+	// user.SetAvatar(avatar)
 	err = a.userRepo.Save(user)
 	return err
 }
