@@ -15,8 +15,12 @@ require (
 	github.com/lib/pq v1.3.0
 	github.com/magiconair/properties v1.8.1
 	github.com/minio/minio-go/v6 v6.0.47
+	github.com/opentracing/opentracing-go v1.1.0
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/testify v1.4.0
+	go.elastic.co/apm/module/apmecho v1.7.0
+	go.elastic.co/apm/module/apmot v1.7.0
+	go.elastic.co/apm/module/apmsql v1.7.0
 	go.uber.org/zap v1.13.0
 	golang.org/x/crypto v0.0.0-20200117160349-530e935923ad
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect

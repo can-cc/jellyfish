@@ -5,6 +5,8 @@ import (
 	configs "github.com/fwchen/jellyfish/config"
 	"github.com/juju/errors"
 	_ "github.com/lib/pq"
+	"go.elastic.co/apm/module/apmsql"
+	_ "go.elastic.co/apm/module/apmsql/pq"
 )
 
 type AppDataSource struct {
@@ -12,7 +14,7 @@ type AppDataSource struct {
 }
 
 func connectDatabase(rdsConfig configs.RDSConfig) (*sql.DB, error) {
-	db, err := sql.Open("postgres", rdsConfig.DatabaseUrl)
+	db, err := apmsql.Open("postgres", rdsConfig.DatabaseUrl)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}

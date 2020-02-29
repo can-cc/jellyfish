@@ -8,6 +8,8 @@ import (
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"go.elastic.co/apm/module/apmecho"
+	_ "go.elastic.co/apm/module/apmsql/sqlite3"
 )
 
 func NewApplication(config *configs.AppConfig, datasource *database.AppDataSource, imageStorageService *service.ImageStorageService) Application {
@@ -26,6 +28,7 @@ type Application struct {
 
 func (a *Application) StartServe() {
 	e := echo.New()
+	e.Use(apmecho.Middleware())
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: "method=${method}, uri=${uri}, status=${status}\n",

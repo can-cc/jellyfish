@@ -7,6 +7,8 @@ import (
 	"github.com/fwchen/jellyfish/logger"
 	"github.com/fwchen/jellyfish/service"
 	_ "github.com/labstack/gommon/log"
+	"github.com/opentracing/opentracing-go"
+	"go.elastic.co/apm/module/apmot"
 )
 
 func main() {
@@ -14,6 +16,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	opentracing.SetGlobalTracer(apmot.New())
 
 	err = logger.InitLogger(config.Logger)
 	if err != nil {
