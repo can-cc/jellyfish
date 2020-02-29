@@ -65,9 +65,9 @@ pipeline {
             stages {
                 stage('Build Image') {
                     steps {
-                        sh "cd migration && docker build . -t $DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER"
-                        sh "docker build . -f cmd/jellyfish-tool/Dockerfile -t $DOCKER_REGISTER/jellyfish-tool:v0.0.$BUILD_NUMBER"
-                        sh "docker build . -t $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
+                        sh "cd migration && docker build . -t $DOCKER_REGISTER/jellyfish-migration:latest"
+                        sh "docker build . -f cmd/jellyfish-tool/Dockerfile -t $DOCKER_REGISTER/jellyfish-tool:latest"
+                        sh "docker build . -t $DOCKER_REGISTER/jellyfish:latest"
                     }
                 }
                 stage('Registry Login') {
@@ -77,20 +77,20 @@ pipeline {
                 }
                 stage('Publish image') {
                     steps {
-                        sh 'docker push $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER'
-                        sh 'docker push $DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER'
-                        sh 'docker push $DOCKER_REGISTER/jellyfish-tool:v0.0.$BUILD_NUMBER'
-                        sh 'echo "$DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER" > .artifacts'
-                        sh 'echo "$DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER" >> .artifacts'
-                        sh 'echo "$DOCKER_REGISTER/jellyfish-tool:v0.0.$BUILD_NUMBER" >> .artifacts'
+                        sh 'docker push $DOCKER_REGISTER/jellyfish:latest'
+                        sh 'docker push $DOCKER_REGISTER/jellyfish-migration:latest'
+                        sh 'docker push $DOCKER_REGISTER/jellyfish-tool:latest'
+                        sh 'echo "$DOCKER_REGISTER/jellyfish:latest" > .artifacts'
+                        sh 'echo "$DOCKER_REGISTER/jellyfish-migration:latest" >> .artifacts'
+                        sh 'echo "$DOCKER_REGISTER/jellyfish-tool:latest" >> .artifacts'
                         archiveArtifacts(artifacts: '.artifacts')
                     }
                 }
                 stage('Remove image') {
                     steps {
-                        sh "docker image rm $DOCKER_REGISTER/jellyfish:v0.0.$BUILD_NUMBER"
-                        sh "docker image rm $DOCKER_REGISTER/jellyfish-migration:v0.0.$BUILD_NUMBER"
-                        sh "docker image rm $DOCKER_REGISTER/jellyfish-tool:v0.0.$BUILD_NUMBER"
+                        sh "docker image rm $DOCKER_REGISTER/jellyfish:latest"
+                        sh "docker image rm $DOCKER_REGISTER/jellyfish-migration:latest"
+                        sh "docker image rm $DOCKER_REGISTER/jellyfish-tool:latest"
                     }
                 }
             }
