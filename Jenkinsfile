@@ -57,16 +57,11 @@ pipeline {
             }
         }
         stage('Dockerize') {
-            agent {
-                docker {
-                    image 'docker:19.03.5'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
+            agent master
             stages {
                 stage('Build Image') {
                     steps {
-                        sh "cd migration && docker build . -t $DOCKER_REGISTER/jellyfish-migration:latest"
+                        sh "cd migration && d   ocker build . -t $DOCKER_REGISTER/jellyfish-migration:latest"
                         sh "docker build . -f cmd/jellyfish-tool/Dockerfile -t $DOCKER_REGISTER/jellyfish-tool:latest"
                         sh "docker build . -t $DOCKER_REGISTER/jellyfish:latest"
                     }
