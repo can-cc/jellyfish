@@ -19,7 +19,7 @@ pipeline {
         stage('Lint') {
             agent {
                 docker {
-                    image 'golangci/golangci-lint:v1.23.6'
+                    image 'golangci/golangci-lint:latest'
                 }
             }
             steps {
