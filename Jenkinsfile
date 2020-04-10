@@ -29,7 +29,8 @@ pipeline {
         stage('Test') {
             agent {
                 docker {
-                    image 'golang:1.14.2-buster'
+                    image 'golang:1.14.2-buster',
+                    args '-u 0:0'
                 }
             }
             steps {
