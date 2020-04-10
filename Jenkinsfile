@@ -29,7 +29,7 @@ pipeline {
         stage('Test') {
             agent {
                 docker {
-                    image '1.14.2-alpine3.11'
+                    image 'golang:1.14.2-alpine3.11'
                 }
             }
             steps {
@@ -39,7 +39,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image '1.14.2-alpine3.11'
+                    image 'golang:1.14.2-alpine3.11'
                 }
             }
             steps {
@@ -49,7 +49,7 @@ pipeline {
         stage('Build Tools') {
             agent {
                 docker {
-                    image '1.14.2-alpine3.11'
+                    image 'golang:1.14.2-alpine3.11'
                 }
             }
             steps {
