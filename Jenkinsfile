@@ -16,20 +16,20 @@ pipeline {
         docker_hub_password = credentials('docker_hub_password')
     }
     stages {
-        // stage('Lint') {
-        //    agent {
-        //        docker {
-        //            image 'golangci/golangci-lint:latest'
-        //        }
-        //    }
-        //    steps {
-        //        sh 'golangci-lint run -v'
-        //    }
-        // }
+        stage('Lint') {
+           agent {
+               docker {
+                   image 'golangci/golangci-lint:latest'
+               }
+           }
+           steps {
+               sh 'golangci-lint run -v'
+           }
+        }
         stage('Test') {
             agent {
                 docker {
-                    image 'golang:1.14.2-buster',
+                    image 'golang:1.14.2-buster'
                     args '-u 0:0'
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
         stage('Build Tools') {
             agent {
                 docker {
-                    image 'golang:1.14.2-buster',
+                    image 'golang:1.14.2-buster'
                     args '-u 0:0'
                 }
             }
