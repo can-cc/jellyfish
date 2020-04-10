@@ -5,7 +5,6 @@ pipeline {
         pollSCM('*/1 * * * *')
     }
      environment {
-        HOME = '.'
         JFISH_DATASOURCE_RDS_DATABASE_URL = credentials('jenkins-jfish-datasource-rds-database_url')
         GOPROXY = 'goproxy.cn'
         DOCKER_REGISTER = 'fwchen'
@@ -16,16 +15,16 @@ pipeline {
         docker_hub_password = credentials('docker_hub_password')
     }
     stages {
-        stage('Lint') {
-            agent {
-                docker {
-                    image 'golangci/golangci-lint:v1.23.6'
-                }
-            }
-            steps {
-                sh 'golangci-lint run -v'
-            }
-        }
+        // stage('Lint') {
+        //     agent {
+        //         docker {
+        //             image 'golangci/golangci-lint:v1.23.6'
+        //         }
+        //     }
+        //     steps {
+        //         sh 'golangci-lint run -v'
+        //     }
+        // }
         stage('Test') {
             agent {
                 docker {
