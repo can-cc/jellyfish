@@ -16,21 +16,20 @@ pipeline {
         docker_hub_password = credentials('docker_hub_password')
     }
     stages {
-        stage('Lint') {
-           agent {
-               docker {
-                   image 'golangci/golangci-lint:latest'
-               }
-           }
-           steps {
-               sh 'golangci-lint run -v'
-           }
-        }
+//         stage('Lint') {
+//            agent {
+//                docker {
+//                    image 'golangci/golangci-lint:latest'
+//                }
+//            }
+//            steps {
+//                sh 'golangci-lint run -v'
+//            }
+//         }
         stage('Test') {
             agent {
                 docker {
                     image 'golang:1.14.2-buster'
-                    args '-u 0:0'
                 }
             }
             steps {
@@ -51,7 +50,6 @@ pipeline {
             agent {
                 docker {
                     image 'golang:1.14.2-buster'
-                    args '-u 0:0'
                 }
             }
             steps {
@@ -63,7 +61,7 @@ pipeline {
             stages {
                 stage('Build Image') {
                     steps {
-                        sh "cd migration && d   ocker build . -t $DOCKER_REGISTER/jellyfish-migration:latest"
+                        sh "cd migration && docker build . -t $DOCKER_REGISTER/jellyfish-migration:latest"
                         sh "docker build . -f cmd/jellyfish-tool/Dockerfile -t $DOCKER_REGISTER/jellyfish-tool:latest"
                         sh "docker build . -t $DOCKER_REGISTER/jellyfish:latest"
                     }
