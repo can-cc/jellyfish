@@ -39,7 +39,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'golang:1.13.4-stretch'
+                    image 'golang:1.14.2-buster'
                 }
             }
             steps {
@@ -49,7 +49,7 @@ pipeline {
         stage('Build Tools') {
             agent {
                 docker {
-                    image 'golang:1.13.4-stretch'
+                    image 'golang:1.14.2-buster'
                 }
             }
             steps {
