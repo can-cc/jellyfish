@@ -1,5 +1,6 @@
 pipeline {
     agent none
+
     triggers {
         pollSCM('*/1 * * * *')
     }
@@ -7,7 +8,6 @@ pipeline {
         HOME = '.'
         JFISH_DATASOURCE_RDS_DATABASE_URL = credentials('jenkins-jfish-datasource-rds-database_url')
         GOPROXY = 'goproxy.cn'
-        GO111MODULE = 'on'
         DOCKER_REGISTER = 'fwchen'
         JFISH_STORAGE_ENDPOINT = credentials('s3_storage_endpoint')
         JFISH_STORAGE_ACCESS_KEY_ID = credentials('s3_storage_access_key_id')
@@ -16,20 +16,20 @@ pipeline {
         docker_hub_password = credentials('docker_hub_password')
     }
     stages {
-//         stage('Lint') {
-//            agent {
-//                docker {
-//                    image 'golangci/golangci-lint:latest'
-//                }
-//            }
-//            steps {
-//                sh 'golangci-lint run -v'
-//            }
-//         }
+        stage('Lint') {
+            agent {
+                docker {
+                    image 'golangci/golangci-lint:v1.23.6'
+                }
+            }
+            steps {
+                sh 'golangci-lint run -v'
+            }
+        }
         stage('Test') {
             agent {
                 docker {
-                    image 'golang:1.14.2-alpine3.11'
+                    image 'golang:1.13.4-stretch'
                 }
             }
             steps {
@@ -39,7 +39,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'golang:1.14.2-alpine3.11'
+                    image 'golang:1.13.4-stretch'
                 }
             }
             steps {
@@ -49,7 +49,7 @@ pipeline {
         stage('Build Tools') {
             agent {
                 docker {
-                    image 'golang:1.14.2-alpine3.11'
+                    image 'golang:1.13.4-stretch'
                 }
             }
             steps {
@@ -57,7 +57,12 @@ pipeline {
             }
         }
         stage('Dockerize') {
-            agent any
+            agent {
+                docker {
+                    image 'docker:19.03.5'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             stages {
                 stage('Build Image') {
                     steps {
