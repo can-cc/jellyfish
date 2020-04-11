@@ -40,6 +40,7 @@ pipeline {
             agent {
                 docker {
                     image 'golang:1.13.4-stretch'
+                    args '-u root'
                 }
             }
             steps {
@@ -50,6 +51,7 @@ pipeline {
             agent {
                 docker {
                     image 'golang:1.13.4-stretch'
+                    args '-u root'
                 }
             }
             steps {
