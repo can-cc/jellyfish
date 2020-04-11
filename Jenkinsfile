@@ -5,6 +5,7 @@ pipeline {
         pollSCM('*/1 * * * *')
     }
      environment {
+        HOME = '.'
         JFISH_DATASOURCE_RDS_DATABASE_URL = credentials('jenkins-jfish-datasource-rds-database_url')
         GOPROXY = 'goproxy.cn'
         DOCKER_REGISTER = 'fwchen'
