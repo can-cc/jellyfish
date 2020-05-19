@@ -1,24 +1,27 @@
 # jellyfish server
 
-## run the server
+## 使用
+项目用 Makefile 配置了一系列的命令
 
+启动：
 ``` bash
-go get
-
-go build main.go
-
-./main 
+make run
 ```
 
 then open [http://localhost:8180]
 
-## Development
+## 开发
 
-see [development docs](./docs/development.md)
+见 [开发文档](./docs/development-zh.md)
+
+## 配置
+启动时，必需要配置 pg 数据库和 s3，还有其他配置项需要配置，具体可以修改配置文件[config.yaml](./config/config.yaml)，项目用 [viper](https://github.com/spf13/viper) 来读取配置，也可以通过环境变量来进行配置
+
+例如，设置 pg 数据库，设置 `JFISH_DATASOURCE_RDS_DATABASE_URL` 这个环境变量即可
 
 
-## Elastic apm configure
-To enable elastic apm, set below environment variables.
+### Elastic apm 配置
+项目集成 elastic apm 功能，如果需要开启，配置下面的环境变量即可
 
 ``` bash
 export ELASTIC_APM_SERVICE_NAME=

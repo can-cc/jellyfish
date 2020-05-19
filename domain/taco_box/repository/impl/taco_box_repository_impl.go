@@ -38,7 +38,7 @@ func (t *TacoBoxRepositoryImpl) ListTacoBoxes(userID string) ([]taco_box.TacoBox
 	tacoBoxes := make([]taco_box.TacoBox, 0)
 	for rows.Next() {
 		var tb taco_box.TacoBox
-		if err := rows.Scan(&tb.ID, &tb.Name, &tb.Icon, &tb.CreatorID, &tb.CreatedAt, &tb.UpdatedAt); err != nil {
+		if err := rows.Scan(&tb.ID, &tb.Name, &tb.CreatorID, &tb.CreatedAt, &tb.UpdatedAt); err != nil {
 			return nil, errors.Trace(err)
 		}
 		tacoBoxes = append(tacoBoxes, tb)
@@ -52,7 +52,7 @@ func (t *TacoBoxRepositoryImpl) FindTacoBox(boxID string) (*taco_box.TacoBox, er
 		return nil, errors.Trace(err)
 	}
 	var tb taco_box.TacoBox
-	err = t.dataSource.RDS.QueryRow(sql).Scan(&tb.ID, &tb.Name, &tb.Icon, &tb.CreatorID, &tb.CreatedAt, &tb.UpdatedAt)
+	err = t.dataSource.RDS.QueryRow(sql).Scan(&tb.ID, &tb.Name, &tb.CreatorID, &tb.CreatedAt, &tb.UpdatedAt)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -63,7 +63,6 @@ func (t *TacoBoxRepositoryImpl) insertTacoBox(box *taco_box.TacoBox) (*taco_box.
 	sql, _, err := goqu.Insert("taco_box").Rows(
 		goqu.Record{
 			"name":       box.Name,
-			"icon":       box.Icon,
 			"creator_id": box.CreatorID,
 		},
 	).Returning("id").ToSQL()
@@ -79,7 +78,6 @@ func (t *TacoBoxRepositoryImpl) updateTacoBox(box *taco_box.TacoBox) error {
 	sql, _, err := goqu.Update("taco_box").Set(
 		goqu.Record{
 			"name":      box.Name,
-			"icon":      box.Icon,
 			"updatedAt": time.Now(),
 		},
 	).ToSQL()
@@ -101,7 +99,6 @@ func getGoquTacoSelection() *goqu.SelectDataset {
 	return goqu.From("taco_box").Select(
 		"id",
 		"name",
-		"icon",
 		"creator_id",
 		"created_at",
 		"updated_at",

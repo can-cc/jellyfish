@@ -17,7 +17,7 @@ type TacoBoxApplicationService struct {
 }
 
 func (t *TacoBoxApplicationService) CreateTacoBox(command command.CreateTacoBoxCommand) (*taco_box.TacoBoxID, error) {
-	taco := factory.NewTacoBox(command.Name, command.Icon, command.CreatorId)
+	taco := factory.NewTacoBox(command.Name, command.CreatorId)
 	return t.tacoBoxRepo.SaveTacoBox(taco)
 }
 
@@ -31,7 +31,6 @@ func (t *TacoBoxApplicationService) UpdateTacoBox(command command.UpdateTacoComm
 		return errors.Trace(err)
 	}
 	tb.Name = command.Name
-	tb.Icon = command.Icon
 	_, err = t.tacoBoxRepo.SaveTacoBox(tb)
 	return err
 }

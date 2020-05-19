@@ -31,7 +31,7 @@ func (h *handler) CreateTacoBox(c echo.Context) error {
 	userID := middleware.GetClaimsUserID(c)
 	var requestCommand command.CreateTacoBoxCommand
 	requestCommand.CreatorId = userID
-	err := c.Bind(&c)
+	err := c.Bind(&requestCommand)
 	if err != nil {
 		return errors.Trace(err)
 	}
