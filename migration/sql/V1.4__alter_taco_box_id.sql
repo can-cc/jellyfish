@@ -1,0 +1,1 @@
+ALTER TABLE taco ALTER COLUMN box_id TYPE char(36);

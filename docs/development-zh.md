@@ -1,12 +1,15 @@
 # 开发
 
+## 编码
+修改了 Repository 之后，需要运行 `make mockgen` 来生成 Mock
+
 ### 编译 
 `make build`
 
 ### lint
 使用 golang-ci [golangci-lint](https://github.com/golangci/golangci-lint#editor-integration) 来检查
 
-### create database
+### 创建数据库
 docker:
 ``` bash
 docker run --rm -v ./migration/sql:/flyway/sql -v ./migration/conf:/flyway/conf boxfuse/flyway migrate 
@@ -22,8 +25,8 @@ command line:
 flyway migrate -url=jdbc:postgresql://localhost:5432/jellyfish -user=postgres -password=mysecretpassword -locations="./migration/sql"
 ```
 
-### create user
-`./create-user fwchen 123456`
+### 创建用户
+运行命令：`./create-user fwchen 123456`
 
 
 ## postgres permission

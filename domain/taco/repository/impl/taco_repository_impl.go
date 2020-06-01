@@ -65,6 +65,7 @@ func (t *TacoRepositoryImpl) insertTaco(taco *taco.Taco) (*string, error) {
 		goqu.Record{
 			"content":    taco.Content,
 			"creator_id": taco.CreatorID,
+			"box_id":     taco.BoxId,
 			"detail":     taco.Detail,
 			"status":     taco.Status,
 			"type":       taco.Type,

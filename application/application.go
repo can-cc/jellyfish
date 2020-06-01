@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/middleware"
 	"go.elastic.co/apm/module/apmecho"
 	_ "go.elastic.co/apm/module/apmsql/sqlite3"
+	"net/http"
 )
 
 func NewApplication(config *configs.AppConfig, datasource *database.AppDataSource, imageStorageService *service.ImageStorageService) Application {
@@ -38,10 +39,19 @@ func (a *Application) StartServe() {
 	a.Route(e)
 
 	e.HTTPErrorHandler = func(err error, context echo.Context) {
-		e.DefaultHTTPErrorHandler(err, context)
 		fmt.Println()
 		fmt.Println(errors.ErrorStack(err))
 		fmt.Println()
+		if errors.IsBadRequest(err) {
+			_ = context.NoContent(http.StatusBadRequest)
+			return
+		}
+		if errors.IsForbidden(err) {
+			_ = context.NoContent(http.StatusForbidden)
+			return
+		}
+		e.DefaultHTTPErrorHandler(err, context)
+
 	}
 
 	fmt.Println(fmt.Sprintf("jellyfish serve on http://%s", a.config.Application.Addr))
