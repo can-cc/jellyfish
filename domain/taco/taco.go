@@ -25,6 +25,12 @@ func ParseStatues(str string) (statues []Status) {
 
 type Type string
 
+type ListTacoFilter struct {
+	Statues []Status
+	BoxId   *string
+	Type    *Type
+}
+
 const (
 	Task Type = "Task"
 )

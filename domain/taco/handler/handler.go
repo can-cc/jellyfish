@@ -23,9 +23,8 @@ func NewHandler(tacoRepo repository.Repository, tacoBoxPermissionService *servic
 func (h *handler) GetTacos(c echo.Context) error {
 	userID := middleware.GetClaimsUserID(c)
 	statues := taco.ParseStatues(c.QueryParam("status"))
-	tacos, err := h.tacoService.GetTacos(userID, repository.ListTacoFilter{
-		Statues: statues,
-	})
+	box := c.QueryParam("box")
+	tacos, err := h.tacoService.GetTacos(userID, statues, box)
 	if err != nil {
 		return errors.Trace(err)
 	}

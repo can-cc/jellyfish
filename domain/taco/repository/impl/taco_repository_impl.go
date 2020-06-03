@@ -19,7 +19,7 @@ type TacoRepositoryImpl struct {
 	dataSource *database.AppDataSource
 }
 
-func (t *TacoRepositoryImpl) ListTacos(userID string, filter repository.ListTacoFilter) ([]taco.Taco, error) {
+func (t *TacoRepositoryImpl) ListTacos(userID string, filter taco.ListTacoFilter) ([]taco.Taco, error) {
 	sql, _, err := buildListTacosSQL(userID, filter)
 	if err != nil {
 		return nil, errors.Trace(err)
@@ -99,10 +99,16 @@ func (t *TacoRepositoryImpl) updateTaco(taco *taco.Taco) error {
 	return err
 }
 
-func buildListTacosSQL(userID string, filter repository.ListTacoFilter) (sql string, params []interface{}, err error) {
+func buildListTacosSQL(userID string, filter taco.ListTacoFilter) (sql string, params []interface{}, err error) {
 	statuesFilters := []exp.Expression{goqu.C("creator_id").Eq(userID)}
 	if filter.Statues != nil {
 		statuesFilters = append(statuesFilters, goqu.C("status").In(filter.Statues))
+	}
+	if filter.BoxId != nil {
+		statuesFilters = append(statuesFilters, goqu.C("box_id").Eq(filter.BoxId))
+	}
+	if filter.Type != nil {
+		statuesFilters = append(statuesFilters, goqu.C("type").Eq(filter.Type))
 	}
 
 	return getGoquTacoSelection().Where(

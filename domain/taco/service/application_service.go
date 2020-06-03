@@ -7,17 +7,9 @@ import (
 	"github.com/fwchen/jellyfish/domain/taco/repository"
 	"github.com/fwchen/jellyfish/domain/taco_box"
 	"github.com/fwchen/jellyfish/domain/taco_box/service"
+	"github.com/fwchen/jellyfish/util"
 	"github.com/juju/errors"
 )
-
-func contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
 
 func NewTacoApplicationService(tacoRepo repository.Repository, tacoBoxPermissionService *service.TacoBoxPermissionService) *TacoApplicationService {
 	return &TacoApplicationService{
@@ -31,13 +23,28 @@ type TacoApplicationService struct {
 	tacoBoxPermissionService *service.TacoBoxPermissionService
 }
 
-func (t *TacoApplicationService) GetTacos(userID string, filter repository.ListTacoFilter) ([]taco.Taco, error) {
-	return t.tacoRepo.ListTacos(userID, filter)
+func (t *TacoApplicationService) GetTacos(userID string, status []taco.Status, box string) ([]taco.Taco, error) {
+	var tacoTypeStr string
+	var boxId *string = nil
+	if taco_box.ContainTypeTacoBox(box) {
+		tacoTypeStr = box
+	} else if box == taco_box.TacoBoxAll {
+		tacoTypeStr = string(taco.Task)
+	} else {
+		tacoTypeStr = string(taco.Task)
+		boxId = util.PointerStr(box)
+	}
+	tacoType := taco.Type(tacoTypeStr)
+	return t.tacoRepo.ListTacos(userID, taco.ListTacoFilter{
+		Statues: status,
+		Type:    &tacoType,
+		BoxId:   boxId,
+	})
 }
 
 func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, userID string) (*string, error) {
 	if command.BoxId != nil {
-		if !contains(taco_box.CommonTacoBoxes[:], *command.BoxId) {
+		if !taco_box.ContainCommonTacoBox(*command.BoxId) {
 			can, err := t.tacoBoxPermissionService.CheckUserCanOperation(*command.BoxId, userID)
 			if err != nil {
 				return nil, errors.Trace(err)

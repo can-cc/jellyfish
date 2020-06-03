@@ -6,7 +6,6 @@ package mock
 
 import (
 	taco "github.com/fwchen/jellyfish/domain/taco"
-	repository "github.com/fwchen/jellyfish/domain/taco/repository"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -35,7 +34,7 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // ListTacos mocks base method
-func (m *MockRepository) ListTacos(userID string, filter repository.ListTacoFilter) ([]taco.Taco, error) {
+func (m *MockRepository) ListTacos(userID string, filter taco.ListTacoFilter) ([]taco.Taco, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListTacos", userID, filter)
 	ret0, _ := ret[0].([]taco.Taco)
