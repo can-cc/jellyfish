@@ -1,0 +1,96 @@
+name: Docker
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+jobs:
+  push_jellyfish:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push_jellyfish'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag image
+
+      - name: Log into registry
+        run: echo "${{ secrets.docker_hub_password }}" | docker login -u ${{ secrets.docker_hub_username }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=${{ secrets.docker_hub_username }}/jellyfish
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+  push_jellyfish_migration:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push_jellyfish_migration'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file migration/Dockerfile --tag image
+
+      - name: Log into registry
+        run: echo "${{ secrets.docker_hub_password }}" | docker login -u ${{ secrets.docker_hub_username }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=${{ secrets.docker_hub_username }}/jellyfish-migration
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+
+  push_jellyfish_tool:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push_jellyfish_tool'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file cmd/jellyfish-tool/Dockerfile --tag image
+
+      - name: Log into registry
+        run: echo "${{ secrets.docker_hub_password }}" | docker login -u ${{ secrets.docker_hub_username }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=${{ secrets.docker_hub_username }}/jellyfish-tool
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
