@@ -1,7 +1,7 @@
 name: Docker
 
 on:
-  push_jellyfish_migration:
+  push:
     # Publish `master` as Docker `latest` image.
     branches:
       - master
@@ -10,15 +10,10 @@ on:
     tags:
       - v*
 
-  # Run tests for any PRs.
-  push_jellyfish:
-  push_jellyfish_tool:
 
 jobs:
   push_jellyfish:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push_jellyfish'
-
     steps:
       - uses: actions/checkout@v2
 
@@ -44,8 +39,6 @@ jobs:
 
   push_jellyfish_migration:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push_jellyfish_migration'
-
     steps:
       - uses: actions/checkout@v2
 
@@ -71,8 +64,6 @@ jobs:
 
   push_jellyfish_tool:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push_jellyfish_tool'
-
     steps:
       - uses: actions/checkout@v2
 
