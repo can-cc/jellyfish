@@ -1,2 +1,2 @@
 FROM boxfuse/flyway
-COPY ./sql /flyway/sql
+COPY .migration/sql /flyway/sql
