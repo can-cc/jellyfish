@@ -1,7 +1,7 @@
 name: Docker
 
 on:
-  push:
+  push_jellyfish_migration:
     # Publish `master` as Docker `latest` image.
     branches:
       - master
@@ -11,7 +11,8 @@ on:
       - v*
 
   # Run tests for any PRs.
-  pull_request:
+  push_jellyfish:
+  push_jellyfish_tool:
 
 jobs:
   push_jellyfish:
