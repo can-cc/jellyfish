@@ -7,7 +7,7 @@ import (
 
 func NewTacoFromCreateCommand(command *command.CreateTacoCommand, userID string) *taco.Taco {
 	t := &taco.Taco{
-		CreatorID: userID,
+		CreatorId: userID,
 		Content:   command.Content,
 		Detail:    command.Detail,
 		Status:    taco.Doing,

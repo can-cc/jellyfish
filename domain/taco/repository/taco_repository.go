@@ -3,7 +3,8 @@ package repository
 import "github.com/fwchen/jellyfish/domain/taco"
 
 type Repository interface {
-	ListTacos(userID string, filter taco.ListTacoFilter) ([]taco.Taco, error)
-	SaveTaco(taco *taco.Taco) (*string, error)
-	FindTaco(tacoID string) (*taco.Taco, error)
+	List(userID string, filter taco.ListTacoFilter) ([]taco.Taco, error)
+	Save(taco *taco.Taco) (*string, error)
+	FindById(tacoID string) (*taco.Taco, error)
+	Delete(tacoId string) error
 }

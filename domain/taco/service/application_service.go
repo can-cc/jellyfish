@@ -35,7 +35,7 @@ func (t *TacoApplicationService) GetTacos(userID string, status []taco.Status, b
 		boxId = util.PointerStr(box)
 	}
 	tacoType := taco.Type(tacoTypeStr)
-	return t.tacoRepo.ListTacos(userID, taco.ListTacoFilter{
+	return t.tacoRepo.List(userID, taco.ListTacoFilter{
 		Statues: status,
 		Type:    &tacoType,
 		BoxId:   boxId,
@@ -52,14 +52,16 @@ func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, 
 			if !can {
 				return nil, errors.Forbiddenf("user [userId = %s] forbidden create taco in box [boxId = %s]", userID, *command.BoxId)
 			}
+		} else {
+			command.BoxId = nil
 		}
 	}
 	ta := factory.NewTacoFromCreateCommand(command, userID)
-	return t.tacoRepo.SaveTaco(ta)
+	return t.tacoRepo.Save(ta)
 }
 
 func (t *TacoApplicationService) UpdateTaco(command command.UpdateTacoCommand) error {
-	ta, err := t.tacoRepo.FindTaco(command.TacoID)
+	ta, err := t.tacoRepo.FindById(command.TacoId)
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -67,6 +69,11 @@ func (t *TacoApplicationService) UpdateTaco(command command.UpdateTacoCommand) e
 	ta.Detail = command.Detail
 	ta.Deadline = command.Deadline
 	ta.Status = command.Status
-	_, err = t.tacoRepo.SaveTaco(ta)
+	ta.BoxId = command.BoxId
+	_, err = t.tacoRepo.Save(ta)
 	return err
+}
+
+func (t *TacoApplicationService) DeleteTaco(id string) error {
+	return t.tacoRepo.Delete(id)
 }

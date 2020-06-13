@@ -32,8 +32,8 @@ func TestHandler_GetTacos(t *testing.T) {
 	mockRepo := mock.NewMockRepository(ctrl)
 	mockRepo.EXPECT().ListTacos("u123", gomock.Any()).Return([]taco.Taco{
 		{
-			ID:        "id_123",
-			CreatorID: "u123",
+			Id:        "id_123",
+			CreatorId: "u123",
 			Content:   "watch tv",
 			Detail:    util.PointerStr("watch AC"),
 			Status:    "Doing",
@@ -67,7 +67,7 @@ func TestHandler_CreateTaco(t *testing.T) {
 	defer ctrl.Finish()
 	mockRepo := mock.NewMockRepository(ctrl)
 	mockRepo.EXPECT().SaveTaco(&taco.Taco{
-		CreatorID: "u123",
+		CreatorId: "u123",
 		Content:   "Read book",
 		Detail:    util.PointerStr("《Refactor》"),
 		Status:    "Doing",

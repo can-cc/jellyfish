@@ -15,8 +15,8 @@ logger:
 
 storage:
   endpoint: "localhost:9000"
-  access_key_id: "AKIAIOSFODNN7EXAMPLE"
-  secret_access_key_id: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+  access_key_id: "minio"
+  secret_access_key_id: "miniostorage"
   use_ssl: false
   location: "us-east-1"
 

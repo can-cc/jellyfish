@@ -36,18 +36,18 @@ const (
 )
 
 type Taco struct {
-	ID        string     `json:"id"`
-	CreatorID string     `json:"creatorID"`
+	Id        string     `json:"id"`
+	CreatorId string     `json:"creatorId"`
 	Content   string     `json:"content"`
 	Detail    *string    `json:"detail"`
 	Status    Status     `json:"status"`
 	Type      Type       `json:"type"`
 	Deadline  *time.Time `json:"deadline"`
-	BoxId     *string    `json:"boxID"`
+	BoxId     *string    `json:"boxId"`
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdateAt  *time.Time `json:"updatedAt"`
 }
 
 func (t *Taco) IsNew() bool {
-	return t.ID == ""
+	return t.Id == ""
 }

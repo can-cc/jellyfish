@@ -47,15 +47,24 @@ func (h *handler) CreateTaco(c echo.Context) error {
 
 func (h *handler) UpdateTaco(c echo.Context) error {
 	userID := middleware.GetClaimsUserID(c)
-	tacoID := c.Param("tacoID")
+	tacoID := c.Param("tacoId")
 	var command tacoCommand.UpdateTacoCommand
 	err := c.Bind(&command)
 	if err != nil {
 		return errors.Trace(err)
 	}
-	command.TacoID = tacoID
+	command.TacoId = tacoID
 	command.OperationUserID = userID
 	err = h.tacoService.UpdateTaco(command)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	return c.NoContent(http.StatusOK)
+}
+
+func (h *handler) DeleteTaco(c echo.Context) error {
+	tacoId := c.Param("tacoId")
+	err := h.tacoService.DeleteTaco(tacoId)
 	if err != nil {
 		return errors.Trace(err)
 	}

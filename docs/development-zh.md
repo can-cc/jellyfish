@@ -1,5 +1,11 @@
 # 开发
 
+## 环境准备
+### MinIO
+```　bash
+docker run -p 9000:9000 -d --name=minio -e MINIO_ACCESS_KEY=minio -e MINIO_SECRET_KEY=miniostorage minio/minio server /data
+```
+
 ## 编码
 修改了 Repository 之后，需要运行 `make mockgen` 来生成 Mock
 
@@ -26,7 +32,7 @@ flyway migrate -url=jdbc:postgresql://localhost:5432/jellyfish -user=postgres -p
 ```
 
 ### 创建用户
-运行命令：`./create-user fwchen 123456`
+运行命令：`go run cmd/jellyfish-tool/main.go create-user jellyfish 123456`
 
 
 ## postgres permission

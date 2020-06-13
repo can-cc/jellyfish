@@ -33,47 +33,47 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
-// ListTacos mocks base method
+// List mocks base method
 func (m *MockRepository) ListTacos(userID string, filter taco.ListTacoFilter) ([]taco.Taco, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListTacos", userID, filter)
+	ret := m.ctrl.Call(m, "List", userID, filter)
 	ret0, _ := ret[0].([]taco.Taco)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListTacos indicates an expected call of ListTacos
+// List indicates an expected call of List
 func (mr *MockRepositoryMockRecorder) ListTacos(userID, filter interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTacos", reflect.TypeOf((*MockRepository)(nil).ListTacos), userID, filter)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockRepository)(nil).ListTacos), userID, filter)
 }
 
-// SaveTaco mocks base method
+// Save mocks base method
 func (m *MockRepository) SaveTaco(taco *taco.Taco) (*string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SaveTaco", taco)
+	ret := m.ctrl.Call(m, "Save", taco)
 	ret0, _ := ret[0].(*string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// SaveTaco indicates an expected call of SaveTaco
+// Save indicates an expected call of Save
 func (mr *MockRepositoryMockRecorder) SaveTaco(taco interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveTaco", reflect.TypeOf((*MockRepository)(nil).SaveTaco), taco)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockRepository)(nil).SaveTaco), taco)
 }
 
-// FindTaco mocks base method
+// FindById mocks base method
 func (m *MockRepository) FindTaco(tacoID string) (*taco.Taco, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindTaco", tacoID)
+	ret := m.ctrl.Call(m, "FindById", tacoID)
 	ret0, _ := ret[0].(*taco.Taco)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindTaco indicates an expected call of FindTaco
+// FindById indicates an expected call of FindById
 func (mr *MockRepositoryMockRecorder) FindTaco(tacoID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTaco", reflect.TypeOf((*MockRepository)(nil).FindTaco), tacoID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockRepository)(nil).FindTaco), tacoID)
 }
