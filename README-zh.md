@@ -14,6 +14,11 @@ then open [http://localhost:8180]
 
 见 [开发文档](./docs/development-zh.md)
 
+## S3/MinIO
+``` bash
+docker run -p 9000:9000 -d --name=minio -e MINIO_ACCESS_KEY=minio -e MINIO_SECRET_KEY=miniostorage minio/minio server /data
+```
+
 ## 配置
 启动时，必需要配置 pg 数据库和 s3，还有其他配置项需要配置，具体可以修改配置文件[config.yaml](./config/config.yaml)，项目用 [viper](https://github.com/spf13/viper) 来读取配置，也可以通过环境变量来进行配置
 
