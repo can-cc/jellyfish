@@ -32,7 +32,11 @@ func (t *TacoApplicationService) GetTacos(userID string, status []taco.Status, b
 		tacoTypeStr = string(taco.Task)
 	} else {
 		tacoTypeStr = string(taco.Task)
-		boxId = util.PointerStr(box)
+		if box == "" {
+			boxId = nil
+		} else {
+			boxId = util.PointerStr(box)
+		}
 	}
 	tacoType := taco.Type(tacoTypeStr)
 	return t.tacoRepo.List(userID, taco.ListTacoFilter{
