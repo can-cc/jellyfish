@@ -10,13 +10,19 @@ make run
 
 then open [http://localhost:8180]
 
-## 开发
-
+## 文档
 见 [开发文档](./docs/development-zh.md)
 
+
+### 所需环境
 ## S3/MinIO
 ``` bash
 docker run -p 9000:9000 -d --name=minio -e MINIO_ACCESS_KEY=minio -e MINIO_SECRET_KEY=miniostorage minio/minio server /data
+```
+
+## postgres
+``` bash
+docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 ```
 
 ## 配置
@@ -40,3 +46,4 @@ export ELASTIC_APM_SECRET_TOKEN=
 export ELASTIC_APM_ENVIRONMENT="production"
 ```
 See the [documentation](https://www.elastic.co/guide/en/apm/agent/go/current/configuration.html) for advanced configuration.
+
