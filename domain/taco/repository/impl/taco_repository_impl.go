@@ -7,6 +7,7 @@ import (
 	"github.com/fwchen/jellyfish/database"
 	"github.com/fwchen/jellyfish/domain/taco"
 	"github.com/fwchen/jellyfish/domain/taco/repository"
+	"github.com/fwchen/jellyfish/util"
 	"github.com/juju/errors"
 	"time"
 )
@@ -63,13 +64,14 @@ func (t *TacoRepositoryImpl) FindById(tacoID string) (*taco.Taco, error) {
 func (t *TacoRepositoryImpl) insert(taco *taco.Taco) (*string, error) {
 	sql, _, err := goqu.Insert("taco").Rows(
 		goqu.Record{
-			"content":    taco.Content,
-			"creator_id": taco.CreatorId,
-			"box_id":     taco.BoxId,
-			"detail":     taco.Detail,
-			"status":     taco.Status,
-			"type":       taco.Type,
-			"deadline":   taco.Deadline,
+			"content":      taco.Content,
+			"creator_id":   taco.CreatorId,
+			"box_id":       taco.BoxId,
+			"detail":       taco.Detail,
+			"status":       taco.Status,
+			"type":         taco.Type,
+			"order_index": taco.Order,
+			"deadline":     taco.Deadline,
 		},
 	).Returning("id").ToSQL()
 	if err != nil {
@@ -82,13 +84,16 @@ func (t *TacoRepositoryImpl) insert(taco *taco.Taco) (*string, error) {
 
 func (t *TacoRepositoryImpl) FindMaxOrderByCreatorID(creatorID string) (*float64, error) {
 	sql, _, err := goqu.From("taco").Select(
-		 goqu.MAX("order_index").As("order"),
+		goqu.MAX("order_index").As("order"),
 	).Where(goqu.C("creator_id").Eq(creatorID)).ToSQL()
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
 	var order *float64
 	err = t.dataSource.RDS.QueryRow(sql).Scan(&order)
+	if order == nil {
+		order = util.PointerFloat64(float64(0))
+	}
 	return order, err
 }
 

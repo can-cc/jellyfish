@@ -6,7 +6,7 @@ import (
 	tacoCommand "github.com/fwchen/jellyfish/domain/taco/command"
 	"github.com/fwchen/jellyfish/domain/taco/repository"
 	"github.com/fwchen/jellyfish/domain/taco/service"
-	service2 "github.com/fwchen/jellyfish/domain/taco_box/service"
+	boxService "github.com/fwchen/jellyfish/domain/taco_box/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
 	"net/http"
@@ -16,7 +16,7 @@ type handler struct {
 	tacoService *service.TacoApplicationService
 }
 
-func NewHandler(tacoRepo repository.Repository, tacoBoxPermissionService *service2.TacoBoxPermissionService) *handler {
+func NewHandler(tacoRepo repository.Repository, tacoBoxPermissionService *boxService.TacoBoxPermissionService) *handler {
 	return &handler{tacoService: service.NewTacoApplicationService(tacoRepo, tacoBoxPermissionService)}
 }
 

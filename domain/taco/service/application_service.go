@@ -47,6 +47,11 @@ func (t *TacoApplicationService) GetTacos(userID string, status []taco.Status, b
 }
 
 func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, userID string) (*string, error) {
+	maxOrder, err := t.tacoRepo.FindMaxOrderByCreatorID(userID)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	command.Order = *maxOrder + float64(10)
 	if command.BoxId != nil {
 		if !taco_box.ContainCommonTacoBox(*command.BoxId) {
 			can, err := t.tacoBoxPermissionService.CheckUserCanOperation(*command.BoxId, userID)

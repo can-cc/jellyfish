@@ -13,6 +13,7 @@ func NewTacoFromCreateCommand(command *command.CreateTacoCommand, userID string)
 		Status:    taco.Doing,
 		BoxId:     command.BoxId,
 		Type:      taco.Task,
+		Order:     command.Order,
 		Deadline:  command.Deadline,
 	}
 	return t

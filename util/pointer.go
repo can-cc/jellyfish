@@ -9,3 +9,7 @@ func PointerStr(str string) *string {
 func PointerTime(t time.Time) *time.Time {
 	return &t
 }
+
+func PointerFloat64(value float64) *float64 {
+	return &value
+}
