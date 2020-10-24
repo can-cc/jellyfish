@@ -9,4 +9,5 @@ type CreateTacoCommand struct {
 	Detail   *string    `json:"detail"`
 	Deadline *time.Time `json:"deadline"`
 	BoxId    *string    `json:"boxId"`
+	Order    float64
 }

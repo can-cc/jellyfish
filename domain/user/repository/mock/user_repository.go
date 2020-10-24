@@ -33,18 +33,18 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
-// insert mocks base method
+// Save mocks base method
 func (m *MockRepository) Save(user *user.AppUser) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "insert", user)
+	ret := m.ctrl.Call(m, "Save", user)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// insert indicates an expected call of insert
+// Save indicates an expected call of Save
 func (mr *MockRepositoryMockRecorder) Save(user interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "insert", reflect.TypeOf((*MockRepository)(nil).Save), user)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockRepository)(nil).Save), user)
 }
 
 // Has mocks base method

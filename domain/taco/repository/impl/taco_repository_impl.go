@@ -80,6 +80,18 @@ func (t *TacoRepositoryImpl) insert(taco *taco.Taco) (*string, error) {
 	return &id, err
 }
 
+func (t *TacoRepositoryImpl) FindMaxOrderByCreatorID(creatorID string) (*float64, error) {
+	sql, _, err := goqu.From("taco").Select(
+		 goqu.MAX("order_index").As("order"),
+	).Where(goqu.C("creator_id").Eq(creatorID)).ToSQL()
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	var order *float64
+	err = t.dataSource.RDS.QueryRow(sql).Scan(&order)
+	return order, err
+}
+
 func (t *TacoRepositoryImpl) updateTaco(taco *taco.Taco) error {
 	sql, _, err := goqu.Update("taco").Set(
 		goqu.Record{

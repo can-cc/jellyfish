@@ -34,7 +34,7 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // List mocks base method
-func (m *MockRepository) ListTacos(userID string, filter taco.ListTacoFilter) ([]taco.Taco, error) {
+func (m *MockRepository) List(userID string, filter taco.ListTacoFilter) ([]taco.Taco, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", userID, filter)
 	ret0, _ := ret[0].([]taco.Taco)
@@ -43,13 +43,13 @@ func (m *MockRepository) ListTacos(userID string, filter taco.ListTacoFilter) ([
 }
 
 // List indicates an expected call of List
-func (mr *MockRepositoryMockRecorder) ListTacos(userID, filter interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) List(userID, filter interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockRepository)(nil).ListTacos), userID, filter)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockRepository)(nil).List), userID, filter)
 }
 
 // Save mocks base method
-func (m *MockRepository) SaveTaco(taco *taco.Taco) (*string, error) {
+func (m *MockRepository) Save(taco *taco.Taco) (*string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Save", taco)
 	ret0, _ := ret[0].(*string)
@@ -58,13 +58,13 @@ func (m *MockRepository) SaveTaco(taco *taco.Taco) (*string, error) {
 }
 
 // Save indicates an expected call of Save
-func (mr *MockRepositoryMockRecorder) SaveTaco(taco interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) Save(taco interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockRepository)(nil).SaveTaco), taco)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockRepository)(nil).Save), taco)
 }
 
 // FindById mocks base method
-func (m *MockRepository) FindTaco(tacoID string) (*taco.Taco, error) {
+func (m *MockRepository) FindById(tacoID string) (*taco.Taco, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindById", tacoID)
 	ret0, _ := ret[0].(*taco.Taco)
@@ -73,7 +73,36 @@ func (m *MockRepository) FindTaco(tacoID string) (*taco.Taco, error) {
 }
 
 // FindById indicates an expected call of FindById
-func (mr *MockRepositoryMockRecorder) FindTaco(tacoID interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) FindById(tacoID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockRepository)(nil).FindTaco), tacoID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockRepository)(nil).FindById), tacoID)
+}
+
+// FindMaxOrderByCreatorID mocks base method
+func (m *MockRepository) FindMaxOrderByCreatorID(userID string) (*float64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindMaxOrderByCreatorID", userID)
+	ret0, _ := ret[0].(*float64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindMaxOrderByCreatorID indicates an expected call of FindMaxOrderByCreatorID
+func (mr *MockRepositoryMockRecorder) FindMaxOrderByCreatorID(userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindMaxOrderByCreatorID", reflect.TypeOf((*MockRepository)(nil).FindMaxOrderByCreatorID), userID)
+}
+
+// Delete mocks base method
+func (m *MockRepository) Delete(tacoId string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", tacoId)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete
+func (mr *MockRepositoryMockRecorder) Delete(tacoId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), tacoId)
 }

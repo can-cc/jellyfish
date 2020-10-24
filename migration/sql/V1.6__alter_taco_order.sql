@@ -1,0 +1,1 @@
+ALTER TABLE taco ADD COLUMN order_index float;

@@ -44,6 +44,7 @@ type Taco struct {
 	Type      Type       `json:"type"`
 	Deadline  *time.Time `json:"deadline"`
 	BoxId     *string    `json:"boxId"`
+	Order     float64    `json:"order"`
 	CreatedAt time.Time  `json:"createdAt"`
 	UpdateAt  *time.Time `json:"updatedAt"`
 }
