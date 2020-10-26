@@ -10,6 +10,8 @@ make run
 
 then open [http://localhost:8180]
 
+
+
 ## 文档
 见 [开发文档](./docs/development-zh.md)
 
@@ -47,3 +49,7 @@ export ELASTIC_APM_ENVIRONMENT="production"
 ```
 See the [documentation](https://www.elastic.co/guide/en/apm/agent/go/current/configuration.html) for advanced configuration.
 
+
+## 开发规范
+### 命名
+id: id, Id

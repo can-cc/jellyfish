@@ -23,6 +23,7 @@ type TacoApplicationService struct {
 	tacoBoxPermissionService *service.TacoBoxPermissionService
 }
 
+// TODO: rename box => boxName
 func (t *TacoApplicationService) GetTacos(userID string, status []taco.Status, box string) ([]taco.Taco, error) {
 	var tacoTypeStr string
 	var boxId *string = nil
@@ -47,7 +48,14 @@ func (t *TacoApplicationService) GetTacos(userID string, status []taco.Status, b
 }
 
 func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, userID string) (*string, error) {
-	maxOrder, err := t.tacoRepo.FindMaxOrderByCreatorID(userID)
+	isInBox := command.BoxId != nil
+	var maxOrder *float64
+	if isInBox {
+		maxOrder, err := t.tacoRepo.MaxOrderByBoxId(userId)
+	} else {
+		maxOrder, err := t.tacoRepo.MaxOrderByCreatorId(userId)
+
+	}
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -85,4 +93,10 @@ func (t *TacoApplicationService) UpdateTaco(command command.UpdateTacoCommand) e
 
 func (t *TacoApplicationService) DeleteTaco(id string) error {
 	return t.tacoRepo.Delete(id)
+}
+
+func (t *TacoApplicationService) SortTaco(command command.SortTacoCommand, userId string) error {
+	// find lists
+
+	return nil
 }

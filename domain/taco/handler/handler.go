@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/fwchen/jellyfish/application/middleware"
 	"github.com/fwchen/jellyfish/domain/taco"
 	tacoCommand "github.com/fwchen/jellyfish/domain/taco/command"
@@ -9,7 +11,6 @@ import (
 	boxService "github.com/fwchen/jellyfish/domain/taco_box/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
-	"net/http"
 )
 
 type handler struct {
@@ -65,6 +66,20 @@ func (h *handler) UpdateTaco(c echo.Context) error {
 func (h *handler) DeleteTaco(c echo.Context) error {
 	tacoId := c.Param("tacoId")
 	err := h.tacoService.DeleteTaco(tacoId)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	return c.NoContent(http.StatusOK)
+}
+
+func (h *handler) SortTaco(c echo.Context) error {
+	userID := middleware.GetClaimsUserID(c)
+	var command tacoCommand.SortTacoCommand
+	err := c.Bind(&command)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	_, err = h.tacoService.SortTaco(&command, userID)
 	if err != nil {
 		return errors.Trace(err)
 	}

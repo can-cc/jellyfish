@@ -1,6 +1,8 @@
 package impl
 
 import (
+	"time"
+
 	"github.com/doug-martin/goqu/v9"
 	_ "github.com/doug-martin/goqu/v9/dialect/postgres"
 	"github.com/doug-martin/goqu/v9/exp"
@@ -9,7 +11,6 @@ import (
 	"github.com/fwchen/jellyfish/domain/taco/repository"
 	"github.com/fwchen/jellyfish/util"
 	"github.com/juju/errors"
-	"time"
 )
 
 func NewTacoRepository(dataSource *database.AppDataSource) repository.Repository {
@@ -64,14 +65,14 @@ func (t *TacoRepositoryImpl) FindById(tacoID string) (*taco.Taco, error) {
 func (t *TacoRepositoryImpl) insert(taco *taco.Taco) (*string, error) {
 	sql, _, err := goqu.Insert("taco").Rows(
 		goqu.Record{
-			"content":      taco.Content,
-			"creator_id":   taco.CreatorId,
-			"box_id":       taco.BoxId,
-			"detail":       taco.Detail,
-			"status":       taco.Status,
-			"type":         taco.Type,
+			"content":     taco.Content,
+			"creator_id":  taco.CreatorId,
+			"box_id":      taco.BoxId,
+			"detail":      taco.Detail,
+			"status":      taco.Status,
+			"type":        taco.Type,
 			"order_index": taco.Order,
-			"deadline":     taco.Deadline,
+			"deadline":    taco.Deadline,
 		},
 	).Returning("id").ToSQL()
 	if err != nil {
@@ -82,15 +83,29 @@ func (t *TacoRepositoryImpl) insert(taco *taco.Taco) (*string, error) {
 	return &id, err
 }
 
-func (t *TacoRepositoryImpl) FindMaxOrderByCreatorID(creatorID string) (*float64, error) {
+func (t *TacoRepositoryImpl) MaxOrderByCreatorId(creatorId string) (*float64, error) {
 	sql, _, err := goqu.From("taco").Select(
 		goqu.MAX("order_index").As("order"),
-	).Where(goqu.C("creator_id").Eq(creatorID)).ToSQL()
+	).Where(goqu.C("creator_id").Eq(creatorId)).ToSQL()
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
+	return t.findOrder(sql)
+}
+
+func (t *TacoRepositoryImpl) MaxOrderByBoxId(boxId string) (*float64, error) {
+	sql, _, err := goqu.From("taco").Select(
+		goqu.MAX("order_index").As("order"),
+	).Where(goqu.C("box_id").Eq(boxId)).ToSQL()
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	return t.findOrder(sql)
+}
+
+func (t *TacoRepositoryImpl) findOrder(sql string) (*float64, error) {
 	var order *float64
-	err = t.dataSource.RDS.QueryRow(sql).Scan(&order)
+	err := t.dataSource.RDS.QueryRow(sql).Scan(&order)
 	if order == nil {
 		order = util.PointerFloat64(float64(0))
 	}
