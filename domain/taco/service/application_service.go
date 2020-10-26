@@ -47,13 +47,14 @@ func (t *TacoApplicationService) GetTacos(userID string, status []taco.Status, b
 	})
 }
 
-func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, userID string) (*string, error) {
+func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, userId string) (*string, error) {
 	isInBox := command.BoxId != nil
 	var maxOrder *float64
+	var err error
 	if isInBox {
-		maxOrder, err := t.tacoRepo.MaxOrderByBoxId(userId)
+		maxOrder, err = t.tacoRepo.MaxOrderByBoxId(userId)
 	} else {
-		maxOrder, err := t.tacoRepo.MaxOrderByCreatorId(userId)
+		maxOrder, err = t.tacoRepo.MaxOrderByCreatorId(userId)
 
 	}
 	if err != nil {
@@ -62,18 +63,18 @@ func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, 
 	command.Order = *maxOrder + float64(10)
 	if command.BoxId != nil {
 		if !taco_box.ContainCommonTacoBox(*command.BoxId) {
-			can, err := t.tacoBoxPermissionService.CheckUserCanOperation(*command.BoxId, userID)
+			can, err := t.tacoBoxPermissionService.CheckUserCanOperation(*command.BoxId, userId)
 			if err != nil {
 				return nil, errors.Trace(err)
 			}
 			if !can {
-				return nil, errors.Forbiddenf("user [userId = %s] forbidden create taco in box [boxId = %s]", userID, *command.BoxId)
+				return nil, errors.Forbiddenf("user [userId = %s] forbidden create taco in box [boxId = %s]", userId, *command.BoxId)
 			}
 		} else {
 			command.BoxId = nil
 		}
 	}
-	ta := factory.NewTacoFromCreateCommand(command, userID)
+	ta := factory.NewTacoFromCreateCommand(command, userId)
 	return t.tacoRepo.Save(ta)
 }
 
@@ -95,7 +96,7 @@ func (t *TacoApplicationService) DeleteTaco(id string) error {
 	return t.tacoRepo.Delete(id)
 }
 
-func (t *TacoApplicationService) SortTaco(command command.SortTacoCommand, userId string) error {
+func (t *TacoApplicationService) SortTaco(command *command.SortTacoCommand, userId string) error {
 	// find lists
 
 	return nil

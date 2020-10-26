@@ -49,8 +49,8 @@ func (t *TacoRepositoryImpl) Save(taco *taco.Taco) (*string, error) {
 	return &taco.Id, err
 }
 
-func (t *TacoRepositoryImpl) FindById(tacoID string) (*taco.Taco, error) {
-	sql, _, err := getGoquTacoSelection().Where(goqu.C("id").Eq(tacoID)).ToSQL()
+func (t *TacoRepositoryImpl) FindById(tacoId string) (*taco.Taco, error) {
+	sql, _, err := getGoquTacoSelection().Where(goqu.C("id").Eq(tacoId)).ToSQL()
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
