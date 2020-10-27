@@ -52,3 +52,12 @@ type Taco struct {
 func (t *Taco) IsNew() bool {
 	return t.Id == ""
 }
+
+func IndexOfSlice(slice []Taco, item Taco) int {
+	for i, _ := range slice {
+		if slice[i].Id == item.Id {
+			return i
+		}
+	}
+	return -1
+}
