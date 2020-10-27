@@ -97,7 +97,23 @@ func (t *TacoApplicationService) DeleteTaco(id string) error {
 }
 
 func (t *TacoApplicationService) SortTaco(command *command.SortTacoCommand, userId string) error {
-	// find lists
+	// a little function to help us with reordering the result
+	// const reorder = (list, startIndex, endIndex) => {
+	// const result = Array.from(list);
+	// const [removed] = result.splice(startIndex, 1);
+	// result.splice(endIndex, 0, removed);
 
+	// return result;
+	tacoType := taco.Type("Task")
+	status := []taco.Status{taco.Status("Doing")}
+	tacos, err := t.tacoRepo.List(userId, taco.ListTacoFilter{
+		Statues: status,
+		Type:    &tacoType,
+		BoxId:   command.BoxId,
+	})
+	moveTacoIndex := tacos.findIndex()
+	if err != nil {
+		return errors.Trace(err)
+	}
 	return nil
 }
