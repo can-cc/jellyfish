@@ -53,11 +53,17 @@ func (t *Taco) IsNew() bool {
 	return t.Id == ""
 }
 
-func IndexOfSlice(slice []Taco, item Taco) int {
-	for i, _ := range slice {
-		if slice[i].Id == item.Id {
+func IndexOfSlice(slice []Taco, itemId string) int {
+	for i := range slice {
+		if slice[i].Id == itemId {
 			return i
 		}
 	}
 	return -1
+}
+
+func SliceRemove(tacos []Taco, index int) {
+	tacos[index] = tacos[len(tacos)-1]
+	tacos[len(tacos)-1] = Taco{}
+	tacos = tacos[:len(tacos)-1]
 }

@@ -102,7 +102,6 @@ func (t *TacoApplicationService) SortTaco(command *command.SortTacoCommand, user
 	// const result = Array.from(list);
 	// const [removed] = result.splice(startIndex, 1);
 	// result.splice(endIndex, 0, removed);
-
 	// return result;
 	tacoType := taco.Type("Task")
 	status := []taco.Status{taco.Status("Doing")}
@@ -111,7 +110,15 @@ func (t *TacoApplicationService) SortTaco(command *command.SortTacoCommand, user
 		Type:    &tacoType,
 		BoxId:   command.BoxId,
 	})
-	moveTacoIndex := tacos.findIndex()
+	moveTacoIndex := taco.IndexOfSlice(tacos, command.TacoId)
+	targetTacoIndex := taco.IndexOfSlice(tacos, command.TargetTacoId)
+	moveTaco := tacos[moveTacoIndex]
+	taco.SliceRemove(tacos, moveTacoIndex)
+	tacos = append(tacos[:targetTacoIndex+1], tacos[targetTacoIndex:]...)
+	tacos[targetTacoIndex] = moveTaco
+	for i := 0; i < len(tacos); i++ {
+		tacos[i].Order = 1 * 10
+	}
 	if err != nil {
 		return errors.Trace(err)
 	}

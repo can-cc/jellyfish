@@ -49,6 +49,17 @@ func (t *TacoRepositoryImpl) Save(taco *taco.Taco) (*string, error) {
 	return &taco.Id, err
 }
 
+// TODO batch save
+func (t *TacoRepositoryImpl) SaveList(tacos []taco.Taco) error {
+	for i := 0; i < len(tacos); i++ {
+		_, err := t.Save(&tacos[i])
+		if err != nil {
+			return errors.Trace(err)
+		}
+	}
+	return nil
+}
+
 func (t *TacoRepositoryImpl) FindById(tacoId string) (*taco.Taco, error) {
 	sql, _, err := getGoquTacoSelection().Where(goqu.C("id").Eq(tacoId)).ToSQL()
 	if err != nil {
