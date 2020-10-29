@@ -33,7 +33,7 @@ func (t *TacoRepositoryImpl) List(userID string, filter taco.ListTacoFilter) ([]
 	tacos := make([]taco.Taco, 0)
 	for rows.Next() {
 		var t taco.Taco
-		if err := rows.Scan(&t.Id, &t.CreatorId, &t.Content, &t.Detail, &t.Type, &t.Deadline, &t.Status, &t.BoxId, &t.CreatedAt, &t.UpdateAt); err != nil {
+		if err := rows.Scan(&t.Id, &t.CreatorId, &t.Content, &t.Detail, &t.Type, &t.Deadline, &t.Status, &t.BoxId, &t.Order, &t.CreatedAt, &t.UpdateAt); err != nil {
 			return nil, errors.Trace(err)
 		}
 		tacos = append(tacos, t)
@@ -66,7 +66,7 @@ func (t *TacoRepositoryImpl) FindById(tacoId string) (*taco.Taco, error) {
 		return nil, errors.Trace(err)
 	}
 	var ta taco.Taco
-	err = t.dataSource.RDS.QueryRow(sql).Scan(&ta.Id, &ta.CreatorId, &ta.Content, &ta.Detail, &ta.Type, &ta.Deadline, &ta.Status, &ta.BoxId, &ta.CreatedAt, &ta.UpdateAt)
+	err = t.dataSource.RDS.QueryRow(sql).Scan(&ta.Id, &ta.CreatorId, &ta.Content, &ta.Detail, &ta.Type, &ta.Deadline, &ta.Status, &ta.BoxId, &ta.Order, &ta.CreatedAt, &ta.UpdateAt)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -185,6 +185,7 @@ func getGoquTacoSelection() *goqu.SelectDataset {
 		"deadline",
 		database.TRIM("status"),
 		database.TRIM("box_id"),
+		"order_index",
 		"created_at",
 		"updated_at",
 	)
