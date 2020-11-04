@@ -16,6 +16,8 @@ docker run -p 9000:9000 -d --name=minio -e MINIO_ACCESS_KEY=minio -e MINIO_SECRE
 使用 golang-ci [golangci-lint](https://github.com/golangci/golangci-lint#editor-integration) 来检查
 
 ### 创建数据库
+PS：不建议在 Windows 下使用 flyway，坑太多，建议在 wsl 中操作
+
 docker:
 ``` bash
 docker run --rm -v ./migration/sql:/flyway/sql -v ./migration/conf:/flyway/conf boxfuse/flyway migrate 
