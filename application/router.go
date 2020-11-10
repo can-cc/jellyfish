@@ -60,6 +60,7 @@ func (a *Application) Route(e *echo.Echo) {
 		tacoGroup := authorizeGroup.Group("taco")
 		tacoGroup.GET("s", handler.GetTacos)
 		tacoGroup.POST("", handler.CreateTaco)
+		tacoGroup.POST("/resort", handler.SortTaco)
 		tacoGroup.PUT("/:tacoId", handler.UpdateTaco)
 		tacoGroup.DELETE("/:tacoId", handler.DeleteTaco)
 	}

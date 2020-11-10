@@ -27,6 +27,7 @@ type TacoApplicationService struct {
 func (t *TacoApplicationService) GetTacos(userID string, status []taco.Status, box string) ([]taco.Taco, error) {
 	var tacoTypeStr string
 	var boxId *string = nil
+	// TODO 放在前端做
 	if taco_box.ContainTypeTacoBox(box) {
 		tacoTypeStr = box
 	} else if box == taco_box.TacoBoxAll {
@@ -96,6 +97,7 @@ func (t *TacoApplicationService) DeleteTaco(id string) error {
 	return t.tacoRepo.Delete(id)
 }
 
+// TODO extra function to test
 func (t *TacoApplicationService) SortTaco(command *command.SortTacoCommand, userId string) error {
 	// a little function to help us with reordering the result
 	// const reorder = (list, startIndex, endIndex) => {
@@ -108,17 +110,25 @@ func (t *TacoApplicationService) SortTaco(command *command.SortTacoCommand, user
 	tacos, err := t.tacoRepo.List(userId, taco.ListTacoFilter{
 		Statues: status,
 		Type:    &tacoType,
-		BoxId:   command.BoxId,
+		BoxId:   nil, // TODO
 	})
+	if err != nil {
+		return errors.Trace(err)
+	}
+	if len(tacos) == 0 {
+		return errors.BadRequestf("todos is empty")
+	}
 	moveTacoIndex := taco.IndexOfSlice(tacos, command.TacoId)
 	targetTacoIndex := taco.IndexOfSlice(tacos, command.TargetTacoId)
 	moveTaco := tacos[moveTacoIndex]
 	taco.SliceRemove(tacos, moveTacoIndex)
 	tacos = append(tacos[:targetTacoIndex+1], tacos[targetTacoIndex:]...)
 	tacos[targetTacoIndex] = moveTaco
+	tacos = tacos[0:len(tacos)-2]
 	for i := 0; i < len(tacos); i++ {
-		tacos[i].Order = 1 * 10
+		tacos[i].Order = float64(i * 10)
 	}
+	err = t.tacoRepo.SaveList(tacos)
 	if err != nil {
 		return errors.Trace(err)
 	}

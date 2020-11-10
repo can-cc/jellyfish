@@ -11,6 +11,7 @@ import (
 	"go.elastic.co/apm/module/apmecho"
 	_ "go.elastic.co/apm/module/apmsql/sqlite3"
 	"net/http"
+	"runtime"
 )
 
 func NewApplication(config *configs.AppConfig, datasource *database.AppDataSource, imageStorageService *service.ImageStorageService) Application {
@@ -39,8 +40,9 @@ func (a *Application) StartServe() {
 	a.Route(e)
 
 	e.HTTPErrorHandler = func(err error, context echo.Context) {
-		fmt.Println()
-		fmt.Println(errors.ErrorStack(err))
+		stack := make([]byte, 4 << 10) // 4kb
+		length := runtime.Stack(stack, true)
+		fmt.Printf("[PANIC RECOVER] %v %s\n", err, stack[:length])
 		fmt.Println()
 		if errors.IsBadRequest(err) {
 			_ = context.NoContent(http.StatusBadRequest)
