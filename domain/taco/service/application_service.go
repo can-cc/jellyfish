@@ -98,7 +98,7 @@ func (t *TacoApplicationService) DeleteTaco(id string) error {
 }
 
 // TODO extra function to test
-func (t *TacoApplicationService) SortTaco(command *command.SortTacoCommand, userId string) error {
+func (t *TacoApplicationService) Sort(command *command.SortTacoCommand, userId string) error {
 	// a little function to help us with reordering the result
 	// const reorder = (list, startIndex, endIndex) => {
 	// const result = Array.from(list);
@@ -120,17 +120,30 @@ func (t *TacoApplicationService) SortTaco(command *command.SortTacoCommand, user
 	}
 	moveTacoIndex := taco.IndexOfSlice(tacos, command.TacoId)
 	targetTacoIndex := taco.IndexOfSlice(tacos, command.TargetTacoId)
-	moveTaco := tacos[moveTacoIndex]
-	taco.SliceRemove(tacos, moveTacoIndex)
-	tacos = append(tacos[:targetTacoIndex+1], tacos[targetTacoIndex:]...)
-	tacos[targetTacoIndex] = moveTaco
-	tacos = tacos[0:len(tacos)-2]
-	for i := 0; i < len(tacos); i++ {
-		tacos[i].Order = float64(i * 10)
-	}
+
+	SortTacos(tacos, moveTacoIndex, targetTacoIndex)
+	//moveTaco := tacos[moveTacoIndex]
+	//taco.SliceRemove(tacos, moveTacoIndex)
+	//tacos = append(tacos[:targetTacoIndex+1], tacos[targetTacoIndex:]...)
+	//tacos[targetTacoIndex] = moveTaco
+	//tacos = tacos[0:len(tacos)-2]
+	//for i := 0; i < len(tacos); i++ {
+	//	tacos[i].Order = float64(i * 10)
+	//}
 	err = t.tacoRepo.SaveList(tacos)
 	if err != nil {
 		return errors.Trace(err)
 	}
 	return nil
+}
+
+func SortTacos(tacos []taco.Taco, moveTacoIndex int, targetTacoIndex int) {
+	moveTaco := tacos[moveTacoIndex]
+	nTacos := taco.SliceRemove(tacos, moveTacoIndex)
+	nTacos = append(nTacos[:targetTacoIndex], nTacos[targetTacoIndex:]...)
+	nTacos[targetTacoIndex] = moveTaco
+	nTacos = tacos[0 : len(tacos)-2]
+	for i := 0; i < len(tacos); i++ {
+		nTacos[i].Order = float64(i * 10)
+	}
 }

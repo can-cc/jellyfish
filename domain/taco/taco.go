@@ -62,8 +62,9 @@ func IndexOfSlice(slice []Taco, itemId string) int {
 	return -1
 }
 
-func SliceRemove(tacos []Taco, index int) {
+func SliceRemove(tacos []Taco, index int) []Taco {
 	tacos[index] = tacos[len(tacos)-1]
 	tacos[len(tacos)-1] = Taco{}
 	tacos = tacos[:len(tacos)-1]
+	return tacos
 }

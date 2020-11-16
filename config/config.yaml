@@ -3,7 +3,7 @@ datasource:
     database_url: postgres://postgres:mysecretpassword@localhost:5432/jellyfish?sslmode=disable
 
 application:
-  addr: 0.0.0.0:8180
+  addr: 127.0.0.1:8180
   jwt_secret: jellyfish-app-tXQhvSMWMS11qZ9euEhE6lf2ferf0FR6RYGd8iMXiTxxXtJ1XDVdTXPaLtV12ZGp  # CHANGE_ME
   jwt_header_key: "App-Authorization"
 
@@ -14,7 +14,7 @@ logger:
     # - "/var/log/jellyfish_log"
 
 storage:
-  endpoint: "localhost:9000"
+  endpoint: "localhost:9100"
   access_key_id: "minio"
   secret_access_key_id: "miniostorage"
   use_ssl: false
