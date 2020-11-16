@@ -18,7 +18,7 @@ func TestSortTacos(t *testing.T) {
 			Id: "3",
 		},
 	}
-	SortTacos(tacos, 0, 1)
+	tacos = SortTacos(tacos, 0, 1)
 	assert.Equal(t, tacos[0].Id, "2")
 	assert.Equal(t, tacos[1].Id, "1")
 	assert.Equal(t, tacos[2].Id, "3")

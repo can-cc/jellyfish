@@ -24,4 +24,6 @@ func TestSliceRemove(t *testing.T) {
 	}
 	tacos = SliceRemove(tacos, 1)
 	assert.Equal(t, len(tacos), 2)
+	assert.Equal(t, tacos[0].Id, "1")
+	assert.Equal(t, tacos[1].Id, "3")
 }
