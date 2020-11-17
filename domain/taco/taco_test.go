@@ -59,6 +59,16 @@ func TestInsertInTacos(t *testing.T) {
 	}
 	tacos2 = InsertInTacos(tacos2, Taco{Id: "2"}, 0)
 	assert.Equal(t, len(tacos2), 2)
-	assert.Equal(t, tacos2[0].Id, "1")
-	assert.Equal(t, tacos2[1].Id, "2")
+	assert.Equal(t, tacos2[0].Id, "2")
+	assert.Equal(t, tacos2[1].Id, "1")
+
+	tacos3 := []Taco{
+		Taco{
+			Id: "1",
+		},
+	}
+	tacos3 = InsertInTacos(tacos3, Taco{Id: "2"}, 1)
+	assert.Equal(t, len(tacos3), 2)
+	assert.Equal(t, tacos3[0].Id, "1")
+	assert.Equal(t, tacos3[1].Id, "2")
 }

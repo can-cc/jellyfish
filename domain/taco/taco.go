@@ -64,15 +64,14 @@ func IndexOfSlice(slice []Taco, itemId string) int {
 }
 
 func SliceRemove(tacos []Taco, index int) []Taco {
-	tacos[index] = tacos[len(tacos)-1]
-	tacos[len(tacos)-1] = Taco{}
-	tacos = tacos[:len(tacos)-1]
-	return tacos
+	return append(tacos[:index], tacos[index+1:]...)
 }
 
 func InsertInTacos(tacos []Taco, taco Taco, index int) []Taco {
-	nTacos := append(tacos, Taco{})
-	copy(nTacos[index:], nTacos[index-1:])
-	nTacos[index] = taco
-	return nTacos
+	if len(tacos) == index { // nil or empty slice or after last element
+		return append(tacos, taco)
+	}
+	tacos = append(tacos[:index+1], tacos[index:]...)
+	tacos[index] = taco
+	return tacos
 }
