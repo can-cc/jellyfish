@@ -1,8 +1,9 @@
 package taco
 
 import (
-	"github.com/magiconair/properties/assert"
 	"testing"
+
+	"github.com/magiconair/properties/assert"
 )
 
 func TestParseStatues(t *testing.T) {
@@ -18,12 +19,46 @@ func TestSliceRemove(t *testing.T) {
 		Taco{
 			Id: "2",
 		},
+	}
+	tacos = SliceRemove(tacos, 0)
+	assert.Equal(t, len(tacos), 1)
+	assert.Equal(t, tacos[0].Id, "2")
+
+	tacos2 := []Taco{
+		Taco{
+			Id: "1",
+		},
+		Taco{
+			Id: "2",
+		},
+	}
+	tacos2 = SliceRemove(tacos2, 1)
+	assert.Equal(t, len(tacos2), 1)
+	assert.Equal(t, tacos2[0].Id, "1")
+}
+
+func TestInsertInTacos(t *testing.T) {
+	tacos := []Taco{
+		Taco{
+			Id: "1",
+		},
 		Taco{
 			Id: "3",
 		},
 	}
-	tacos = SliceRemove(tacos, 1)
-	assert.Equal(t, len(tacos), 2)
+	tacos = InsertInTacos(tacos, Taco{Id: "2"}, 1)
+	assert.Equal(t, len(tacos), 3)
 	assert.Equal(t, tacos[0].Id, "1")
-	assert.Equal(t, tacos[1].Id, "3")
+	assert.Equal(t, tacos[1].Id, "2")
+	assert.Equal(t, tacos[2].Id, "3")
+
+	tacos2 := []Taco{
+		Taco{
+			Id: "1",
+		},
+	}
+	tacos2 = InsertInTacos(tacos2, Taco{Id: "2"}, 0)
+	assert.Equal(t, len(tacos2), 2)
+	assert.Equal(t, tacos2[0].Id, "1")
+	assert.Equal(t, tacos2[1].Id, "2")
 }

@@ -1,9 +1,10 @@
 package service
 
 import (
+	"testing"
+
 	"github.com/fwchen/jellyfish/domain/taco"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestSortTacos(t *testing.T) {

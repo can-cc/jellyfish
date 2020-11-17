@@ -140,11 +140,7 @@ func (t *TacoApplicationService) Sort(command *command.SortTacoCommand, userId s
 func SortTacos(tacos []taco.Taco, moveTacoIndex int, targetTacoIndex int) []taco.Taco {
 	moveTaco := tacos[moveTacoIndex]
 	nTacos := taco.SliceRemove(tacos, moveTacoIndex)
-	nTacos = append(nTacos, taco.Taco{})
-	copy(nTacos[targetTacoIndex:], nTacos[targetTacoIndex-1:])
-	//nTacos = append(nTacos[:targetTacoIndex], nTacos[targetTacoIndex:]...)
-	nTacos[targetTacoIndex] = moveTaco
-	//nTacos = nTacos[0 : len(tacos)-2]
+	nTacos = taco.InsertInTacos(tacos, moveTaco, targetTacoIndex)
 	for i := 0; i < len(nTacos); i++ {
 		nTacos[i].Order = float64(i * 10)
 	}
