@@ -104,6 +104,7 @@ func (t *TacoApplicationService) Reorder(command *command.SortTacoCommand, userI
 		Type:    &tacoType,
 		BoxId:   nil, // TODO
 	})
+	tacos = taco.SortTacosByOrder(tacos)
 	if err != nil {
 		return errors.Trace(err)
 	}
