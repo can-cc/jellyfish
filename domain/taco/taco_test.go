@@ -11,12 +11,34 @@ func TestParseStatues(t *testing.T) {
 	assert.Equal(t, ParseStatues("Doing"), []Status{"Doing"})
 }
 
+func TestSortTacosByOrder(t *testing.T) {
+	tacos := []Taco{
+		{
+			Id:    "1",
+			Order: 20,
+		},
+		{
+			Id:    "2",
+			Order: 10,
+		},
+		{
+			Id:    "3",
+			Order: 30,
+		},
+	}
+	SortTacosByOrder(tacos)
+	assert.Equal(t, tacos[0].Id, "2")
+	assert.Equal(t, tacos[1].Id, "1")
+	assert.Equal(t, tacos[2].Id, "3")
+
+}
+
 func TestSliceRemove(t *testing.T) {
 	tacos := []Taco{
-		Taco{
+		{
 			Id: "1",
 		},
-		Taco{
+		{
 			Id: "2",
 		},
 	}
@@ -25,10 +47,10 @@ func TestSliceRemove(t *testing.T) {
 	assert.Equal(t, tacos[0].Id, "2")
 
 	tacos2 := []Taco{
-		Taco{
+		{
 			Id: "1",
 		},
-		Taco{
+		{
 			Id: "2",
 		},
 	}
@@ -39,10 +61,10 @@ func TestSliceRemove(t *testing.T) {
 
 func TestInsertInTacos(t *testing.T) {
 	tacos := []Taco{
-		Taco{
+		{
 			Id: "1",
 		},
-		Taco{
+		{
 			Id: "3",
 		},
 	}

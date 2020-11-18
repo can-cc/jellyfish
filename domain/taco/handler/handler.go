@@ -79,7 +79,7 @@ func (h *handler) SortTaco(c echo.Context) error {
 	if err != nil {
 		return errors.Trace(err)
 	}
-	err = h.tacoService.Sort(&command, userID)
+	err = h.tacoService.Reorder(&command, userID)
 	if err != nil {
 		return errors.Trace(err)
 	}

@@ -1,6 +1,7 @@
 package taco
 
 import (
+	"sort"
 	"strings"
 	"time"
 )
@@ -53,14 +54,24 @@ func (t *Taco) IsNew() bool {
 	return t.Id == ""
 }
 
-// TODO rename to IndexOfTacos
-func IndexOfSlice(slice []Taco, itemId string) int {
+func IndexOfTacos(slice []Taco, itemId string) int {
 	for i := range slice {
 		if slice[i].Id == itemId {
 			return i
 		}
 	}
 	return -1
+}
+
+type ByOrder []Taco
+
+func (a ByOrder) Len() int           { return len(a) }
+func (a ByOrder) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByOrder) Less(i, j int) bool { return a[i].Order < a[j].Order }
+
+func SortTacosByOrder(tacos []Taco) []Taco {
+	sort.Sort(ByOrder(tacos))
+	return tacos
 }
 
 func SliceRemove(tacos []Taco, index int) []Taco {
