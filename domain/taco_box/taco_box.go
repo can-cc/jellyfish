@@ -15,3 +15,11 @@ type TacoBox struct {
 func (t *TacoBox) IsNew() bool {
 	return t.ID == ""
 }
+
+func PointerBoxIdIfEmptyStr(str string) *TacoBoxID {
+	if str == "" {
+		return nil
+	}
+	id := TacoBoxID(str)
+	return &id
+}

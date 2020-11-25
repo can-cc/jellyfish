@@ -5,9 +5,7 @@ import (
 	"github.com/fwchen/jellyfish/domain/taco/command"
 	"github.com/fwchen/jellyfish/domain/taco/factory"
 	"github.com/fwchen/jellyfish/domain/taco/repository"
-	"github.com/fwchen/jellyfish/domain/taco_box"
 	"github.com/fwchen/jellyfish/domain/taco_box/service"
-	"github.com/fwchen/jellyfish/util"
 	"github.com/juju/errors"
 )
 
@@ -23,28 +21,8 @@ type TacoApplicationService struct {
 	tacoBoxPermissionService *service.TacoBoxPermissionService
 }
 
-func (t *TacoApplicationService) GetTacos(userID string, status []taco.Status, boxName string) ([]taco.Taco, error) {
-	var tacoTypeStr string
-	var boxId *string = nil
-	// TODO 放在前端做
-	if taco_box.ContainTypeTacoBox(boxName) {
-		tacoTypeStr = boxName
-	} else if boxName == taco_box.TacoBoxAll {
-		tacoTypeStr = string(taco.Task)
-	} else {
-		tacoTypeStr = string(taco.Task)
-		if boxName == "" {
-			boxId = nil
-		} else {
-			boxId = util.PointerStr(boxName)
-		}
-	}
-	tacoType := taco.Type(tacoTypeStr)
-	return t.tacoRepo.List(userID, taco.ListTacoFilter{
-		Statues: status,
-		Type:    &tacoType,
-		BoxId:   boxId,
-	})
+func (t *TacoApplicationService) GetTacos(userId string, filter taco.TacoFilter) ([]taco.Taco, error) {
+	return t.tacoRepo.List(userId, filter)
 }
 
 func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, userId string) (*string, error) {
@@ -62,16 +40,12 @@ func (t *TacoApplicationService) CreateTaco(command *command.CreateTacoCommand, 
 	}
 	command.Order = *maxOrder + float64(10)
 	if command.BoxId != nil {
-		if !taco_box.ContainCommonTacoBox(*command.BoxId) {
-			can, err := t.tacoBoxPermissionService.CheckUserCanOperation(*command.BoxId, userId)
-			if err != nil {
-				return nil, errors.Trace(err)
-			}
-			if !can {
-				return nil, errors.Forbiddenf("user [userId = %s] forbidden create taco in box [boxId = %s]", userId, *command.BoxId)
-			}
-		} else {
-			command.BoxId = nil
+		can, err := t.tacoBoxPermissionService.CheckUserCanOperation(*command.BoxId, userId)
+		if err != nil {
+			return nil, errors.Trace(err)
+		}
+		if !can {
+			return nil, errors.Forbiddenf("user [userId = %s] forbidden create taco in box [boxId = %s]", userId, *command.BoxId)
 		}
 	}
 	ta := factory.NewTacoFromCreateCommand(command, userId)
@@ -99,10 +73,10 @@ func (t *TacoApplicationService) DeleteTaco(id string) error {
 func (t *TacoApplicationService) Reorder(command *command.SortTacoCommand, userId string) error {
 	tacoType := taco.Type("Task")
 	status := []taco.Status{taco.Status("Doing")}
-	tacos, err := t.tacoRepo.List(userId, taco.ListTacoFilter{
+	tacos, err := t.tacoRepo.List(userId, taco.TacoFilter{
 		Statues: status,
 		Type:    &tacoType,
-		BoxId:   nil, // TODO
+		BoxId:   command.BoxId,
 	})
 	tacos = taco.SortTacosByOrder(tacos)
 	if err != nil {

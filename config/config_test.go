@@ -11,7 +11,7 @@ func TestLoadConfig(t *testing.T) {
 	cfg, err := LoadConfig("config.yaml")
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "debug", cfg.Logger.Level)
-	assert.Equal(t, "0.0.0.0:8180", cfg.Application.Addr)
+	assert.Equal(t, "127.0.0.1:8180", cfg.Application.Addr)
 	assert.Equal(t, []string{"stdout"}, cfg.Logger.OutputPaths)
 }
 

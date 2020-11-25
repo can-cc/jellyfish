@@ -21,7 +21,7 @@ type TacoRepositoryImpl struct {
 	dataSource *database.AppDataSource
 }
 
-func (t *TacoRepositoryImpl) List(userID string, filter taco.ListTacoFilter) ([]taco.Taco, error) {
+func (t *TacoRepositoryImpl) List(userID string, filter taco.TacoFilter) ([]taco.Taco, error) {
 	sql, _, err := buildListTacosSQL(userID, filter)
 	if err != nil {
 		return nil, errors.Trace(err)
@@ -82,6 +82,7 @@ func (t *TacoRepositoryImpl) insert(taco *taco.Taco) (*string, error) {
 			"detail":      taco.Detail,
 			"status":      taco.Status,
 			"type":        taco.Type,
+			"important":   taco.IsImportant,
 			"order_index": taco.Order,
 			"deadline":    taco.Deadline,
 		},
@@ -126,14 +127,15 @@ func (t *TacoRepositoryImpl) findOrder(sql string) (*float64, error) {
 func (t *TacoRepositoryImpl) updateTaco(taco *taco.Taco) error {
 	sql, _, err := goqu.Update("taco").Set(
 		goqu.Record{
-			"content":    taco.Content,
-			"detail":     taco.Detail,
-			"status":     taco.Status,
-			"box_id":     taco.BoxId,
-			"type":       taco.Type,
-			"order_index":      taco.Order,
-			"deadline":   taco.Deadline,
-			"updated_at": time.Now(),
+			"content":     taco.Content,
+			"detail":      taco.Detail,
+			"status":      taco.Status,
+			"box_id":      taco.BoxId,
+			"type":        taco.Type,
+			"important":   taco.IsImportant,
+			"order_index": taco.Order,
+			"deadline":    taco.Deadline,
+			"updated_at":  time.Now(),
 		},
 	).Where(goqu.C("id").Eq(taco.Id)).ToSQL()
 	if err != nil {
@@ -158,7 +160,7 @@ func (t *TacoRepositoryImpl) Delete(tacoId string) error {
 	return nil
 }
 
-func buildListTacosSQL(userID string, filter taco.ListTacoFilter) (sql string, params []interface{}, err error) {
+func buildListTacosSQL(userID string, filter taco.TacoFilter) (sql string, params []interface{}, err error) {
 	statuesFilters := []exp.Expression{goqu.C("creator_id").Eq(userID)}
 	statuesFilters = append(statuesFilters, goqu.C("deleted").IsNull())
 	if filter.Statues != nil {
@@ -169,6 +171,12 @@ func buildListTacosSQL(userID string, filter taco.ListTacoFilter) (sql string, p
 	}
 	if filter.Type != nil {
 		statuesFilters = append(statuesFilters, goqu.C("type").Eq(filter.Type))
+	}
+	if filter.Important == true {
+		statuesFilters = append(statuesFilters, goqu.C("important").Eq(1))
+	}
+	if filter.Scheduled == true {
+		statuesFilters = append(statuesFilters, goqu.C("deadline").IsNotNull())
 	}
 
 	return getGoquTacoSelection().Where(

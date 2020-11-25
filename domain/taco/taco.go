@@ -4,6 +4,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/fwchen/jellyfish/domain/taco_box"
 )
 
 type Status string
@@ -12,6 +14,14 @@ const (
 	Doing Status = "Doing"
 	Done  Status = "Done"
 )
+
+type TacoFilter struct {
+	Important bool
+	Scheduled bool
+	BoxId     *taco_box.TacoBoxID // TODO rename boxId
+	Statues   []Status
+	Type      *Type
+}
 
 func ParseStatues(str string) (statues []Status) {
 	if str == "" {
@@ -26,28 +36,23 @@ func ParseStatues(str string) (statues []Status) {
 
 type Type string
 
-type ListTacoFilter struct {
-	Statues []Status
-	BoxId   *string
-	Type    *Type
-}
-
 const (
 	Task Type = "Task"
 )
 
 type Taco struct {
-	Id        string     `json:"id"`
-	CreatorId string     `json:"creatorId"`
-	Content   string     `json:"content"`
-	Detail    *string    `json:"detail"`
-	Status    Status     `json:"status"`
-	Type      Type       `json:"type"`
-	Deadline  *time.Time `json:"deadline"`
-	BoxId     *string    `json:"boxId"`
-	Order     float64    `json:"order"`
-	CreatedAt time.Time  `json:"createdAt"`
-	UpdateAt  *time.Time `json:"updatedAt"`
+	Id          string     `json:"id"`
+	CreatorId   string     `json:"creatorId"`
+	Content     string     `json:"content"`
+	Detail      *string    `json:"detail"`
+	Status      Status     `json:"status"`
+	Type        Type       `json:"type"`
+	Deadline    *time.Time `json:"deadline"`
+	BoxId       *string    `json:"boxId"`
+	Order       float64    `json:"order"`
+	IsImportant bool       `json:"isImportant"`
+	CreatedAt   time.Time  `json:"createdAt"`
+	UpdateAt    *time.Time `json:"updatedAt"`
 }
 
 func (t *Taco) IsNew() bool {

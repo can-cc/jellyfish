@@ -2,6 +2,8 @@ package command
 
 import (
 	"time"
+
+	"github.com/fwchen/jellyfish/domain/taco_box"
 )
 
 type CreateTacoCommand struct {
@@ -13,8 +15,8 @@ type CreateTacoCommand struct {
 }
 
 type SortTacoCommand struct {
-	TacoId       string  `json:"tacoId"`
-	TargetTacoId string  `json:"targetTacoId"`
-	IsBefore     bool    `json:"isBefore"`
-	BoxId        *string `json:"boxId"`
+	TacoId       string              `json:"tacoId"`
+	TargetTacoId string              `json:"targetTacoId"`
+	IsBefore     bool                `json:"isBefore"`
+	BoxId        *taco_box.TacoBoxID `json:"boxId"`
 }

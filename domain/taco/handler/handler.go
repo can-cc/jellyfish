@@ -8,6 +8,7 @@ import (
 	tacoCommand "github.com/fwchen/jellyfish/domain/taco/command"
 	"github.com/fwchen/jellyfish/domain/taco/repository"
 	"github.com/fwchen/jellyfish/domain/taco/service"
+	"github.com/fwchen/jellyfish/domain/taco_box"
 	boxService "github.com/fwchen/jellyfish/domain/taco_box/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
@@ -24,8 +25,28 @@ func NewHandler(tacoRepo repository.Repository, tacoBoxPermissionService *boxSer
 func (h *handler) GetTacos(c echo.Context) error {
 	userID := middleware.GetClaimsUserID(c)
 	statues := taco.ParseStatues(c.QueryParam("status"))
-	box := c.QueryParam("box")
-	tacos, err := h.tacoService.GetTacos(userID, statues, box)
+	qtype := c.QueryParam("type")
+	boxId := c.QueryParam("boxId")
+	isImportant := c.QueryParam("isImportant") != ""
+	isScheduled := c.QueryParam("isScheduled") != ""
+
+	var tacoType *taco.Type
+	if qtype == "" {
+		tacoType = nil
+	} else {
+		t := taco.Type(qtype)
+		tacoType = &t
+	}
+
+	filter := taco.TacoFilter{
+		BoxId:     taco_box.PointerBoxIdIfEmptyStr(boxId),
+		Type:      tacoType,
+		Statues:   statues,
+		Important: isImportant,
+		Scheduled: isScheduled,
+	}
+
+	tacos, err := h.tacoService.GetTacos(userID, filter)
 	if err != nil {
 		return errors.Trace(err)
 	}
