@@ -27,8 +27,8 @@ func (h *handler) GetTacos(c echo.Context) error {
 	statues := taco.ParseStatues(c.QueryParam("status"))
 	qtype := c.QueryParam("type")
 	boxId := c.QueryParam("boxId")
-	isImportant := c.QueryParam("isImportant") != ""
-	isScheduled := c.QueryParam("isScheduled") != ""
+	isImportant := c.QueryParam("isImportant") != "" && c.QueryParam("isImportant") != "false"
+	isScheduled := c.QueryParam("isScheduled") != "" && c.QueryParam("isScheduled") != "false"
 
 	var tacoType *taco.Type
 	if qtype == "" {
