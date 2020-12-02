@@ -132,7 +132,7 @@ func (t *TacoRepositoryImpl) updateTaco(taco *taco.Taco) error {
 			"status":      taco.Status,
 			"box_id":      taco.BoxId,
 			"type":        taco.Type,
-			"important":   taco.IsImportant,
+			"important":   util.BoolToInt(taco.IsImportant),
 			"order_index": taco.Order,
 			"deadline":    taco.Deadline,
 			"updated_at":  time.Now(),

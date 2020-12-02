@@ -78,13 +78,14 @@ func (t *TacoApplicationService) Reorder(command *command.SortTacoCommand, userI
 		Type:    &tacoType,
 		BoxId:   command.BoxId,
 	})
+	if len(tacos) == 0 {
+		return errors.Errorf("todos is empty")
+	}
 	tacos = taco.SortTacosByOrder(tacos)
 	if err != nil {
 		return errors.Trace(err)
 	}
-	if len(tacos) == 0 {
-		return errors.Errorf("todos is empty")
-	}
+
 	moveTacoIndex := taco.IndexOfTacos(tacos, command.TacoId)
 	targetTacoIndex := taco.IndexOfTacos(tacos, command.TargetTacoId)
 	tacos = SortTacos(tacos, moveTacoIndex, targetTacoIndex)
