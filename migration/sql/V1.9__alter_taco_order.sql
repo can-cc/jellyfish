@@ -1,1 +1,0 @@
-ALTER TABLE taco ALTER COLUMN order_index SET default 0;
