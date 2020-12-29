@@ -22,3 +22,6 @@ storage:
 
 bucket:
   image: "jellyfish-image-bucket"
+
+notification:
+  endpoint: "http://127.0.0.1:9099"
