@@ -1,5 +1,7 @@
 package notification
 
+import "github.com/labstack/echo/middleware"
+
 type Client interface {
-	GetTargets() (*string, error)
+	GetTargets() ([]*middleware.ProxyTarget, error)
 }

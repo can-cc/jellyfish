@@ -41,9 +41,13 @@ func (a *Application) StartServe() {
 
 	a.Route(e)
 
-	var notificationClient notification.Client = notification.ClientImpl{endpoint: a.config.Notification}
+	var notificationClient notification.Client = notification.ClientImpl{Endpoint: a.config.Notification.Endpoint}
+	targets, err := notificationClient.GetTargets()
+	if err != nil {
+		e.Logger.Fatal(err)
+	}
 	g := e.Group("/notification")
-	g.Use(middleware.Proxy(middleware.NewRoundRobinBalancer(notificationClient.GetTargets())))
+	g.Use(middleware.Proxy(middleware.NewRoundRobinBalancer(targets)))
 
 	e.HTTPErrorHandler = func(err error, context echo.Context) {
 		stack := make([]byte, 4<<10) // 4kb
