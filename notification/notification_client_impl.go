@@ -8,11 +8,11 @@ import (
 )
 
 type ClientImpl struct {
-	endpoint string
+	Endpoint string
 }
 
-func (client *ClientImpl) GetTargets() ([]*middleware.ProxyTarget, error) {
-	url1, err := url.Parse(client.endpoint)
+func (client ClientImpl) GetTargets() ([]*middleware.ProxyTarget, error) {
+	url1, err := url.Parse(client.Endpoint)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}

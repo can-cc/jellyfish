@@ -1,17 +1,19 @@
 package configs
 
 import (
+	"strings"
+
 	"github.com/juju/errors"
 	"github.com/spf13/viper"
-	"strings"
 )
 
 type AppConfig struct {
-	Application ApplicationConfig
-	DataSource  DataSourceConfig
-	Logger      LoggerConfig
-	Storage     StorageConfig
-	Bucket      BucketConfig
+	Application  ApplicationConfig
+	DataSource   DataSourceConfig
+	Logger       LoggerConfig
+	Storage      StorageConfig
+	Bucket       BucketConfig
+	Notification NotificationConfig
 }
 
 type DataSourceConfig struct {
@@ -43,6 +45,10 @@ type StorageConfig struct {
 
 type BucketConfig struct {
 	Image string
+}
+
+type NotificationConfig struct {
+	Endpoint string
 }
 
 func loadConfig(file string) (*AppConfig, error) {
