@@ -1,4 +1,6 @@
-# jellyfish server
+<img src="https://ae01.alicdn.com/kf/Ufb8b47658198433f8827b13d64e2b55eu.jpg" alt="y5c1eA.png" border="0" height="120" align="right" />
+
+# jellyfish
 
 ## run the server
 
