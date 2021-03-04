@@ -16,7 +16,9 @@ then open [http://localhost:8180]
 
 ## Development
 
-see [development docs](./docs/development.md)
+## Docs
+- Document [development docs](./docs/development.md)
+- 中文文档见 [开发文档](./docs/development-zh.md)
 
 
 ## Elastic apm configure
