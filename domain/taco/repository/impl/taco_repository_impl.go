@@ -82,7 +82,7 @@ func (t *TacoRepositoryImpl) insert(taco *taco.Taco) (*string, error) {
 			"detail":      taco.Detail,
 			"status":      taco.Status,
 			"type":        taco.Type,
-			"important":   taco.IsImportant,
+			"important":   util.ConvertBool2Int(taco.IsImportant),
 			"order_index": taco.Order,
 			"deadline":    taco.Deadline,
 		},
