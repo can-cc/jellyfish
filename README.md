@@ -25,7 +25,7 @@ then open [http://localhost:8180]
 To enable elastic apm, set below environment variables.
 
 ``` bash
-export ELASTIC_APM_SERVICE_NAME=
+export ELASTIC_APM_SERVICE_NAME=example
 
 # Set custom APM Server URL (default: http://localhost:8200)
 export ELASTIC_APM_SERVER_URL=
