@@ -4,6 +4,8 @@
 
 ## run the server
 
+This is the backend server for OpenSource Open softwares.
+
 ``` bash
 go get
 
