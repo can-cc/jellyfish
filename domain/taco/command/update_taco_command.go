@@ -1,7 +1,7 @@
 package command
 
 import (
-	"github.com/fwchen/jellyfish/domain/taco"
+	"jellyfish/domain/taco"
 	"time"
 )
 

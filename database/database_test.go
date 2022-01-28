@@ -1,7 +1,7 @@
 package database
 
 import (
-	configs "github.com/fwchen/jellyfish/config"
+	configs "jellyfish/config"
 	"github.com/magiconair/properties/assert"
 	"testing"
 )

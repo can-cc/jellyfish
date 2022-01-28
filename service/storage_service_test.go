@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	configs "github.com/fwchen/jellyfish/config"
+	configs "jellyfish/config"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"

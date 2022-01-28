@@ -1,7 +1,7 @@
 package factory
 
 import (
-	"github.com/fwchen/jellyfish/domain/user"
+	"jellyfish/domain/user"
 	"time"
 )
 

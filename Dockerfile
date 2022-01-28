@@ -1,12 +1,20 @@
-FROM golang:1.12.1-stretch AS builder
+FROM golang:1.17-stretch AS builder
 
-WORKDIR /go/src/github.com/fwchen/jellyfish
+WORKDIR /app
 
 COPY . .
 
 ENV GO111MODULE=on
 
-RUN GOPROXY='https://goproxy.cn' go get -v
-RUN GOPROXY='https://goproxy.cn' go build cmd/jellyfish-server/main.go
+RUN GOPROXY='https://goproxy.cn' go get -v ./cmd/server
+RUN GOPROXY='https://goproxy.cn' go build ./cmd/server/main.go
 
-ENTRYPOINT ["/go/src/github.com/fwchen/jellyfish/main"]
+FROM golang:1.17-stretch
+
+WORKDIR /app
+
+COPY --from=builder /app/main /app
+RUN mkdir /app/config
+COPY ./config/config.yaml /app/config/config.yaml
+
+ENTRYPOINT ["/app/main"]

@@ -5,7 +5,7 @@
 package mock
 
 import (
-	taco_box "github.com/fwchen/jellyfish/domain/taco_box"
+	taco_box "jellyfish/domain/taco_box"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

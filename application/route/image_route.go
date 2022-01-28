@@ -1,7 +1,7 @@
 package route
 
 import (
-	"github.com/fwchen/jellyfish/service"
+	"jellyfish/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
 )

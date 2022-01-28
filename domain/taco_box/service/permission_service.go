@@ -1,6 +1,6 @@
 package service
 
-import "github.com/fwchen/jellyfish/domain/taco_box/repository"
+import "jellyfish/domain/taco_box/repository"
 
 func NewTacoBoxPermissionService(repo repository.TacoBoxRepository) *TacoBoxPermissionService {
 	return &TacoBoxPermissionService{tacoBoxRepo: repo}

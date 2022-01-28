@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/fwchen/jellyfish/domain/taco"
+import "jellyfish/domain/taco"
 
 type Repository interface {
 	List(userId string, filter taco.TacoFilter) ([]taco.Taco, error)

@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"github.com/fwchen/jellyfish/application/middleware"
-	"github.com/fwchen/jellyfish/domain/taco_box/command"
-	"github.com/fwchen/jellyfish/domain/taco_box/repository"
-	"github.com/fwchen/jellyfish/domain/taco_box/service"
+	"jellyfish/application/middleware"
+	"jellyfish/domain/taco_box/command"
+	"jellyfish/domain/taco_box/repository"
+	"jellyfish/domain/taco_box/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
 	"net/http"

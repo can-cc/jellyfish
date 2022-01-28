@@ -5,7 +5,7 @@
 package mock
 
 import (
-	visitor "github.com/fwchen/jellyfish/domain/visitor"
+	visitor "jellyfish/domain/visitor"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/fwchen/jellyfish/application"
-	configs "github.com/fwchen/jellyfish/config"
-	"github.com/fwchen/jellyfish/database"
-	"github.com/fwchen/jellyfish/logger"
-	"github.com/fwchen/jellyfish/service"
+	"jellyfish/application"
+	configs "jellyfish/config"
+	"jellyfish/database"
+	"jellyfish/logger"
+	"jellyfish/service"
 	_ "github.com/labstack/gommon/log"
 	"github.com/opentracing/opentracing-go"
 	"go.elastic.co/apm/module/apmot"

@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"github.com/fwchen/jellyfish/application/middleware"
-	"github.com/fwchen/jellyfish/domain/user/repository"
-	userService "github.com/fwchen/jellyfish/domain/user/service"
-	"github.com/fwchen/jellyfish/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
+	"jellyfish/application/middleware"
+	"jellyfish/domain/user/repository"
+	userService "jellyfish/domain/user/service"
+	"jellyfish/service"
 	"net/http"
 )
 

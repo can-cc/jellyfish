@@ -1,9 +1,9 @@
 package impl
 
 import (
-	"github.com/fwchen/jellyfish/domain/visitor"
-	"github.com/fwchen/jellyfish/domain/visitor/util"
-	"github.com/fwchen/jellyfish/logger"
+	"jellyfish/domain/visitor"
+	"jellyfish/domain/visitor/util"
+	"jellyfish/logger"
 	"github.com/juju/errors"
 )
 

@@ -1,6 +1,6 @@
 package factory
 
-import "github.com/fwchen/jellyfish/domain/visitor"
+import "jellyfish/domain/visitor"
 
 func NewVisitor(name, password string) *visitor.Visitor {
 	return &visitor.Visitor{

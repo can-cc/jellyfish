@@ -1,7 +1,7 @@
 package logger
 
 import (
-	configs "github.com/fwchen/jellyfish/config"
+	configs "jellyfish/config"
 	"github.com/juju/errors"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

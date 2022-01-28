@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	configs "github.com/fwchen/jellyfish/config"
-	"github.com/fwchen/jellyfish/database"
-	"github.com/fwchen/jellyfish/domain/visitor/repository/impl"
-	visitorService "github.com/fwchen/jellyfish/domain/visitor/service"
+	configs "jellyfish/config"
+	"jellyfish/database"
+	"jellyfish/domain/visitor/repository/impl"
+	visitorService "jellyfish/domain/visitor/service"
 )
 
 func createUser(username, password string) {

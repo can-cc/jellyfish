@@ -5,7 +5,7 @@
 package mock
 
 import (
-	user "github.com/fwchen/jellyfish/domain/user"
+	user "jellyfish/domain/user"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )

@@ -1,18 +1,12 @@
 package application
 
 import (
-	"github.com/dchest/captcha"
-	appMiddleware "github.com/fwchen/jellyfish/application/middleware"
-	"github.com/fwchen/jellyfish/application/route"
-	tacoHandler "github.com/fwchen/jellyfish/domain/taco/handler"
-	tacoRepoImpl "github.com/fwchen/jellyfish/domain/taco/repository/impl"
-	tacoBoxHandler "github.com/fwchen/jellyfish/domain/taco_box/handler"
-	tacoBoxImpl "github.com/fwchen/jellyfish/domain/taco_box/repository/impl"
-	"github.com/fwchen/jellyfish/domain/taco_box/service"
-	userHandler "github.com/fwchen/jellyfish/domain/user/handler"
-	userRepoImpl "github.com/fwchen/jellyfish/domain/user/repository/impl"
-	visitorHandler "github.com/fwchen/jellyfish/domain/visitor/handler"
-	visitorRepoImpl "github.com/fwchen/jellyfish/domain/visitor/repository/impl"
+	"jellyfish/application/route"
+	tacoHandler "jellyfish/domain/taco/handler"
+	tacoRepoImpl "jellyfish/domain/taco/repository/impl"
+	tacoBoxHandler "jellyfish/domain/taco_box/handler"
+	tacoBoxImpl "jellyfish/domain/taco_box/repository/impl"
+	"jellyfish/domain/taco_box/service"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -24,45 +18,19 @@ func (a *Application) Route(e *echo.Echo) {
 		return c.String(http.StatusOK, "pong")
 	})
 
-	authorizeGroup := appMiddleware.ApplyJwtInRoute(e, &a.config.Application)
-
-	{
-		e.GET("/image/:fileName", route.GetImageRoute(a.imageStorageService))
-	}
-
-	{
-		handler := visitorHandler.NewHandler(visitorRepoImpl.NewVisitorRepository(a.datasource), &a.config.Application)
-		e.POST("/login", handler.Login)
-		e.POST("/signup", handler.SignUp)
-		e.GET("/captcha/*", echo.WrapHandler(captcha.Server(captcha.StdWidth, captcha.StdHeight)))
-		e.POST("/captcha", handler.GenCaptcha)
-	}
-
-	{
-		handler := userHandler.NewHandler(userRepoImpl.NewUserRepository(a.datasource), a.imageStorageService)
-		authUserGroup := authorizeGroup.Group("user")
-		authUserGroup.GET("/me", handler.GetUserInfo)
-		authUserGroup.POST("/avatar", handler.UpdateUserAvatar)
-	}
+	e.GET("/image/:fileName", route.GetImageRoute(a.imageStorageService))
 
 	tacoBoxRepo := tacoBoxImpl.NewTacoBoxRepositoryImpl(a.datasource)
 	tacoBoxPermissionService := service.NewTacoBoxPermissionService(tacoBoxRepo)
-	{
-		handler := tacoBoxHandler.NewHandler(tacoBoxRepo)
-		tacoBoxGroup := authorizeGroup.Group("box")
-		tacoBoxGroup.GET("es", handler.GetTacoBoxes)
-		tacoBoxGroup.POST("", handler.CreateTacoBox)
-		tacoBoxGroup.PUT("/:tacoBoxID", handler.UpdateTacoBox)
-	}
+	tbHandler := tacoBoxHandler.NewHandler(tacoBoxRepo)
+	e.GET("es", tbHandler.GetTacoBoxes)
+	e.POST("", tbHandler.CreateTacoBox)
+	e.PUT("/:tacoBoxID", tbHandler.UpdateTacoBox)
 
-	{
-		handler := tacoHandler.NewHandler(tacoRepoImpl.NewTacoRepository(a.datasource), tacoBoxPermissionService)
-		tacoGroup := authorizeGroup.Group("taco")
-		tacoGroup.GET("s", handler.GetTacos)
-		tacoGroup.POST("", handler.CreateTaco)
-		tacoGroup.POST("/resort", handler.SortTaco)
-		tacoGroup.PUT("/:tacoId", handler.UpdateTaco)
-		tacoGroup.DELETE("/:tacoId", handler.DeleteTaco)
-	}
-
+	tHandler := tacoHandler.NewHandler(tacoRepoImpl.NewTacoRepository(a.datasource), tacoBoxPermissionService)
+	e.GET("s", tHandler.GetTacos)
+	e.POST("", tHandler.CreateTaco)
+	e.POST("/resort", tHandler.SortTaco)
+	e.PUT("/:tacoId", tHandler.UpdateTaco)
+	e.DELETE("/:tacoId", tHandler.DeleteTaco)
 }

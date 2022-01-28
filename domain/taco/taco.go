@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fwchen/jellyfish/domain/taco_box"
+	"jellyfish/domain/taco_box"
 )
 
 type Status string

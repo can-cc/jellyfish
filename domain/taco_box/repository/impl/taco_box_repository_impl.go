@@ -3,9 +3,9 @@ package tacoBoxImpl
 import (
 	"github.com/doug-martin/goqu/v9"
 	"github.com/doug-martin/goqu/v9/exp"
-	"github.com/fwchen/jellyfish/database"
-	"github.com/fwchen/jellyfish/domain/taco_box"
-	"github.com/fwchen/jellyfish/domain/taco_box/repository"
+	"jellyfish/database"
+	"jellyfish/domain/taco_box"
+	"jellyfish/domain/taco_box/repository"
 	"github.com/juju/errors"
 	"time"
 )

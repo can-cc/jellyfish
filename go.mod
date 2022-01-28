@@ -1,4 +1,4 @@
-module github.com/fwchen/jellyfish
+module jellyfish
 
 go 1.13
 

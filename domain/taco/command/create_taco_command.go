@@ -3,7 +3,7 @@ package command
 import (
 	"time"
 
-	"github.com/fwchen/jellyfish/domain/taco_box"
+	"jellyfish/domain/taco_box"
 )
 
 type CreateTacoCommand struct {

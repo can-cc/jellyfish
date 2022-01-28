@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/fwchen/jellyfish/domain/user/repository"
-	"github.com/fwchen/jellyfish/domain/user/response"
-	"github.com/fwchen/jellyfish/service"
+	"jellyfish/domain/user/repository"
+	"jellyfish/domain/user/response"
+	"jellyfish/service"
 	"github.com/juju/errors"
 )
 

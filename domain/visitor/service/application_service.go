@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/fwchen/jellyfish/application/middleware"
-	configs "github.com/fwchen/jellyfish/config"
-	"github.com/fwchen/jellyfish/domain/visitor/factory"
-	"github.com/fwchen/jellyfish/domain/visitor/repository"
-	"github.com/fwchen/jellyfish/domain/visitor/service/impl"
+	"jellyfish/application/middleware"
+	configs "jellyfish/config"
+	"jellyfish/domain/visitor/factory"
+	"jellyfish/domain/visitor/repository"
+	"jellyfish/domain/visitor/service/impl"
 	"github.com/juju/errors"
 )
 

@@ -2,11 +2,11 @@ package handler
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	"github.com/fwchen/jellyfish/application/middleware"
-	"github.com/fwchen/jellyfish/domain/user"
-	"github.com/fwchen/jellyfish/domain/user/repository/mock"
-	userService "github.com/fwchen/jellyfish/domain/user/service"
-	"github.com/fwchen/jellyfish/util"
+	"jellyfish/application/middleware"
+	"jellyfish/domain/user"
+	"jellyfish/domain/user/repository/mock"
+	userService "jellyfish/domain/user/service"
+	"jellyfish/util"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"

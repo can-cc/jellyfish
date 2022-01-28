@@ -1,6 +1,6 @@
 FROM golang:1.12.1-stretch AS builder
 
-WORKDIR /go/src/github.com/fwchen/jellyfish
+WORKDIR /go/src/jellyfish
 
 COPY . .
 
@@ -12,6 +12,6 @@ FROM golang:1.12.1-stretch
 
 WORKDIR /app
 
-COPY --from=builder /go/src/github.com/fwchen/jellyfish/tool /app
+COPY --from=builder /go/src/jellyfish/tool /app
 
 ENTRYPOINT ["/app/tool"]

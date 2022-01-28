@@ -2,7 +2,7 @@ package visitor
 
 import (
 	"errors"
-	"github.com/fwchen/jellyfish/domain/user"
+	"jellyfish/domain/user"
 )
 
 type Visitor struct {

@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	configs "github.com/fwchen/jellyfish/config"
+	configs "jellyfish/config"
 	"github.com/juju/errors"
 	_ "github.com/lib/pq"
 	"go.elastic.co/apm/module/apmsql"

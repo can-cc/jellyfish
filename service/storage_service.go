@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	configs "github.com/fwchen/jellyfish/config"
-	"github.com/fwchen/jellyfish/logger"
+	configs "jellyfish/config"
+	"jellyfish/logger"
 	"github.com/juju/errors"
 	"github.com/minio/minio-go/v6"
 	"io"

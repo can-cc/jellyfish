@@ -2,10 +2,10 @@ package impl
 
 import (
 	"database/sql"
-	"github.com/fwchen/jellyfish/database"
-	"github.com/fwchen/jellyfish/domain/user"
-	"github.com/fwchen/jellyfish/domain/user/factory"
-	"github.com/fwchen/jellyfish/domain/user/repository"
+	"jellyfish/database"
+	"jellyfish/domain/user"
+	"jellyfish/domain/user/factory"
+	"jellyfish/domain/user/repository"
 	"github.com/juju/errors"
 	"time"
 )

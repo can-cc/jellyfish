@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/fwchen/jellyfish/domain/user"
+	"jellyfish/domain/user"
 )
 
 type UserInfo struct {

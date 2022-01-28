@@ -6,10 +6,10 @@ import (
 	"github.com/doug-martin/goqu/v9"
 	_ "github.com/doug-martin/goqu/v9/dialect/postgres"
 	"github.com/doug-martin/goqu/v9/exp"
-	"github.com/fwchen/jellyfish/database"
-	"github.com/fwchen/jellyfish/domain/taco"
-	"github.com/fwchen/jellyfish/domain/taco/repository"
-	"github.com/fwchen/jellyfish/util"
+	"jellyfish/database"
+	"jellyfish/domain/taco"
+	"jellyfish/domain/taco/repository"
+	"jellyfish/util"
 	"github.com/juju/errors"
 )
 

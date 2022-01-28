@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/fwchen/jellyfish/domain/user"
+import "jellyfish/domain/user"
 
 type Repository interface {
 	Save(user *user.AppUser) error

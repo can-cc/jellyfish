@@ -3,7 +3,7 @@ package service
 import (
 	"testing"
 
-	"github.com/fwchen/jellyfish/domain/taco"
+	"jellyfish/domain/taco"
 	"github.com/stretchr/testify/assert"
 )
 

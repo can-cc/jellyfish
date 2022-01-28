@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/fwchen/jellyfish/domain/visitor"
+	"jellyfish/domain/visitor"
 )
 
 type Guard interface {

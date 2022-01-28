@@ -1,9 +1,9 @@
 package impl
 
 import (
-	"github.com/fwchen/jellyfish/database"
-	"github.com/fwchen/jellyfish/domain/visitor"
-	"github.com/fwchen/jellyfish/domain/visitor/repository"
+	"jellyfish/database"
+	"jellyfish/domain/visitor"
+	"jellyfish/domain/visitor/repository"
 )
 
 func NewVisitorRepository(dataSource *database.AppDataSource) repository.Repository {

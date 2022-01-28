@@ -2,10 +2,10 @@ package handler
 
 import (
 	"github.com/dchest/captcha"
-	configs "github.com/fwchen/jellyfish/config"
-	"github.com/fwchen/jellyfish/domain/visitor"
-	"github.com/fwchen/jellyfish/domain/visitor/repository/mock"
-	visitorUtil "github.com/fwchen/jellyfish/domain/visitor/util"
+	configs "jellyfish/config"
+	"jellyfish/domain/visitor"
+	"jellyfish/domain/visitor/repository/mock"
+	visitorUtil "jellyfish/domain/visitor/util"
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"

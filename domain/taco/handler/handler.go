@@ -3,13 +3,13 @@ package handler
 import (
 	"net/http"
 
-	"github.com/fwchen/jellyfish/application/middleware"
-	"github.com/fwchen/jellyfish/domain/taco"
-	tacoCommand "github.com/fwchen/jellyfish/domain/taco/command"
-	"github.com/fwchen/jellyfish/domain/taco/repository"
-	"github.com/fwchen/jellyfish/domain/taco/service"
-	"github.com/fwchen/jellyfish/domain/taco_box"
-	boxService "github.com/fwchen/jellyfish/domain/taco_box/service"
+	"jellyfish/application/middleware"
+	"jellyfish/domain/taco"
+	tacoCommand "jellyfish/domain/taco/command"
+	"jellyfish/domain/taco/repository"
+	"jellyfish/domain/taco/service"
+	"jellyfish/domain/taco_box"
+	boxService "jellyfish/domain/taco_box/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
 )

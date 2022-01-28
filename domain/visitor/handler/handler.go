@@ -2,9 +2,9 @@ package handler
 
 import (
 	"github.com/dchest/captcha"
-	configs "github.com/fwchen/jellyfish/config"
-	"github.com/fwchen/jellyfish/domain/visitor/repository"
-	visitorService "github.com/fwchen/jellyfish/domain/visitor/service"
+	configs "jellyfish/config"
+	"jellyfish/domain/visitor/repository"
+	visitorService "jellyfish/domain/visitor/service"
 	"github.com/juju/errors"
 	"github.com/labstack/echo"
 	"net/http"

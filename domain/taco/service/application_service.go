@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/fwchen/jellyfish/domain/taco"
-	"github.com/fwchen/jellyfish/domain/taco/command"
-	"github.com/fwchen/jellyfish/domain/taco/factory"
-	"github.com/fwchen/jellyfish/domain/taco/repository"
-	"github.com/fwchen/jellyfish/domain/taco_box/service"
+	"jellyfish/domain/taco"
+	"jellyfish/domain/taco/command"
+	"jellyfish/domain/taco/factory"
+	"jellyfish/domain/taco/repository"
+	"jellyfish/domain/taco_box/service"
 	"github.com/juju/errors"
 )
 

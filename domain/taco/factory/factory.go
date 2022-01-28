@@ -1,8 +1,8 @@
 package factory
 
 import (
-	"github.com/fwchen/jellyfish/domain/taco"
-	"github.com/fwchen/jellyfish/domain/taco/command"
+	"jellyfish/domain/taco"
+	"jellyfish/domain/taco/command"
 )
 
 func NewTacoFromCreateCommand(command *command.CreateTacoCommand, userID string) *taco.Taco {
