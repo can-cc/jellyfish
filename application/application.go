@@ -54,7 +54,6 @@ func (a *Application) StartServe() {
 			return
 		}
 		e.DefaultHTTPErrorHandler(err, context)
-
 	}
 
 	fmt.Println(fmt.Sprintf("jellyfish serve on http://%s", a.config.Application.Addr))

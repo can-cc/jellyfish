@@ -1,23 +1,21 @@
 package main
 
 import (
+	"fmt"
+	_ "github.com/labstack/gommon/log"
 	"jellyfish/application"
 	configs "jellyfish/config"
 	"jellyfish/database"
 	"jellyfish/logger"
 	"jellyfish/service"
-	_ "github.com/labstack/gommon/log"
-	"github.com/opentracing/opentracing-go"
-	"go.elastic.co/apm/module/apmot"
 )
 
 func main() {
+	fmt.Println("Running server")
 	config, err := configs.LoadConfig("config/config.yaml")
 	if err != nil {
 		panic(err)
 	}
-
-	opentracing.SetGlobalTracer(apmot.New())
 
 	err = logger.InitLogger(config.Logger)
 	if err != nil {
@@ -37,7 +35,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
 	app := application.NewApplication(config, datasource, imageStorageService)
 	app.StartServe()
 }
