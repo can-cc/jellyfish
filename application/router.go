@@ -28,7 +28,7 @@ func (a *Application) Route(e *echo.Echo) {
 	e.PUT("/box/:tacoBoxID", tbHandler.UpdateTacoBox)
 
 	tHandler := tacoHandler.NewHandler(tacoRepoImpl.NewTacoRepository(a.datasource), tacoBoxPermissionService)
-	e.GET("s", tHandler.GetTacos)
+	e.GET("/tacos", tHandler.GetTacos)
 	e.POST("/taco", tHandler.CreateTaco)
 	e.POST("/taco/resort", tHandler.SortTaco)
 	e.PUT("/taco/:tacoId", tHandler.UpdateTaco)
