@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	_ "github.com/labstack/gommon/log"
 	"jellyfish/application"
@@ -12,7 +13,9 @@ import (
 
 func main() {
 	fmt.Println("Running server")
-	config, err := configs.LoadConfig("config/config.yaml")
+	configPath := flag.String("config", "config/config.yaml", "config file path")
+	fmt.Printf("reading config file [%s]", *configPath)
+	config, err := configs.LoadConfig(*configPath)
 	if err != nil {
 		panic(err)
 	}
