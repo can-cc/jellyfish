@@ -12,21 +12,18 @@ import (
 	_ "go.elastic.co/apm/module/apmsql/sqlite3"
 	configs "jellyfish/config"
 	"jellyfish/database"
-	"jellyfish/service"
 )
 
-func NewApplication(config *configs.AppConfig, datasource *database.AppDataSource, imageStorageService *service.ImageStorageService) Application {
+func NewApplication(config *configs.AppConfig, datasource *database.AppDataSource) Application {
 	return Application{
-		config:              config,
-		datasource:          datasource,
-		imageStorageService: imageStorageService,
+		config:     config,
+		datasource: datasource,
 	}
 }
 
 type Application struct {
-	config              *configs.AppConfig
-	datasource          *database.AppDataSource
-	imageStorageService *service.ImageStorageService
+	config     *configs.AppConfig
+	datasource *database.AppDataSource
 }
 
 func (a *Application) StartServe() {

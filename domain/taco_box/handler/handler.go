@@ -1,12 +1,12 @@
 package handler
 
 import (
+	"github.com/juju/errors"
+	"github.com/labstack/echo"
 	"jellyfish/application/middleware"
 	"jellyfish/domain/taco_box/command"
 	"jellyfish/domain/taco_box/repository"
 	"jellyfish/domain/taco_box/service"
-	"github.com/juju/errors"
-	"github.com/labstack/echo"
 	"net/http"
 )
 
@@ -19,7 +19,7 @@ func NewHandler(tacoBoxRepo repository.TacoBoxRepository) *handler {
 }
 
 func (h *handler) GetTacoBoxes(c echo.Context) error {
-	userID := middleware.GetClaimsUserID(c)
+	userID := middleware.GetUserID(c)
 	tacos, err := h.tacoBoxService.GetTacoBoxes(userID)
 	if err != nil {
 		return errors.Trace(err)
@@ -28,7 +28,7 @@ func (h *handler) GetTacoBoxes(c echo.Context) error {
 }
 
 func (h *handler) CreateTacoBox(c echo.Context) error {
-	userID := middleware.GetClaimsUserID(c)
+	userID := middleware.GetUserID(c)
 	var requestCommand command.CreateTacoBoxCommand
 	requestCommand.CreatorId = userID
 	err := c.Bind(&requestCommand)
@@ -43,7 +43,7 @@ func (h *handler) CreateTacoBox(c echo.Context) error {
 }
 
 func (h *handler) UpdateTacoBox(c echo.Context) error {
-	userID := middleware.GetClaimsUserID(c)
+	userID := middleware.GetUserID(c)
 	tacoID := c.Param("tacoID")
 	var requestCommand command.UpdateTacoCommand
 	requestCommand.TacoBoxID = tacoID

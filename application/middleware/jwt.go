@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo"
 	"time"
 )
 
@@ -25,12 +24,6 @@ type JwtAppClaims struct {
 //	}))
 //	return authorizeGroup
 //}
-
-func GetClaimsUserID(c echo.Context) string {
-	user := c.Get("user").(*jwt.Token)
-	claims := user.Claims.(*JwtAppClaims)
-	return claims.ID
-}
 
 func SignedToken(data SignData, jwtSecretKey string) (string, error) {
 	claims := &JwtAppClaims{

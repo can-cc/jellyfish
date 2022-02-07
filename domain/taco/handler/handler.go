@@ -3,6 +3,8 @@ package handler
 import (
 	"net/http"
 
+	"github.com/juju/errors"
+	"github.com/labstack/echo"
 	"jellyfish/application/middleware"
 	"jellyfish/domain/taco"
 	tacoCommand "jellyfish/domain/taco/command"
@@ -10,8 +12,6 @@ import (
 	"jellyfish/domain/taco/service"
 	"jellyfish/domain/taco_box"
 	boxService "jellyfish/domain/taco_box/service"
-	"github.com/juju/errors"
-	"github.com/labstack/echo"
 )
 
 type handler struct {
@@ -23,7 +23,7 @@ func NewHandler(tacoRepo repository.Repository, tacoBoxPermissionService *boxSer
 }
 
 func (h *handler) GetTacos(c echo.Context) error {
-	userID := middleware.GetClaimsUserID(c)
+	userID := middleware.GetUserID(c)
 	statues := taco.ParseStatues(c.QueryParam("status"))
 	qtype := c.QueryParam("type")
 	boxId := c.QueryParam("boxId")
@@ -54,7 +54,7 @@ func (h *handler) GetTacos(c echo.Context) error {
 }
 
 func (h *handler) CreateTaco(c echo.Context) error {
-	userID := middleware.GetClaimsUserID(c)
+	userID := middleware.GetUserID(c)
 	var command tacoCommand.CreateTacoCommand
 	err := c.Bind(&command)
 	if err != nil {
@@ -68,7 +68,7 @@ func (h *handler) CreateTaco(c echo.Context) error {
 }
 
 func (h *handler) UpdateTaco(c echo.Context) error {
-	userID := middleware.GetClaimsUserID(c)
+	userID := middleware.GetUserID(c)
 	tacoID := c.Param("tacoId")
 	var command tacoCommand.UpdateTacoCommand
 	err := c.Bind(&command)
@@ -94,7 +94,7 @@ func (h *handler) DeleteTaco(c echo.Context) error {
 }
 
 func (h *handler) SortTaco(c echo.Context) error {
-	userID := middleware.GetClaimsUserID(c)
+	userID := middleware.GetUserID(c)
 	var command tacoCommand.SortTacoCommand
 	err := c.Bind(&command)
 	if err != nil {

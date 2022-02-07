@@ -8,12 +8,12 @@ import (
 	configs "jellyfish/config"
 	"jellyfish/database"
 	"jellyfish/logger"
-	"jellyfish/service"
 )
 
 func main() {
 	fmt.Println("Running server")
-	configPath := flag.String("config", "config/config.yaml", "config file path")
+	configPath := flag.String("config", "config/config.yaml", "config file path") //  -config=xxx.yaml
+	flag.Parse()
 	fmt.Printf("reading config file [%s]", *configPath)
 	config, err := configs.LoadConfig(*configPath)
 	if err != nil {
@@ -29,15 +29,6 @@ func main() {
 		panic(err)
 	}
 
-	storageService := service.NewStorageService(&config.Storage)
-	err = storageService.Init()
-	if err != nil {
-		panic(err)
-	}
-	imageStorageService, err := service.NewImageStorageService(config.Bucket.Image, storageService)
-	if err != nil {
-		panic(err)
-	}
-	app := application.NewApplication(config, datasource, imageStorageService)
+	app := application.NewApplication(config, datasource)
 	app.StartServe()
 }

@@ -19,7 +19,7 @@ func NewHandler(userRepo repository.Repository, imageStorageService *service.Ima
 }
 
 func (h *handler) GetUserInfo(c echo.Context) error {
-	userID := middleware.GetClaimsUserID(c)
+	userID := middleware.GetUserID(c)
 	userInfo, err := h.service.GetUserInfo(userID)
 	if err != nil {
 		return errors.Trace(err)
@@ -28,7 +28,7 @@ func (h *handler) GetUserInfo(c echo.Context) error {
 }
 
 func (h *handler) UpdateUserAvatar(c echo.Context) error {
-	userID := middleware.GetClaimsUserID(c)
+	userID := middleware.GetUserID(c)
 	request := new(struct {
 		Avatar string `json:"avatar" validate:"required"`
 	})
