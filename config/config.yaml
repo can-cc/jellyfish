@@ -13,12 +13,4 @@ logger:
     - "stdout"
     # - "/var/log/jellyfish_log"
 
-storage:
-  endpoint: "localhost:9100"
-  access_key_id: "minio"
-  secret_access_key_id: "miniostorage"
-  use_ssl: false
-  location: "us-east-1"
 
-bucket:
-  image: "jellyfish-image-bucket"
