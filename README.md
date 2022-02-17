@@ -38,3 +38,5 @@ export ELASTIC_APM_SECRET_TOKEN=
 export ELASTIC_APM_ENVIRONMENT="production"
 ```
 See the [documentation](https://www.elastic.co/guide/en/apm/agent/go/current/configuration.html) for advanced configuration.
+
+---
